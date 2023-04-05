@@ -139,7 +139,7 @@ int main(void)
 				close(pipe_fd[READ_END]);
 				dup2(pipe_fd[WRITE_END], STDOUT_FILENO);
 				close(pipe_fd[WRITE_END]);
-				execve(args[0], args, environ); // Replace execvp with execve
+				execve(args[0], args, environ);
 				perror("execve");
 				exit(1);
 			}
@@ -148,13 +148,13 @@ int main(void)
 				waitpid(pipe_pid, &status, 0); // Wait for the child process to finish
 				dup2(pipe_fd[READ_END], STDIN_FILENO);
 				close(pipe_fd[READ_END]);
-				execve(args[i + 1], args + i + 1, environ); // Replace execvp with execve
+				execve(args[i + 1], args + i + 1, environ); 
 				perror("execve");
 				exit(1);
 			}
 			// End of code for piping
 
-			execve(args[0], args, environ); // Replace execvp with execve
+			execve(args[0], args, environ);
 			perror("execve");
 			exit(1);
 		}
