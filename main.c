@@ -71,7 +71,29 @@ int main(void)
 			break;
 		}
 		// We can add code for commands HERE!!!!!
+		if (strcmp(args[0], "cd") == 0)
+		{
+			if (args[1] == NULL)
+				write(STDERR_FILENO, "minishell: expected argument to \"cd\"\n", 38);
+			else
+			{
+				if (chdir(args[1]) != 0)
+					perror("minishell");
+			}
+			continue;
+		}
 
+		if (strcmp(args[0], "pwd") == 0)
+		{
+			char cwd[MAX_LINE];
+			if (getcwd(cwd, sizeof(cwd)) == NULL) {
+				perror("minishell");
+			} else {
+				write(STDOUT_FILENO, cwd, strlen(cwd));
+				write(STDOUT_FILENO, "\n", 1);
+			}
+			continue;
+		}
 		// Fork a child process to execute the command
 		pid = fork();
 
