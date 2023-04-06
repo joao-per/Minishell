@@ -7,3 +7,8 @@ FILES = main.c
 all:
 		$(MAKE) -C Libft all
 		$(CC) $(CFLAGS) $(FILES) Libft/libft.a -o $(NAME)
+
+fclean:
+		rm -f $(NAME)
+
+re: fclean all
