@@ -101,11 +101,15 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		}
 		add_to_history(&cmd_history, input);
-
 		// New built-in command "history"
 		if (strcmp(args[0], "history") == 0)
 		{
 			print_history(&cmd_history);
+			continue ;
+		}
+		if (strcmp(args[0], "env") == 0)
+		{
+			print_env_vars(env_vars);
 			continue ;
 		}
 		// We can add code for commands HERE!!!!!

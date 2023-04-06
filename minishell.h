@@ -35,6 +35,7 @@ typedef struct s_history
 } t_history;
 
 t_env	**env_init(char **env);
+void	print_env_vars(t_env **env_arr);
 
 
 #endif
