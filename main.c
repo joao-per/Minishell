@@ -3,6 +3,31 @@
 
 extern char **environ;
 
+void add_to_history(t_history *cmd_history, char *input)
+{
+	int i;
+
+	i = 0;
+    if (cmd_history->history_count < MAX_HISTORY)
+	{
+        cmd_history->history[cmd_history->history_count++] = ft_strdup(input);
+    }
+	else
+	{
+        free(cmd_history->history[0]);
+        while (++i < MAX_HISTORY)
+            cmd_history->history[i - 1] = cmd_history->history[i];
+        cmd_history->history[MAX_HISTORY - 1] = ft_strdup(input);
+    }
+}
+
+void print_history(t_history *cmd_history)
+{
+	int i = -1;
+    while (++i < cmd_history->history_count)
+        printf("%d %s\n", i + 1, cmd_history->history[i]);
+}
+
 void parse_input(char *input, char **args, const char *delimiter)
 {
 	int i;
@@ -36,6 +61,7 @@ int main()
 	pid_t pid; // Process ID of child process
 	int status; // Exit status of child process
 	int i;
+	t_history cmd_history = {0}; // Initialize CommandHistory struct
 
 	i = 0;
 	should_run = 1;
@@ -68,6 +94,14 @@ int main()
 			should_run = 0;
 			break;
 		}
+		add_to_history(&cmd_history, input);
+
+        // New built-in command "history"
+        if (strcmp(args[0], "history") == 0)
+		{
+            print_history(&cmd_history);
+            continue;
+        }
 		// We can add code for commands HERE!!!!!
 			if (strcmp(args[0], "cd") == 0)
 			{
