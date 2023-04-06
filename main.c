@@ -1,12 +1,7 @@
 #include "minishell.h"
 #include "Libft/libft.h"
 
-#define MAX_LINE 80 // Maximum length of user input
-#define MAX_ARGS MAX_LINE/2 + 1 // Maximum number of arguments for a command
-#define READ_END 0 // File descriptor for read end of a pipe
-#define WRITE_END 1 // File descriptor for write end of a pipe
-
-extern char **environ; // Add this after the includes
+extern char **environ;
 
 void parse_input(char *input, char **args, const char *delimiter)
 {
@@ -33,16 +28,19 @@ void parse_input(char *input, char **args, const char *delimiter)
 	args[i] = NULL; // Add NULL terminator to the end of args array
 }
 
-int main(void)
+int main()
 {
 	char input[MAX_LINE]; // Buffer to store user input
 	char *args[MAX_ARGS]; // Array to store parsed user input
-	int should_run = 1; // Flag to indicate when to exit the loop
+	int should_run; // Flag to indicate when to exit the loop
 	pid_t pid; // Process ID of child process
 	int status; // Exit status of child process
-	int i = 0;
+	int i;
 
-	while (should_run) {
+	i = 0;
+	should_run = 1;
+	while (should_run)
+	{
 		write(STDOUT_FILENO, "\033[0;93m Minishell>$ \033[0;39m", 28);
 
 		// Read in user input using read
@@ -71,29 +69,56 @@ int main(void)
 			break;
 		}
 		// We can add code for commands HERE!!!!!
-		if (strcmp(args[0], "cd") == 0)
-		{
-			if (args[1] == NULL)
-				write(STDERR_FILENO, "minishell: expected argument to \"cd\"\n", 38);
-			else
+			if (strcmp(args[0], "cd") == 0)
 			{
-				if (chdir(args[1]) != 0)
-					perror("minishell");
+				if (args[1] == NULL)
+					write(STDERR_FILENO, "minishell: expected argument to \"cd\"\n", 38);
+				else
+				{
+					if (chdir(args[1]) != 0)
+						perror("minishell");
+				}
+				continue;
 			}
-			continue;
-		}
 
 		if (strcmp(args[0], "pwd") == 0)
 		{
 			char cwd[MAX_LINE];
-			if (getcwd(cwd, sizeof(cwd)) == NULL) {
+			if (getcwd(cwd, sizeof(cwd)) == NULL)
 				perror("minishell");
-			} else {
-				write(STDOUT_FILENO, cwd, strlen(cwd));
+			else
+			{
+				write(STDOUT_FILENO, cwd, ft_strlen(cwd));
 				write(STDOUT_FILENO, "\n", 1);
 			}
 			continue;
 		}
+
+		// "ls" command implementation
+		if (strcmp(args[0], "ls") == 0)
+		{
+			DIR *dir;
+			struct dirent *entry;
+			char *dir_path;
+
+			if (args[1] == NULL)
+				dir_path = ".";
+			else
+				dir_path = args[1];
+			if ((dir = opendir(dir_path)) == NULL)
+				perror("minishell");
+			else
+			{
+				while ((entry = readdir(dir)) != NULL)
+				{
+					write(STDOUT_FILENO, entry->d_name, ft_strlen(entry->d_name));
+					write(STDOUT_FILENO, "\n", 1);
+				}
+				closedir(dir);
+			}
+			continue;
+		}
+
 		// Fork a child process to execute the command
 		pid = fork();
 
@@ -116,7 +141,8 @@ int main(void)
 				{
 					input_file = args[j + 1];
 					input_fd = open(input_file, O_RDONLY);
-					if (input_fd < 0) {
+					if (input_fd < 0)
+					{
 						perror("open");
 						exit(1);
 					}
