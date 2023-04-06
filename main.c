@@ -1,34 +1,34 @@
-#include "minishell.h"
 #include "Libft/libft.h"
+#include "minishell.h"
 
 extern char **environ;
 
-void add_to_history(t_history *cmd_history, char *input)
+void	add_to_history(t_history *cmd_history, char *input)
 {
 	int i;
 
 	i = 0;
-    if (cmd_history->history_count < MAX_HISTORY)
+	if (cmd_history->history_count < MAX_HISTORY)
 	{
-        cmd_history->history[cmd_history->history_count++] = ft_strdup(input);
-    }
+		cmd_history->history[cmd_history->history_count++] = ft_strdup(input);
+	}
 	else
 	{
-        free(cmd_history->history[0]);
-        while (++i < MAX_HISTORY)
-            cmd_history->history[i - 1] = cmd_history->history[i];
-        cmd_history->history[MAX_HISTORY - 1] = ft_strdup(input);
-    }
+		free(cmd_history->history[0]);
+		while (++i < MAX_HISTORY)
+			cmd_history->history[i - 1] = cmd_history->history[i];
+		cmd_history->history[MAX_HISTORY - 1] = ft_strdup(input);
+	}
 }
 
-void print_history(t_history *cmd_history)
+void	print_history(t_history *cmd_history)
 {
 	int i = -1;
-    while (++i < cmd_history->history_count)
-        printf("%d %s\n", i + 1, cmd_history->history[i]);
+	while (++i < cmd_history->history_count)
+		printf("%d %s\n", i + 1, cmd_history->history[i]);
 }
 
-void parse_input(char *input, char **args, const char *delimiter)
+void	parse_input(char *input, char **args, const char *delimiter)
 {
 	int i;
 	int j;
@@ -41,7 +41,8 @@ void parse_input(char *input, char **args, const char *delimiter)
 	{
 		if (start == -1 && input[j] != *delimiter)
 			start = j;
-		else if (start != -1 && (input[j] == *delimiter || input[j + 1] == '\0'))
+		else if (start != -1 && (input[j] == *delimiter || input[j
+					+ 1] == '\0'))
 		{
 			if (input[j + 1] == '\0')
 				j++;
@@ -53,18 +54,23 @@ void parse_input(char *input, char **args, const char *delimiter)
 	args[i] = NULL; // Add NULL terminator to the end of args array
 }
 
-int main()
+int	main(int argc, char **argv, char **env)
 {
 	char input[MAX_LINE]; // Buffer to store user input
 	char *args[MAX_ARGS]; // Array to store parsed user input
-	int should_run; // Flag to indicate when to exit the loop
-	pid_t pid; // Process ID of child process
-	int status; // Exit status of child process
+	int should_run;       // Flag to indicate when to exit the loop
+	pid_t pid;            // Process ID of child process
+	int status;           // Exit status of child process
 	int i;
 	t_history cmd_history = {0}; // Initialize CommandHistory struct
+	t_env **env_vars;
 
+	(void)argc;
+	(void)argv;
+	(void)env;
 	i = 0;
 	should_run = 1;
+	env_vars = env_init(env);
 	while (should_run)
 	{
 		write(STDOUT_FILENO, "\033[0;93m Minishell>$ \033[0;39m", 28);
@@ -92,29 +98,29 @@ int main()
 		else if (strcmp(args[0], "exit") == 0)
 		{
 			should_run = 0;
-			break;
+			break ;
 		}
 		add_to_history(&cmd_history, input);
 
-        // New built-in command "history"
-        if (strcmp(args[0], "history") == 0)
+		// New built-in command "history"
+		if (strcmp(args[0], "history") == 0)
 		{
-            print_history(&cmd_history);
-            continue;
-        }
+			print_history(&cmd_history);
+			continue ;
+		}
 		// We can add code for commands HERE!!!!!
-			if (strcmp(args[0], "cd") == 0)
+		if (strcmp(args[0], "cd") == 0)
+		{
+			if (args[1] == NULL)
+				write(STDERR_FILENO, "minishell: expected argument to \"cd\"\n",
+						38);
+			else
 			{
-				if (args[1] == NULL)
-					write(STDERR_FILENO, "minishell: expected argument to \"cd\"\n", 38);
-				else
-				{
-					if (chdir(args[1]) != 0)
-						perror("minishell");
-				}
-				continue;
+				if (chdir(args[1]) != 0)
+					perror("minishell");
 			}
-
+			continue ;
+		}
 		if (strcmp(args[0], "pwd") == 0)
 		{
 			char cwd[MAX_LINE];
@@ -125,7 +131,7 @@ int main()
 				write(STDOUT_FILENO, cwd, ft_strlen(cwd));
 				write(STDOUT_FILENO, "\n", 1);
 			}
-			continue;
+			continue ;
 		}
 
 		// "ls" command implementation
@@ -145,12 +151,13 @@ int main()
 			{
 				while ((entry = readdir(dir)) != NULL)
 				{
-					write(STDOUT_FILENO, entry->d_name, ft_strlen(entry->d_name));
+					write(STDOUT_FILENO, entry->d_name,
+							ft_strlen(entry->d_name));
 					write(STDOUT_FILENO, "\n", 1);
 				}
 				closedir(dir);
 			}
-			continue;
+			continue ;
 		}
 
 		// Fork a child process to execute the command
@@ -183,13 +190,14 @@ int main()
 					dup2(input_fd, STDIN_FILENO);
 					close(input_fd);
 					args[j] = NULL;
-					break;
+					break ;
 				}
 				else if (strcmp(args[j], ">") == 0)
 				// Output redirection
 				{
 					output_file = args[j + 1];
-					output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+					output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC,
+							0644);
 					if (output_fd < 0)
 					{
 						perror("open");
@@ -198,7 +206,7 @@ int main()
 					dup2(output_fd, STDOUT_FILENO);
 					close(output_fd);
 					args[j] = NULL;
-					break;
+					break ;
 				}
 				j++;
 			}
@@ -225,12 +233,14 @@ int main()
 				perror("execve");
 				exit(1);
 			}
-			else { // Parent process
+			else
+			{ // Parent process
 				close(pipe_fd[WRITE_END]);
-				waitpid(pipe_pid, &status, 0); // Wait for the child process to finish
+				waitpid(pipe_pid, &status, 0);
+					// Wait for the child process to finish
 				dup2(pipe_fd[READ_END], STDIN_FILENO);
 				close(pipe_fd[READ_END]);
-				execve(args[i + 1], args + i + 1, environ); 
+				execve(args[i + 1], args + i + 1, environ);
 				perror("execve");
 				exit(1);
 			}
@@ -240,9 +250,8 @@ int main()
 			perror("execve");
 			exit(1);
 		}
-		else // Parent process
+		else                          // Parent process
 			waitpid(pid, &status, 0); // Wait for the child process to finish
 	}
-	return 0;
+	return (0);
 }
-				   
