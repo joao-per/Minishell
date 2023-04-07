@@ -26,16 +26,19 @@ typedef struct s_env
 {
 	char *env_var;      // environment variable name
 	struct s_env *next; // next variable
-} t_env;
+}	t_env;
 
 typedef struct s_history
 {
 	char *history[MAX_HISTORY]; // Array to store history of commands
 	int history_count;          // Current count of commands in history
-} t_history;
+}	t_history;
 
+/*				Environment				*/
 t_env	**env_init(char **env);
 void	print_env_vars(t_env **env_arr);
-
+/*				Commands				*/
+int		check_commands(char **av);
+int		check_commands2(char **av);
 
 #endif

@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/07 14:54:09 by joao-per          #+#    #+#             */
+/*   Updated: 2023/04/07 14:54:09 by joao-per         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Libft/libft.h"
 #include "minishell.h"
 
-extern char **environ;
+extern char	**environ;
 
 void	add_to_history(t_history *cmd_history, char *input)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (cmd_history->history_count < MAX_HISTORY)
@@ -23,16 +35,18 @@ void	add_to_history(t_history *cmd_history, char *input)
 
 void	print_history(t_history *cmd_history)
 {
-	int i = -1;
+	int	i;
+
+	i = -1;
 	while (++i < cmd_history->history_count)
 		printf("%d %s\n", i + 1, cmd_history->history[i]);
 }
 
-void	parse_input(char *input, char **args, const char *delimiter)
+void	parse_input(char *input, char **av, const char *delimiter)
 {
-	int i;
-	int j;
-	int start;
+	int	i;
+	int	j;
+	int	start;
 
 	i = 0;
 	j = 0;
@@ -46,26 +60,26 @@ void	parse_input(char *input, char **args, const char *delimiter)
 		{
 			if (input[j + 1] == '\0')
 				j++;
-			args[i++] = ft_strndup(input + start, j - start);
+			av[i++] = ft_strndup(input + start, j - start);
 			start = -1;
 		}
 		j++;
 	}
-	args[i] = NULL; // Add NULL terminator to the end of args array
+	av[i] = NULL; // Add NULL terminator to the end of av array
 }
 
-int	main(int argc, char **argv, char **env)
+int	main(int ac, char **argv, char **env)
 {
-	char input[MAX_LINE]; // Buffer to store user input
-	char *args[MAX_ARGS]; // Array to store parsed user input
-	int should_run;       // Flag to indicate when to exit the loop
-	pid_t pid;            // Process ID of child process
-	int status;           // Exit status of child process
-	int i;
-	t_history cmd_history = {0}; // Initialize CommandHistory struct
-	t_env **env_vars;
+	char		input[MAX_LINE]; // Buffer to store user input
+	char 		*av[MAX_ARGS]; // Array to store parsed user input
+	int			should_run;       // Flag to indicate when to exit the loop
+	pid_t		pid;            // Process ID of child process
+	int			status;           // Exit status of child process
+	int			i;
+	t_history	cmd_history = {0}; // Initialize CommandHistory struct
+	t_env		**env_vars;
 
-	(void)argc;
+	(void)ac;
 	(void)argv;
 	(void)env;
 	i = 0;
@@ -78,92 +92,45 @@ int	main(int argc, char **argv, char **env)
 		// Read in user input using read
 		ssize_t n = read(STDIN_FILENO, input, MAX_LINE);
 		if (n == -1)
-		{ // Error occurred
+		// Error occurred
+		{
 			perror("read");
 			continue ;
 		}
 		else if (n == 0)
-		{ // End of file (e.g. user pressed Ctrl-D)
+		// End of file (e.g. user pressed Ctrl-D)
+		{
 			should_run = 0;
 			break ;
 		}
 		input[n - 1] = '\0'; // Replace newline character with null terminator
 
 		// Parse the input into separate arguments
-		parse_input(input, args, " ");
+		parse_input(input, av, " ");
 
 		// Check for built-in commands
-		if (args[0] == NULL)
+		if (av[0] == NULL)
 			continue ;
-		else if (strcmp(args[0], "exit") == 0)
+		else if (strcmp(av[0], "exit") == 0)
 		{
 			should_run = 0;
 			break ;
 		}
 		add_to_history(&cmd_history, input);
 		// New built-in command "history"
-		if (strcmp(args[0], "history") == 0)
+		if (strcmp(av[0], "history") == 0)
 		{
 			print_history(&cmd_history);
 			continue ;
 		}
-		if (strcmp(args[0], "env") == 0)
+		if (strcmp(av[0], "env") == 0)
 		{
 			print_env_vars(env_vars);
 			continue ;
 		}
 		// We can add code for commands HERE!!!!!
-		if (strcmp(args[0], "cd") == 0)
-		{
-			if (args[1] == NULL)
-				write(STDERR_FILENO, "minishell: expected argument to \"cd\"\n",
-						38);
-			else
-			{
-				if (chdir(args[1]) != 0)
-					perror("minishell");
-			}
+		if (!check_commands(av))
 			continue ;
-		}
-		if (strcmp(args[0], "pwd") == 0)
-		{
-			char cwd[MAX_LINE];
-			if (getcwd(cwd, sizeof(cwd)) == NULL)
-				perror("minishell");
-			else
-			{
-				write(STDOUT_FILENO, cwd, ft_strlen(cwd));
-				write(STDOUT_FILENO, "\n", 1);
-			}
-			continue ;
-		}
-
-		// "ls" command implementation
-		if (strcmp(args[0], "ls") == 0)
-		{
-			DIR *dir;
-			struct dirent *entry;
-			char *dir_path;
-
-			if (args[1] == NULL)
-				dir_path = ".";
-			else
-				dir_path = args[1];
-			if ((dir = opendir(dir_path)) == NULL)
-				perror("minishell");
-			else
-			{
-				while ((entry = readdir(dir)) != NULL)
-				{
-					write(STDOUT_FILENO, entry->d_name,
-							ft_strlen(entry->d_name));
-					write(STDOUT_FILENO, "\n", 1);
-				}
-				closedir(dir);
-			}
-			continue ;
-		}
-
 		// Fork a child process to execute the command
 		pid = fork();
 
@@ -179,12 +146,12 @@ int	main(int argc, char **argv, char **env)
 			int input_fd = 0, output_fd = 0;
 			char *input_file = NULL, *output_file = NULL;
 			int j = 0;
-			while (args[j] != NULL)
+			while (av[j] != NULL)
 			{
-				if (strcmp(args[j], "<") == 0)
+				if (strcmp(av[j], "<") == 0)
 				// Input redirection
 				{
-					input_file = args[j + 1];
+					input_file = av[j + 1];
 					input_fd = open(input_file, O_RDONLY);
 					if (input_fd < 0)
 					{
@@ -193,13 +160,13 @@ int	main(int argc, char **argv, char **env)
 					}
 					dup2(input_fd, STDIN_FILENO);
 					close(input_fd);
-					args[j] = NULL;
+					av[j] = NULL;
 					break ;
 				}
-				else if (strcmp(args[j], ">") == 0)
+				else if (strcmp(av[j], ">") == 0)
 				// Output redirection
 				{
-					output_file = args[j + 1];
+					output_file = av[j + 1];
 					output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC,
 							0644);
 					if (output_fd < 0)
@@ -209,7 +176,7 @@ int	main(int argc, char **argv, char **env)
 					}
 					dup2(output_fd, STDOUT_FILENO);
 					close(output_fd);
-					args[j] = NULL;
+					av[j] = NULL;
 					break ;
 				}
 				j++;
@@ -233,7 +200,7 @@ int	main(int argc, char **argv, char **env)
 				close(pipe_fd[READ_END]);
 				dup2(pipe_fd[WRITE_END], STDOUT_FILENO);
 				close(pipe_fd[WRITE_END]);
-				execve(args[0], args, environ);
+				execve(av[0], av, environ);
 				perror("execve");
 				exit(1);
 			}
@@ -244,13 +211,13 @@ int	main(int argc, char **argv, char **env)
 					// Wait for the child process to finish
 				dup2(pipe_fd[READ_END], STDIN_FILENO);
 				close(pipe_fd[READ_END]);
-				execve(args[i + 1], args + i + 1, environ);
+				execve(av[i + 1], av + i + 1, environ);
 				perror("execve");
 				exit(1);
 			}
 			// End of code for piping
 
-			execve(args[0], args, environ);
+			execve(av[0], av, environ);
 			perror("execve");
 			exit(1);
 		}
