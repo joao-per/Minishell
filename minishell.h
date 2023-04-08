@@ -22,6 +22,8 @@
 # define MAX_HISTORY 100          
 	// Maximum number of commands to be stored in history
 
+extern char	**environ;
+
 typedef struct s_env
 {
 	char *env_var;      // environment variable name
@@ -40,5 +42,8 @@ void	print_env_vars(t_env **env_arr);
 /*				Commands				*/
 int		check_commands(char **av);
 int		check_commands2(char **av);
+void	handle_pipe(char **av, int status, int i);
+void	handle_redirection(char **av);
+void	execute_command(char **av);
 
 #endif
