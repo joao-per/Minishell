@@ -39,6 +39,7 @@ typedef struct s_history
 /*				Environment				*/
 t_env	**env_init(char **env);
 void	print_env_vars(t_env **env_arr);
+t_env	*search_env_name(t_env **stack, char *var_to_find);
 /*				Commands				*/
 int		check_commands(char **av);
 int		check_commands2(char **av);

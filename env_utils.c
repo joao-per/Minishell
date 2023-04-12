@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:17:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/04/06 17:18:35 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/04/12 23:48:34 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,20 @@ void	print_env_vars(t_env **env_arr)
 		printf("%s\n", current->env_var);
 		current = current->next;
 	}
+}
+
+t_env	*search_env_name(t_env **stack, char *var_to_find)
+{
+	t_env	*temp;
+	int		len;
+
+	temp = (*stack);
+	len = ft_strlen(var_to_find);
+	while (temp != NULL)
+	{
+		if (!ft_strncmp(temp->env_var, var_to_find, len))
+			break ;
+		temp = temp->next;
+	}
+	return (temp);
 }

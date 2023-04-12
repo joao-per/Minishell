@@ -25,7 +25,7 @@ ft_lstlast ft_lstiter ft_lstsize ft_lstmap \
 
 CC = gcc
 RM = rm -f
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 AR	= ar rcs
 
 DEFAULT = \033[0;39m

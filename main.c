@@ -79,6 +79,14 @@ int main(int ac, char **argv, char **env)
 	(void)env;
 	should_run = 1;
 	env_vars = env_init(env);
+	int i;
+	i = -1;
+	while (++i < MAX_ARGS)
+		av[i] = 0;
+	i = -1;
+	while (++i < MAX_LINE)
+		input[i] = 0;
+	parse_input(input, av, " ");
 	while (should_run)
 	{
 		write(STDOUT_FILENO, "\033[0;93m Minishell>$ \033[0;39m", 28);
@@ -121,10 +129,10 @@ int main(int ac, char **argv, char **env)
 			continue ;
 		}
 		// We can add code for commands HERE!!!!!
-		if (!check_commands(av))
+		if (check_commands(av))
 			continue ;
 		// Fork a child process to execute the command
-		execute_command(av);
+		//execute_command(av);
 	}
 	return (0);
 }
