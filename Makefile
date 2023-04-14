@@ -6,7 +6,7 @@ FILES = main.c env_utils.c commands.c pipes.c
 
 all:
 		$(MAKE) -C Libft all
-		$(CC) $(CFLAGS) $(FILES) Libft/libft.a -o $(NAME)
+		$(CC) $(FILES) Libft/libft.a -o $(NAME) -lreadline -lhistory
 
 fclean:
 		rm -f $(NAME)

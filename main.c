@@ -13,33 +13,6 @@
 #include "Libft/libft.h"
 #include "minishell.h"
 
-void	add_to_history(t_history *cmd_history, char *input)
-{
-	int	i;
-
-	i = 0;
-	if (cmd_history->history_count < MAX_HISTORY)
-	{
-		cmd_history->history[cmd_history->history_count++] = ft_strdup(input);
-	}
-	else
-	{
-		free(cmd_history->history[0]);
-		while (++i < MAX_HISTORY)
-			cmd_history->history[i - 1] = cmd_history->history[i];
-		cmd_history->history[MAX_HISTORY - 1] = ft_strdup(input);
-	}
-}
-
-void	print_history(t_history *cmd_history)
-{
-	int	i;
-
-	i = -1;
-	while (++i < cmd_history->history_count)
-		printf("%d %s\n", i + 1, cmd_history->history[i]);
-}
-
 void	parse_input(char *input, char **av, const char *delimiter)
 {
 	int	i;
@@ -89,21 +62,17 @@ int main(int ac, char **argv, char **env)
 	parse_input(input, av, " ");
 	while (should_run)
 	{
-		write(STDOUT_FILENO, "\033[0;93m Minishell>$ \033[0;39m", 28);
-		// Read in user input using read
-		ssize_t n = read(STDIN_FILENO, input, MAX_LINE);
-		if (n == -1)
-		{
-			perror("read");
-			continue ;
-		}
+		char *line = readline("\033[0;93m Minishell>$ \033[0;39m");
+		if (line == NULL)
 		// End of file (e.g. user pressed Ctrl-D)
-		else if (n == 0)
 		{
 			should_run = 0;
-			break ;
+			break;
 		}
-		input[n - 1] = '\0'; // Replace newline character with null terminator
+		strncpy(input, line, MAX_LINE - 1);
+		input[MAX_LINE - 1] = '\0'; // Ensure null terminator
+		free(line); // Free memory allocated by readline
+
 
 		// Parse the input into separate arguments
 		parse_input(input, av, " ");
@@ -116,13 +85,13 @@ int main(int ac, char **argv, char **env)
 			should_run = 0;
 			break ;
 		}
-		add_to_history(&cmd_history, input);
+		add_history(input);
 		// New built-in command "history"
-		if (strcmp(av[0], "history") == 0)
+		/* if (strcmp(av[0], "history") == 0)
 		{
 			print_history(&cmd_history);
 			continue ;
-		}
+		} */
 		if (strcmp(av[0], "env") == 0)
 		{
 			print_env_vars(env_vars);

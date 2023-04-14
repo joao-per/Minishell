@@ -14,6 +14,8 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # define MAX_LINE 80               // Maximum length of user input
 # define MAX_ARGS MAX_LINE / 2 + 1 // Maximum number of arguments for a command
@@ -46,5 +48,7 @@ int		check_commands2(char **av);
 void	handle_pipe(char **av, int status, int i);
 void	handle_redirection(char **av);
 void	execute_command(char **av);
+void	add_to_history(t_history *cmd_history, char *input);
+void	print_history(t_history *cmd_history);
 
 #endif
