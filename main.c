@@ -46,13 +46,14 @@ int main(int ac, char **argv, char **env)
 	int should_run;       // Flag to indicate when to exit the loop
 	t_history cmd_history = {0}; // Initialize CommandHistory struct
 	t_env **env_vars;
+	int i;
+	char *line;
 
 	(void)ac;
 	(void)argv;
 	(void)env;
 	should_run = 1;
 	env_vars = env_init(env);
-	int i;
 	i = -1;
 	while (++i < MAX_ARGS)
 		av[i] = 0;
@@ -62,7 +63,7 @@ int main(int ac, char **argv, char **env)
 	parse_input(input, av, " ");
 	while (should_run)
 	{
-		char *line = readline("\033[0;93m Minishell>$ \033[0;39m");
+		line = readline("\033[0;93m Minishell>$ \033[0;39m");
 		if (line == NULL)
 		// End of file (e.g. user pressed Ctrl-D)
 		{
@@ -86,12 +87,6 @@ int main(int ac, char **argv, char **env)
 			break ;
 		}
 		add_history(input);
-		// New built-in command "history"
-		/* if (strcmp(av[0], "history") == 0)
-		{
-			print_history(&cmd_history);
-			continue ;
-		} */
 		if (strcmp(av[0], "env") == 0)
 		{
 			print_env_vars(env_vars);
