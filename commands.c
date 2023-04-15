@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/04/12 23:17:46 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/04/15 01:31:33 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	check_commands(char **av)
 	if (strcmp(av[0], "cd") == 0)
 	{
 		if (av[1] == NULL)
-			write(2, "minishell: expected argument to \"cd\"\n", 38);
+			chdir(getenv("HOME"));
 		else
 		{
 			if (chdir(av[1]) != 0)
