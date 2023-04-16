@@ -52,5 +52,6 @@ void	add_to_history(t_history *cmd_history, char *input);
 void	print_history(t_history *cmd_history);
 void	export_variable(t_env **env_vars, const char *new_var);
 void	unset_variable(t_env **env_vars, const char *var_name);
+void	echo_command(char **av);
 
 #endif

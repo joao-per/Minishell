@@ -6,7 +6,7 @@
 /*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/04/16 11:53:37 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/04/16 13:25:09 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ int	check_commands(char **av, t_env **env_vars)
 	if (strcmp(av[0], "unset") == 0)
 	{
 		unset_variable(env_vars, av[1]);
+		return (0);
+	}
+	if (strcmp(av[0], "echo") == 0)
+	{
+		echo_command(av);
 		return (0);
 	}
 	return (check_commands2(av));
@@ -108,6 +113,7 @@ void	export_variable(t_env **env_vars, const char *new_var)
 	while (curr->next)
 		curr = curr->next;
 	curr->next = new_env_var;
+	//free(new_env_var);
 }
 
 void	unset_variable(t_env **env_vars, const char *var_name)
@@ -143,4 +149,27 @@ void	unset_variable(t_env **env_vars, const char *var_name)
 		curr = curr->next;
 	}
 	printf("minishell: unset: Variable not found: %s\n", var_name);
+}
+
+void	echo_command(char **av)
+{
+	int	new_line;
+	int	i;
+
+	new_line = 1;
+	i = 1;
+	if (av[i] && strcmp(av[i], "-n") == 0)
+	{
+		new_line = 0;
+		i++;
+	}
+	while (av[i])
+	{
+		write(STDOUT_FILENO, av[i], ft_strlen(av[i]));
+		if (av[i + 1])
+			write(STDOUT_FILENO, " ", 1);
+		i++;
+	}
+	if (new_line)
+		write(STDOUT_FILENO, "\n", 1);
 }
