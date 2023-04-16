@@ -6,7 +6,7 @@
 /*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/04/16 10:12:36 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/04/16 10:13:20 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	export_variable(t_env **env_vars, const char *new_var)
 		perror("minishell: export: malloc");
 		return ;
 	}
-	new_env_var->env_var = strdup(new_var);
+	new_env_var->env_var = ft_strdup(new_var);
 	new_env_var->next = NULL;
 	if (*env_vars == NULL)
 	{
