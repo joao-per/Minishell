@@ -93,7 +93,7 @@ int main(int ac, char **argv, char **env)
 			continue ;
 		}
 		// We can add code for commands HERE!!!!!
-		if (check_commands(av))
+		if (check_commands(av, env_vars))
 			continue ;
 		// Fork a child process to execute the command
 		//execute_command(av);

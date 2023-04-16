@@ -6,14 +6,14 @@
 /*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/04/15 01:31:33 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/04/16 10:12:36 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Libft/libft.h"
 #include "minishell.h"
 
-int	check_commands(char **av)
+int	check_commands(char **av, t_env **env_vars)
 {
 	char	cwd[MAX_LINE];
 
@@ -37,6 +37,11 @@ int	check_commands(char **av)
 			write(STDOUT_FILENO, cwd, ft_strlen(cwd));
 			write(STDOUT_FILENO, "\n", 1);
 		}
+		return (0);
+	}
+	if (strcmp(av[0], "export") == 0)
+	{
+		export_variable(env_vars, av[1]);
 		return (0);
 	}
 	return (check_commands2(av));
@@ -69,3 +74,34 @@ int	check_commands2(char **av)
 	}
 	return (1);
 }
+
+void	export_variable(t_env **env_vars, const char *new_var)
+{
+	t_env	*new_env_var;
+	t_env	*curr;
+
+	// If no argument is provided, display all environment variables
+	if (!new_var)
+	{
+		print_env_vars(env_vars);
+		return ;
+	}
+	new_env_var = (t_env *)malloc(sizeof(t_env));
+	if (!new_env_var)
+	{
+		perror("minishell: export: malloc");
+		return ;
+	}
+	new_env_var->env_var = strdup(new_var);
+	new_env_var->next = NULL;
+	if (*env_vars == NULL)
+	{
+		*env_vars = new_env_var;
+		return ;
+	}
+	curr = *env_vars;
+	while (curr->next)
+		curr = curr->next;
+	curr->next = new_env_var;
+}
+
