@@ -6,7 +6,7 @@
 /*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/04/16 10:13:20 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/04/16 11:53:37 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ int	check_commands(char **av, t_env **env_vars)
 	if (strcmp(av[0], "export") == 0)
 	{
 		export_variable(env_vars, av[1]);
+		return (0);
+	}
+	if (strcmp(av[0], "unset") == 0)
+	{
+		unset_variable(env_vars, av[1]);
 		return (0);
 	}
 	return (check_commands2(av));
@@ -105,3 +110,37 @@ void	export_variable(t_env **env_vars, const char *new_var)
 	curr->next = new_env_var;
 }
 
+void	unset_variable(t_env **env_vars, const char *var_name)
+{
+	t_env	*curr;
+	t_env	*prev;
+	char	*equal_pos;
+
+	curr = *env_vars;
+	prev = NULL;
+	if (!var_name)
+	{
+		printf("minishell: unset: Invalid format. Usage: unset KEY\n");
+		return ;
+	}
+	while (curr)
+	{
+		equal_pos = ft_strchr(curr->env_var, '=');
+		if (equal_pos && strncmp(curr->env_var, var_name,
+				equal_pos - curr->env_var) == 0
+			&& ft_strlen(var_name) == (size_t)(equal_pos - curr->env_var))
+		{
+			if (prev)
+				prev->next = curr->next;
+			else
+				*env_vars = curr->next;
+
+			free(curr->env_var);
+			free(curr);
+			return ;
+		}
+		prev = curr;
+		curr = curr->next;
+	}
+	printf("minishell: unset: Variable not found: %s\n", var_name);
+}
