@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/04/16 13:25:09 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/04/21 19:59:02 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,40 @@
 int	check_commands(char **av, t_env **env_vars)
 {
 	char	cwd[MAX_LINE];
+	char	*oldwd;
+	t_env 	*temp;
 
 	if (strcmp(av[0], "cd") == 0)
 	{
 		if (av[1] == NULL)
+		{
 			chdir(getenv("HOME"));
+			getcwd(cwd, sizeof(cwd));
+			temp = search_env_name(env_vars, "PWD=");
+			oldwd = ft_strdup(temp->env_var);
+			free(temp->env_var);
+			temp->env_var = ft_strjoin("PWD=", cwd);
+			temp = search_env_name(env_vars, "OLDPWD=");
+			free(temp->env_var);
+			temp->env_var = ft_strjoin("OLD", oldwd);
+			free(oldwd);
+		}
 		else
 		{
 			if (chdir(av[1]) != 0)
+			{
 				perror("minishell");
+				return (0);
+			}
+			getcwd(cwd, sizeof(cwd));
+			temp = search_env_name(env_vars, "PWD");
+			oldwd = ft_strdup(temp->env_var);
+			free(temp->env_var);
+			temp->env_var = ft_strjoin("PWD=", cwd);
+			temp = search_env_name(env_vars, "OLDPWD=");
+			free(temp->env_var);
+			temp->env_var = ft_strjoin("OLD", oldwd);
+			free(oldwd);
 		}
 		return (0);
 	}

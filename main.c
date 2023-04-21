@@ -86,7 +86,7 @@ int main(int ac, char **argv, char **env)
 			should_run = 0;
 			break ;
 		}
-		add_history(input);
+		//add_history(input);
 		if (strcmp(av[0], "env") == 0)
 		{
 			print_env_vars(env_vars);
