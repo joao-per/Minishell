@@ -78,6 +78,8 @@ int main(int ac, char **argv, char **env)
 		// Parse the input into separate arguments
 		parse_input(input, av, " ");
 
+		//if (!check_commands(av, env_vars))
+		execute_command(av, env_vars);
 		// Check for built-in commands
 		if (av[0] == NULL)
 			continue ;
@@ -86,17 +88,15 @@ int main(int ac, char **argv, char **env)
 			should_run = 0;
 			break ;
 		}
-		//add_history(input);
+		add_history(input);
 		if (strcmp(av[0], "env") == 0)
 		{
 			print_env_vars(env_vars);
 			continue ;
 		}
 		// We can add code for commands HERE!!!!!
-		if (check_commands(av, env_vars))
-			continue ;
+		//continue ;
 		// Fork a child process to execute the command
-		//execute_command(av);
 	}
 	return (0);
 }

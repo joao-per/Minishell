@@ -86,16 +86,19 @@ void handle_redirection(char **av)
 	}
 }
 
-void	execute_command(char **av)
+void execute_command(char **av, t_env **env_vars)
 {
-	pid_t	pid;
-	int		pipe_flag;
-	int		i;
-	int		status;           // Exit status of child process
+	pid_t pid;
+	int status; // Exit status of child process
+	int pipe_fd[2];
+	int is_builtin;
 
+	if (pipe(pipe_fd) == -1)
+	{
+		perror("pipe");
+		exit(1);
+	}
 	status = 0;
-	pipe_flag = 0;
-	i = 0;
 	pid = fork();
 	if (pid < 0)
 	{
@@ -105,29 +108,62 @@ void	execute_command(char **av)
 	// Child process
 	else if (pid == 0)
 	{
-		// Call handle_redirection function
-		handle_redirection(av);
-		// Check for piping and call handle_pipe function
-		while (av[i] != NULL)
-		{
-			if (strcmp(av[i], "|") == 0)
-			{
-				pipe_flag = 1;
-				av[i] = NULL;
-				break ;
-			}
-			i++;
+		char buffer[MAX_LINE];
+		int env_vars_count;
+		env_vars_count = 0;
+		close(pipe_fd[1]); // Close the write end of the pipe in the child process
+		handle_redirection(av); // Apply redirection only to the child process
+
+		// Add the following line to the child process before handling the commands
+		dup2(pipe_fd[0], 3); // Duplicate the read end of the pipe to file descriptor 3
+		close(pipe_fd[0]); // Close the original read end of the pipe
+
+		// Deserialize the env_vars variable in the child process
+		// Count the number of environment variables
+		while (env_vars[env_vars_count] != NULL) {
+			env_vars_count++;
 		}
-		if (pipe_flag)
-			handle_pipe(av + i + 1, status, i);
-		else
+		// Allocate memory for the child_env_vars array
+		t_env **child_env_vars = (t_env **)malloc((env_vars_count + 1) * sizeof(t_env *));
+		int index = 0;
+		// Read environment variables from the pipe (file descriptor 3) and store them in the child_env_vars array
+		while (read(3, buffer, MAX_LINE) > 0 && buffer[0] != '\0') {
+			child_env_vars[index] = (t_env *)malloc(sizeof(t_env));
+			child_env_vars[index]->env_var = strdup(buffer);
+			index++;
+		}
+		child_env_vars[index] = NULL;
+
+		// Handle built-in commands using the child's environment variables.
+		is_builtin = check_commands(av, child_env_vars);
+		if (is_builtin == 0)
 		{
-			execve(av[0], av, environ);
-			perror("execve");
-			exit(1);
+			// Free child_env_vars memory
+			while (child_env_vars[i] != NULL)
+			{
+				free(child_env_vars[i]->env_var);
+				free(child_env_vars[i]);
+				i++;
+			}
+			free(child_env_vars);
+			exit(0);
 		}
 	}
 	// Parent process / Wait for the child process to finish
 	else
-		waitpid(pid, &status, 0);
+	{
+		close(pipe_fd[0]); // Closes the read end of the pipe in the parent process, as the parent will only be writing to the pipe
+
+		// Pass the env_vars variable to the child process through the pipe
+		int env_vars_count = 0;
+		// Write the env_vars variable to the pipe (fd 1) so the child process can read it
+		while (env_vars[env_vars_count] != NULL)
+		{
+			write(pipe_fd[1], env_vars[env_vars_count]->env_var, strlen(env_vars[env_vars_count]->env_var) + 1);
+			env_vars_count++;
+		}
+		write(pipe_fd[1], "", 1); // Write an empty string to indicate the end of the env_vars list
+		close(pipe_fd[1]); // Close the write end of the pipe
+		waitpid(pid, &status, 0); // Wait for the child process to finish
+	}
 }
