@@ -6,48 +6,41 @@
 /*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/04/24 01:17:55 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/05/01 17:25:19 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Libft/libft.h"
 #include "minishell.h"
 
-void cd_command(char **av, t_env **child_env_vars)
+void cd_command(char **av, t_env **env_vars)
 {
 	char	cwd[MAX_LINE];
 	char	*oldwd;
 	t_env 	*temp;
+
     if (av[1] == NULL)
 	{
 		chdir(getenv("HOME"));
-		getcwd(cwd, sizeof(cwd));
-		temp = search_env_name(child_env_vars, "PWD=");
-		oldwd = ft_strdup(temp->env_var);
-		free(temp->env_var);
-		temp->env_var = ft_strjoin("PWD=", cwd);
-		temp = search_env_name(child_env_vars, "OLDPWD=");
-		free(temp->env_var);
-		temp->env_var = ft_strjoin("OLD", oldwd);
-		free(oldwd);
 	}
 	else
 	{
 		if (chdir(av[1]) != 0)
 		{
 			perror("minishell");
-			return ;
+			return;
 		}
-		getcwd(cwd, sizeof(cwd));
-		temp = search_env_name(child_env_vars, "PWD");
-		oldwd = ft_strdup(temp->env_var);
-		free(temp->env_var);
-		temp->env_var = ft_strjoin("PWD=", cwd);
-		temp = search_env_name(child_env_vars, "OLDPWD=");
-		free(temp->env_var);
-		temp->env_var = ft_strjoin("OLD", oldwd);
-		free(oldwd);
 	}
+	
+	getcwd(cwd, sizeof(cwd));
+	temp = search_env_name(env_vars, "PWD=");
+	oldwd = ft_strdup(temp->env_var);
+	free(temp->env_var);
+	temp->env_var = ft_strjoin("PWD=", cwd);
+	temp = search_env_name(env_vars, "OLDPWD=");
+	free(temp->env_var);
+	temp->env_var = ft_strjoin("OLD", oldwd);
+	free(oldwd);
 }
 
 int	check_commands(char **av, t_env **child_env_vars)
@@ -83,10 +76,10 @@ int	check_commands(char **av, t_env **child_env_vars)
 		echo_command(av);
 		return (0);
 	}
-	return (check_commands2(av));
+	return (check_commands2(av, child_env_vars));
 }
 
-int	check_commands2(char **av)
+int	check_commands2(char **av, t_env **child_env_vars)
 {
 	struct dirent	*entry;
 	DIR				*dir;
@@ -111,6 +104,7 @@ int	check_commands2(char **av)
 		}
 		return (0);
 	}
+	execute_external_command(av, child_env_vars);
 	return (1);
 }
 

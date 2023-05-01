@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:17:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/04/12 23:48:34 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/01 17:22:39 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,24 @@ t_env	*search_env_name(t_env **stack, char *var_to_find)
 		temp = temp->next;
 	}
 	return (temp);
+}
+
+char *get_env_value(char *name, t_env **env_vars)
+{
+	t_env *env_var;
+	char *value;
+	int name_len;
+
+	name_len = strlen(name);
+	env_var = *env_vars;
+	while (env_var)
+	{
+		if (strncmp(env_var->env_var, name, name_len) == 0 && env_var->env_var[name_len] == '=')
+		{
+			value = strdup(env_var->env_var + name_len + 1);
+			return value;
+		}
+		env_var = env_var->next;
+	}
+	return (NULL);
 }

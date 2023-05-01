@@ -86,12 +86,16 @@ void handle_redirection(char **av)
 	}
 }
 
+/*
+while the parent process is responsible for passing environment variables to the child and waiting for the child process to complete.
+*/
 void execute_command(char **av, t_env **env_vars)
 {
 	pid_t pid;
 	int status; // Exit status of child process
 	int pipe_fd[2];
 	int is_builtin;
+	int i = 0;
 
 	if (pipe(pipe_fd) == -1)
 	{
@@ -99,6 +103,11 @@ void execute_command(char **av, t_env **env_vars)
 		exit(1);
 	}
 	status = 0;
+	if (strcmp(av[0], "cd") == 0)
+	{
+		cd_command(av, env_vars);
+		return;
+	}
 	pid = fork();
 	if (pid < 0)
 	{
@@ -166,4 +175,68 @@ void execute_command(char **av, t_env **env_vars)
 		close(pipe_fd[1]); // Close the write end of the pipe
 		waitpid(pid, &status, 0); // Wait for the child process to finish
 	}
+}
+
+void execute_external_command(char **av, t_env **env_vars)
+{
+	char	*path_var;
+	char	**path_dirs;
+	char	*cmd_path;
+	char	*temp;
+	char	*full_path;
+	int		i;
+
+	if (strchr(av[0], '/'))
+	{
+		execve(av[0], av, env_vars_to_char_arr(env_vars));
+		perror("minishell");
+		exit(1);
+	}
+	path_var = get_env_value("PATH", env_vars);
+	if (!path_var)
+	{
+		perror("minishell: PATH not set");
+		exit(1);
+	}
+	path_dirs = ft_split(path_var, ':');
+	free(path_var);
+	i = 0;
+	while (path_dirs[i])
+	{
+		temp = ft_strjoin(path_dirs[i], "/");
+        full_path = ft_strjoin(temp, av[0]);
+		free(temp);
+		if (access(cmd_path, X_OK) == 0)
+		{
+			execve(cmd_path, av, env_vars_to_char_arr(env_vars));
+			free(cmd_path);
+			break;
+		}
+		free(cmd_path);
+		i++;
+	}
+
+	free_double_array(path_dirs);
+	perror("minishell");
+	exit(1);
+}
+
+char **env_vars_to_char_arr(t_env **env_vars)
+{
+	int env_count;
+	char **env_arr;
+	int i;
+
+	env_count = 0;
+	while (env_vars[env_count] != NULL)
+		env_count++;
+	env_arr = (char **)malloc((env_count + 1) * sizeof(char *));
+	i = 0;
+	while (i < env_count)
+	{
+		env_arr[i] = env_vars[i]->env_var;
+		i++;
+	}
+	env_arr[env_count] = NULL;
+	return (env_arr);
 }

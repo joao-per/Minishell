@@ -44,7 +44,7 @@ void	print_env_vars(t_env **env_arr);
 t_env	*search_env_name(t_env **stack, char *var_to_find);
 /*				Commands				*/
 int		check_commands(char **av, t_env **child_env_vars);
-int		check_commands2(char **av);
+int		check_commands2(char **av, t_env **child_env_vars);
 void	handle_pipe(char **av, int status, int i);
 void	handle_redirection(char **av);
 void	execute_command(char **av, t_env **env_vars);
@@ -53,5 +53,10 @@ void	print_history(t_history *cmd_history);
 void	export_variable(t_env **env_vars, const char *new_var);
 void	unset_variable(t_env **env_vars, const char *var_name);
 void	echo_command(char **av);
+void	cd_command(char **av, t_env **child_env_vars);
+void	execute_external_command(char **av, t_env **env_vars);
+char	**env_vars_to_char_arr(t_env **env_vars);
+void	free_double_array(char **doubles);
+char	*get_env_value(char *name, t_env **env_vars);
 
 #endif
