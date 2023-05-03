@@ -25,7 +25,15 @@ void	parse_input(char *input, char **av, const char *delimiter)
 	while (input[j] != '\0')
 	{
 		if (start == -1 && input[j] != *delimiter)
+		{
 			start = j;
+			if (input[j + 1] == '\0')
+			{
+				j++;
+				av[i++] = ft_strndup(input + start, j - start);
+				start = -1;
+			}
+		}
 		else if (start != -1 && (input[j] == *delimiter || input[j
 					+ 1] == '\0'))
 		{
@@ -79,7 +87,6 @@ int main(int ac, char **argv, char **env)
 		parse_input(input, av, " ");
 
 		//if (!check_commands(av, env_vars))
-		execute_command(av, env_vars);
 		// Check for built-in commands
 		if (av[0] == NULL)
 			continue ;
@@ -94,6 +101,7 @@ int main(int ac, char **argv, char **env)
 			print_env_vars(env_vars);
 			continue ;
 		}
+		execute_command(av, env_vars);
 		// We can add code for commands HERE!!!!!
 		//continue ;
 		// Fork a child process to execute the command
