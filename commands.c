@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/05 18:55:04 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/05 19:20:28 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,13 @@ void	export_variable(t_env **env_vars, char *new_var)
 		print_export_vars(env_vars);
 		return ;
 	}
-	if (!ft_isalpha(new_var[0]) && !(new_var[0] == '_') || !ft_strchr(new_var, '='))
+	if ((!ft_isalpha(new_var[0]) && !(new_var[0] == '_')))
 	{
-		printf("export: not an identifier: %s\n", new_var);
+		printf("export: `%s': not a valid identifier \n", new_var);
 		return ;
 	}
+	if (!ft_strchr(new_var, '='))
+		return ;
 	eq_pos = ft_strchr(new_var, '=');
 	env_name_l = eq_pos - new_var;
 	env_name = malloc(env_name_l + 1);
