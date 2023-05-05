@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/05 19:20:28 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/05 19:50:28 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void cd_command(char **av, t_env **env_vars)
 int	check_commands(char **av, t_env **child_env_vars)
 {
 	char	cwd[MAX_LINE];
+	int i;
 	if (strcmp(av[0], "cd") == 0)
 	{
 		cd_command(av, child_env_vars);
@@ -63,7 +64,12 @@ int	check_commands(char **av, t_env **child_env_vars)
 	}
 	if (strcmp(av[0], "export") == 0)
 	{
-		export_variable(child_env_vars, av[1]);
+		i = 1;
+		while (av[i])
+		{
+			export_variable(child_env_vars, av[i]);
+			i++;
+		}
 		return (0);
 	}
 	if (strcmp(av[0], "unset") == 0)
