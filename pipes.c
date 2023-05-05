@@ -144,7 +144,7 @@ void execute_command(char **av, t_env **env_vars)
 		child_env_vars[index] = NULL;
 
 		// Handle built-in commands using the child's environment variables.
-		is_builtin = check_commands(av, child_env_vars);
+		is_builtin = check_commands(av, env_vars);
 		if (is_builtin == 0)
 		{
 			// Free child_env_vars memory

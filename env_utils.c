@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:17:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/03 17:58:55 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/05 17:13:18 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,37 @@ void	env_add_back(t_env **env, t_env *new)
 	last->next = new;
 }
 
-t_env	*env_new(char *env_name)
+char	*ft_strncpy(char *s1, char *s2, int n)
+{
+	int	i;
+
+	i = -1;
+	while (++i < n && s2[i])
+		s1[i] = s2[i];
+	s1[i] = '\0';
+	return (s1);
+}
+
+t_env	*env_new(char *env_var)
 {
 	t_env	*new;
+	char	*eq_pos;
+	char	*env_name;
+	char	*env_value;
+	int		env_name_l;
 
 	new = (t_env *)malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
-	new->env_var = ft_strdup(env_name);
+	new->env_var = ft_strdup(env_var);
+	eq_pos = ft_strchr(env_var, '=');
+	env_name_l = eq_pos - env_var;
+	env_name = malloc(env_name_l + 1);
+	ft_strncpy(env_name, env_var, env_name_l);
+	env_name[env_name_l] = '\0';
+	env_value = eq_pos + 1;
+	new->env_name = env_name;
+	new->env_value = env_value;
 	new->next = NULL;
 	return (new);
 }
@@ -72,7 +95,19 @@ void	print_env_vars(t_env **env_arr)
 	current = *env_arr;
 	while (current)
 	{
-		printf("%s\n", current->env_var);
+		printf("%s=%s\n", current->env_name, current->env_value);
+		current = current->next;
+	}
+}
+
+void	print_export_vars(t_env **env_arr)
+{
+	t_env	*current;
+
+	current = *env_arr;
+	while (current)
+	{
+		printf("declare -x %s=%s\n", current->env_name, current->env_value);
 		current = current->next;
 	}
 }

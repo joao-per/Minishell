@@ -29,6 +29,8 @@ extern char	**environ;
 typedef struct s_env
 {
 	char *env_var;      // environment variable name
+	char *env_name;
+	char *env_value;
 	struct s_env *next; // next variable
 }	t_env;
 
@@ -40,8 +42,12 @@ typedef struct s_history
 
 /*				Environment				*/
 t_env	**env_init(char **env);
+t_env	*env_new(char *env_var);
+void	env_add_back(t_env **env, t_env *new);
+void	print_export_vars(t_env **env_arr);
 void	print_env_vars(t_env **env_arr);
 t_env	*search_env_name(t_env **stack, char *var_to_find);
+char	*ft_strncpy(char *s1, char *s2, int n);
 /*				Commands				*/
 int		check_commands(char **av, t_env **child_env_vars);
 int		check_commands2(char **av, t_env **child_env_vars);
@@ -50,7 +56,7 @@ void	handle_redirection(char **av);
 void	execute_command(char **av, t_env **env_vars);
 void	add_to_history(t_history *cmd_history, char *input);
 void	print_history(t_history *cmd_history);
-void	export_variable(t_env **env_vars, const char *new_var);
+void	export_variable(t_env **env_vars, char *new_var);
 void	unset_variable(t_env **env_vars, const char *var_name);
 void	echo_command(char **av);
 void	cd_command(char **av, t_env **child_env_vars);

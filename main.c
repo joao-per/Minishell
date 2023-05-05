@@ -101,7 +101,8 @@ int main(int ac, char **argv, char **env)
 			print_env_vars(env_vars);
 			continue ;
 		}
-		execute_command(av, env_vars);
+		//execute_command(av, env_vars);
+		check_commands(av, env_vars);
 		// We can add code for commands HERE!!!!!
 		//continue ;
 		// Fork a child process to execute the command

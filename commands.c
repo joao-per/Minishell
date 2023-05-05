@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/03 19:43:21 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/05 18:55:04 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,35 +108,44 @@ int	check_commands2(char **av, t_env **child_env_vars)
 	return (1);
 }
 
-void	export_variable(t_env **env_vars, const char *new_var)
+void	export_variable(t_env **env_vars, char *new_var)
 {
-	t_env	*new_env_var;
 	t_env	*curr;
+	char *eq_pos;
+	char *env_name;
+	char *env_value;
+	int env_name_l;
 
 	// If no argument is provided, display all environment variables
 	if (!new_var)
 	{
-		print_env_vars(env_vars);
+		print_export_vars(env_vars);
 		return ;
 	}
-	new_env_var = (t_env *)malloc(sizeof(t_env));
-	if (!new_env_var)
+	if (!ft_isalpha(new_var[0]) && !(new_var[0] == '_') || !ft_strchr(new_var, '='))
 	{
-		perror("minishell: export: malloc");
+		printf("export: not an identifier: %s\n", new_var);
 		return ;
 	}
-	new_env_var->env_var = ft_strdup(new_var);
-	new_env_var->next = NULL;
-	if (*env_vars == NULL)
+	eq_pos = ft_strchr(new_var, '=');
+	env_name_l = eq_pos - new_var;
+	env_name = malloc(env_name_l + 1);
+	ft_strncpy(env_name, new_var, env_name_l);
+	env_name[env_name_l] = '\0';
+	env_value = eq_pos + 1;
+	curr = search_env_name(env_vars, env_name);
+	if(curr != NULL)
 	{
-		*env_vars = new_env_var;
-		return ;
+		free(curr->env_var);
+		//free(curr->env_value);
+		curr->env_value = env_value;
+		curr->env_var = new_var;
 	}
-	curr = *env_vars;
-	while (curr->next)
-		curr = curr->next;
-	curr->next = new_env_var;
-	//free(new_env_var);
+	else
+	{
+		curr = env_new(new_var);
+		env_add_back(env_vars, curr);
+	}
 }
 
 void	unset_variable(t_env **env_vars, const char *var_name)
