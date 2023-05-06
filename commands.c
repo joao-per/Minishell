@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/05 19:50:28 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/06 13:41:20 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int	check_commands(char **av, t_env **child_env_vars)
 	if (strcmp(av[0], "export") == 0)
 	{
 		i = 1;
+		if (!av[i])
+			export_variable(child_env_vars, av[i]);
 		while (av[i])
 		{
 			export_variable(child_env_vars, av[i]);
@@ -82,10 +84,11 @@ int	check_commands(char **av, t_env **child_env_vars)
 		echo_command(av);
 		return (0);
 	}
-	return (check_commands2(av, child_env_vars));
+	//execute_external_command(av, child_env_vars);
+	return (0);
 }
 
-int	check_commands2(char **av, t_env **child_env_vars)
+/* int	check_commands2(char **av, t_env **child_env_vars)
 {
 	struct dirent	*entry;
 	DIR				*dir;
@@ -112,7 +115,7 @@ int	check_commands2(char **av, t_env **child_env_vars)
 	}
 	execute_external_command(av, child_env_vars);
 	return (1);
-}
+} */
 
 void	export_variable(t_env **env_vars, char *new_var)
 {
@@ -133,10 +136,11 @@ void	export_variable(t_env **env_vars, char *new_var)
 		printf("export: `%s': not a valid identifier \n", new_var);
 		return ;
 	}
-	if (!ft_strchr(new_var, '='))
-		return ;
 	eq_pos = ft_strchr(new_var, '=');
-	env_name_l = eq_pos - new_var;
+	if (eq_pos)
+		env_name_l = eq_pos - new_var;
+	else
+		env_name_l = ft_strlen(new_var);
 	env_name = malloc(env_name_l + 1);
 	ft_strncpy(env_name, new_var, env_name_l);
 	env_name[env_name_l] = '\0';
@@ -153,6 +157,8 @@ void	export_variable(t_env **env_vars, char *new_var)
 	{
 		curr = env_new(new_var);
 		env_add_back(env_vars, curr);
+		if(!eq_pos)
+			curr->env_value = NULL;
 	}
 }
 

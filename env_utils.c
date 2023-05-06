@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:17:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/05 17:13:18 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/06 13:37:27 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ t_env	*env_new(char *env_var)
 		return (NULL);
 	new->env_var = ft_strdup(env_var);
 	eq_pos = ft_strchr(env_var, '=');
-	env_name_l = eq_pos - env_var;
+	if (eq_pos)
+		env_name_l = eq_pos - env_var;
+	else
+		env_name_l = ft_strlen(env_var);
 	env_name = malloc(env_name_l + 1);
 	ft_strncpy(env_name, env_var, env_name_l);
 	env_name[env_name_l] = '\0';
@@ -95,7 +98,8 @@ void	print_env_vars(t_env **env_arr)
 	current = *env_arr;
 	while (current)
 	{
-		printf("%s=%s\n", current->env_name, current->env_value);
+		if(current->env_value)
+			printf("%s=%s\n", current->env_name, current->env_value);
 		current = current->next;
 	}
 }
@@ -107,7 +111,10 @@ void	print_export_vars(t_env **env_arr)
 	current = *env_arr;
 	while (current)
 	{
-		printf("declare -x %s=%s\n", current->env_name, current->env_value);
+		if(current->env_value)
+			printf("declare -x %s=\"%s\"\n", current->env_name, current->env_value);
+		else
+			printf("declare -x %s\n", current->env_name);
 		current = current->next;
 	}
 }

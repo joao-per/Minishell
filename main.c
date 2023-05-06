@@ -52,7 +52,6 @@ int main(int ac, char **argv, char **env)
 	char input[MAX_LINE]; // Buffer to store user input
 	char *av[MAX_ARGS];   // Array to store parsed user input
 	int should_run;       // Flag to indicate when to exit the loop
-	t_history cmd_history = {0}; // Initialize CommandHistory struct
 	t_env **env_vars;
 	int i;
 	char *line;
@@ -85,7 +84,6 @@ int main(int ac, char **argv, char **env)
 
 		// Parse the input into separate arguments
 		parse_input(input, av, " ");
-
 		//if (!check_commands(av, env_vars))
 		// Check for built-in commands
 		if (av[0] == NULL)
@@ -101,8 +99,8 @@ int main(int ac, char **argv, char **env)
 			print_env_vars(env_vars);
 			continue ;
 		}
-		//execute_command(av, env_vars);
 		check_commands(av, env_vars);
+		//execute_command(av, env_vars);
 		// We can add code for commands HERE!!!!!
 		//continue ;
 		// Fork a child process to execute the command
