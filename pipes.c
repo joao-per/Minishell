@@ -138,7 +138,7 @@ void execute_command(char **av, t_env **env_vars)
 		// Read environment variables from the pipe (file descriptor 3) and store them in the child_env_vars array
 		while (read(3, buffer, MAX_LINE) > 0 && buffer[0] != '\0') {
 			child_env_vars[index] = (t_env *)malloc(sizeof(t_env));
-			child_env_vars[index]->env_var = strdup(buffer);
+			child_env_vars[index]->env_name = strdup(buffer);
 			index++;
 		}
 		child_env_vars[index] = NULL;
@@ -150,7 +150,7 @@ void execute_command(char **av, t_env **env_vars)
 			// Free child_env_vars memory
 			while (child_env_vars[i] != NULL)
 			{
-				free(child_env_vars[i]->env_var);
+				free(child_env_vars[i]->env_name);
 				free(child_env_vars[i]);
 				i++;
 			}
@@ -168,7 +168,7 @@ void execute_command(char **av, t_env **env_vars)
 		// Write the env_vars variable to the pipe (fd 1) so the child process can read it
 		while (env_vars[env_vars_count] != NULL)
 		{
-			write(pipe_fd[1], env_vars[env_vars_count]->env_var, strlen(env_vars[env_vars_count]->env_var) + 1);
+			write(pipe_fd[1], env_vars[env_vars_count]->env_name, strlen(env_vars[env_vars_count]->env_name) + 1);
 			env_vars_count++;
 		}
 		write(pipe_fd[1], "", 1); // Write an empty string to indicate the end of the env_vars list
@@ -234,7 +234,7 @@ char **env_vars_to_char_arr(t_env **env_vars)
 	i = 0;
 	while (i < env_count)
 	{
-		env_arr[i] = env_vars[i]->env_var;
+		env_arr[i] = env_vars[i]->env_name;
 		i++;
 	}
 	env_arr[env_count] = NULL;

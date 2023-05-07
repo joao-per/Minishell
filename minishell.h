@@ -28,7 +28,6 @@ extern char	**environ;
 
 typedef struct s_env
 {
-	char *env_var;      // environment variable name
 	char *env_name;
 	char *env_value;
 	struct s_env *next; // next variable

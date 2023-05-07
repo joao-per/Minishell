@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:17:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/06 13:37:27 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/07 13:44:53 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,15 @@ char	*ft_strncpy(char *s1, char *s2, int n)
 	return (s1);
 }
 
-t_env	*env_new(char *env_var)
+void sep_name_value_env(t_env *new, char *env_var)
 {
-	t_env	*new;
 	char	*eq_pos;
 	char	*env_name;
 	char	*env_value;
 	int		env_name_l;
 
-	new = (t_env *)malloc(sizeof(t_env));
 	if (!new)
-		return (NULL);
-	new->env_var = ft_strdup(env_var);
+		return ;
 	eq_pos = ft_strchr(env_var, '=');
 	if (eq_pos)
 		env_name_l = eq_pos - env_var;
@@ -69,8 +66,16 @@ t_env	*env_new(char *env_var)
 	env_name[env_name_l] = '\0';
 	env_value = eq_pos + 1;
 	new->env_name = env_name;
-	new->env_value = env_value;
+	new->env_value = ft_strdup(env_value);
 	new->next = NULL;
+}
+
+t_env	*env_new(char *env_var)
+{
+	t_env	*new;
+
+	new = (t_env *)malloc(sizeof(t_env));
+	sep_name_value_env(new, env_var);
 	return (new);
 }
 
@@ -128,7 +133,7 @@ t_env	*search_env_name(t_env **stack, char *var_to_find)
 	len = ft_strlen(var_to_find);
 	while (temp != NULL)
 	{
-		if (!ft_strncmp(temp->env_var, var_to_find, len))
+		if (!ft_strncmp(temp->env_name, var_to_find, len))
 			break ;
 		temp = temp->next;
 	}
@@ -145,9 +150,9 @@ char *get_env_value(char *name, t_env **env_vars)
 	env_var = *env_vars;
 	while (env_var)
 	{
-		if (strncmp(env_var->env_var, name, name_len) == 0 && env_var->env_var[name_len] == '=')
+		if (ft_strncmp(env_var->env_name, name, name_len) == 0)
 		{
-			value = strdup(env_var->env_var + name_len + 1);
+			value = strdup(env_var->env_value);
 			return value;
 		}
 		env_var = env_var->next;

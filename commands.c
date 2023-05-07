@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/06 13:41:20 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/07 13:51:49 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ void cd_command(char **av, t_env **env_vars)
 	}
 	
 	getcwd(cwd, sizeof(cwd));
-	temp = search_env_name(env_vars, "PWD=");
-	oldwd = ft_strdup(temp->env_var);
-	free(temp->env_var);
-	temp->env_var = ft_strjoin("PWD=", cwd);
-	temp = search_env_name(env_vars, "OLDPWD=");
-	free(temp->env_var);
-	temp->env_var = ft_strjoin("OLD", oldwd);
+	temp = search_env_name(env_vars, "PWD");
+	oldwd = ft_strdup(temp->env_value);
+	free(temp->env_value);
+	temp->env_value = ft_strdup(cwd);
+	temp = search_env_name(env_vars, "OLDPWD");
+	free(temp->env_value);
+	temp->env_value = ft_strdup(oldwd);
 	free(oldwd);
 }
 
@@ -148,10 +148,8 @@ void	export_variable(t_env **env_vars, char *new_var)
 	curr = search_env_name(env_vars, env_name);
 	if(curr != NULL)
 	{
-		free(curr->env_var);
-		//free(curr->env_value);
-		curr->env_value = env_value;
-		curr->env_var = new_var;
+		free(curr->env_value);
+		curr->env_value = ft_strdup(env_value);
 	}
 	else
 	{
@@ -177,17 +175,14 @@ void	unset_variable(t_env **env_vars, const char *var_name)
 	}
 	while (curr)
 	{
-		equal_pos = ft_strchr(curr->env_var, '=');
-		if (equal_pos && strncmp(curr->env_var, var_name,
-				equal_pos - curr->env_var) == 0
-			&& ft_strlen(var_name) == (size_t)(equal_pos - curr->env_var))
+		if (ft_strncmp(curr->env_name, (char *)var_name, ft_strlen(var_name)) == 0)
 		{
 			if (prev)
 				prev->next = curr->next;
 			else
 				*env_vars = curr->next;
-
-			free(curr->env_var);
+			free(curr->env_name);
+			free(curr->env_value);
 			free(curr);
 			return ;
 		}
