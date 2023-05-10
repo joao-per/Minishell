@@ -2,7 +2,7 @@ NAME = minishell
 CC = cc
 CFLAGS =  -Wall -Werror -Wextra -g
 
-FILES = main.c env_utils.c commands.c pipes.c utils.c
+FILES = main.c env_utils.c commands.c pipes.c utils.c parser.c
 
 all:
 		$(MAKE) -C Libft all

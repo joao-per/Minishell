@@ -47,6 +47,7 @@ void	print_export_vars(t_env **env_arr);
 void	print_env_vars(t_env **env_arr);
 t_env	*search_env_name(t_env **stack, char *var_to_find);
 char	*ft_strncpy(char *s1, char *s2, int n);
+void	parse(char *res, char *str, char sep, int slen);
 /*				Commands				*/
 int		check_commands(char **av, t_env **child_env_vars);
 int		check_commands2(char **av, t_env **child_env_vars);

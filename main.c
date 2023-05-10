@@ -52,6 +52,7 @@ int main(int ac, char **argv, char **env)
 	char input[MAX_LINE]; // Buffer to store user input
 	char *av[MAX_ARGS];   // Array to store parsed user input
 	int should_run;       // Flag to indicate when to exit the loop
+	char * pre_split;
 	t_env **env_vars;
 	int i;
 	char *line;
@@ -71,6 +72,9 @@ int main(int ac, char **argv, char **env)
 	while (should_run)
 	{
 		line = readline("\033[0;93m Minishell>$ \033[0;39m");
+		pre_split = ft_calloc((ft_strlen(line) * 2 + 1), 1);
+		parse(pre_split, line, 0, 0);
+		printf("%s\n", pre_split);
 		if (line == NULL)
 		// End of file (e.g. user pressed Ctrl-D)
 		{
