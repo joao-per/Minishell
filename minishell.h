@@ -64,5 +64,7 @@ void	execute_external_command(char **av, t_env **env_vars);
 char	**env_vars_to_char_arr(t_env **env_vars);
 void	free_double_array(char **doubles);
 char	*get_env_value(char *name, t_env **env_vars);
+void 	run_signals(int sig, int *ret_number);
+int 	find_pipe(char **av);
 
 #endif

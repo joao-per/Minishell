@@ -73,8 +73,8 @@ int main(int ac, char **argv, char **env)
 	{
 		line = readline("\033[0;93m Minishell>$ \033[0;39m");
 		pre_split = ft_calloc((ft_strlen(line) * 2 + 1), 1);
-		parse(pre_split, line, 0, 0);
-		printf("%s\n", pre_split);
+		//parse(pre_split, line, 0, 0);
+		//printf("%s\n", pre_split);
 		if (line == NULL)
 		// End of file (e.g. user pressed Ctrl-D)
 		{
@@ -103,8 +103,8 @@ int main(int ac, char **argv, char **env)
 			print_env_vars(env_vars);
 			continue ;
 		}
-		check_commands(av, env_vars);
-		//execute_command(av, env_vars);
+		//check_commands(av, env_vars);
+		execute_command(av, env_vars);
 		// We can add code for commands HERE!!!!!
 		//continue ;
 		// Fork a child process to execute the command

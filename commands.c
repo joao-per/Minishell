@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/07 13:51:49 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/12 17:27:14 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void cd_command(char **av, t_env **env_vars)
 			return;
 		}
 	}
-	
 	getcwd(cwd, sizeof(cwd));
 	temp = search_env_name(env_vars, "PWD");
 	oldwd = ft_strdup(temp->env_value);
@@ -50,6 +49,7 @@ int	check_commands(char **av, t_env **child_env_vars)
 	if (strcmp(av[0], "cd") == 0)
 	{
 		cd_command(av, child_env_vars);
+		return 0;
 	}
 	if (strcmp(av[0], "pwd") == 0)
 	{
@@ -85,7 +85,7 @@ int	check_commands(char **av, t_env **child_env_vars)
 		return (0);
 	}
 	//execute_external_command(av, child_env_vars);
-	return (0);
+	return (1);
 }
 
 /* int	check_commands2(char **av, t_env **child_env_vars)
@@ -149,7 +149,10 @@ void	export_variable(t_env **env_vars, char *new_var)
 	if(curr != NULL)
 	{
 		free(curr->env_value);
-		curr->env_value = ft_strdup(env_value);
+		if (eq_pos)
+			curr->env_value = ft_strdup(env_value);
+		else
+			curr->env_value = NULL;
 	}
 	else
 	{

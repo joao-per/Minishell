@@ -1,41 +1,6 @@
 #include "minishell.h"
 #include "Libft/libft.h"
-
-void	handle_pipe(char **av, int status, int i)
-{
-	int	pipe_fd[2];
-	if (pipe(pipe_fd) == -1)
-	{
-		perror("pipe");
-		exit(1);
-	}
-
-	pid_t pipe_pid = fork();
-	if (pipe_pid < 0)
-	{
-		perror("fork");
-		exit(1);
-	}
-	else if (pipe_pid == 0)
-	{
-		close(pipe_fd[READ_END]);
-		dup2(pipe_fd[WRITE_END], STDOUT_FILENO);
-		close(pipe_fd[WRITE_END]);
-		execve(av[0], av, environ);
-		perror("execve");
-		exit(1);
-	}
-	else
-	{
-		close(pipe_fd[WRITE_END]);
-		waitpid(pipe_pid, &status, 0);
-		dup2(pipe_fd[READ_END], STDIN_FILENO);
-		close(pipe_fd[READ_END]);
-		execve(av[i + 1], av + i + 1, environ);
-		perror("execve");
-		exit(1);
-	}
-}
+ 
 
 void handle_redirection(char **av)
 {
@@ -86,96 +51,82 @@ void handle_redirection(char **av)
 	}
 }
 
+
+
 /*
 while the parent process is responsible for passing environment variables to the child and waiting for the child process to complete.
 */
-void execute_command(char **av, t_env **env_vars)
+void file_descriptor_handler(int in, int out)
+{
+	if (in != 0)
+	{
+		dup2(in, 0);
+		close(in);
+	}
+	if (out != 1)
+	{
+		dup2(out, 1);
+		close(out);
+	}
+}
+
+void run_commands_aux(char **av, t_env **env_vars, int in_fd, int out_fd)
 {
 	pid_t pid;
-	int status; // Exit status of child process
-	int pipe_fd[2];
-	int is_builtin;
-	int i = 0;
+	int status;
+	int built_in_command_executed;
 
-	if (pipe(pipe_fd) == -1)
-	{
-		perror("pipe");
-		exit(1);
-	}
-	status = 0;
-	if (strcmp(av[0], "cd") == 0)
-	{
-		cd_command(av, env_vars);
-		return;
-	}
 	pid = fork();
 	if (pid < 0)
 	{
 		printf("Fork failed.\n");
 		exit(1);
 	}
-	// Child process
 	else if (pid == 0)
 	{
-		char buffer[MAX_LINE];
-		int env_vars_count;
-		env_vars_count = 0;
-		close(pipe_fd[1]); // Close the write end of the pipe in the child process
-		handle_redirection(av); // Apply redirection only to the child process
-
-		// Add the following line to the child process before handling the commands
-		dup2(pipe_fd[0], 3); // Duplicate the read end of the pipe to file descriptor 3
-		close(pipe_fd[0]); // Close the original read end of the pipe
-
-		// Deserialize the env_vars variable in the child process
-		// Count the number of environment variables
-		while (env_vars[env_vars_count] != NULL) {
-			env_vars_count++;
-		}
-		// Allocate memory for the child_env_vars array
-		t_env **child_env_vars = (t_env **)malloc((env_vars_count + 1) * sizeof(t_env *));
-		int index = 0;
-		// Read environment variables from the pipe (file descriptor 3) and store them in the child_env_vars array
-		while (read(3, buffer, MAX_LINE) > 0 && buffer[0] != '\0') {
-			child_env_vars[index] = (t_env *)malloc(sizeof(t_env));
-			child_env_vars[index]->env_name = strdup(buffer);
-			index++;
-		}
-		child_env_vars[index] = NULL;
-
-		// Handle built-in commands using the child's environment variables.
-		is_builtin = check_commands(av, env_vars);
-		if (is_builtin == 0)
-		{
-			// Free child_env_vars memory
-			while (child_env_vars[i] != NULL)
-			{
-				free(child_env_vars[i]->env_name);
-				free(child_env_vars[i]);
-				i++;
-			}
-			free(child_env_vars);
+		file_descriptor_handler(in_fd, out_fd);
+		handle_redirection(av);
+		//built_in_command_executed = check_commands(av, env_vars);
+		// Return if a built-in command was executed
+		built_in_command_executed = check_commands(av, env_vars);
+		if (!built_in_command_executed)
 			exit(0);
-		}
-	}
-	// Parent process / Wait for the child process to finish
-	else
-	{
-		close(pipe_fd[0]); // Closes the read end of the pipe in the parent process, as the parent will only be writing to the pipe
 
-		// Pass the env_vars variable to the child process through the pipe
-		int env_vars_count = 0;
-		// Write the env_vars variable to the pipe (fd 1) so the child process can read it
-		while (env_vars[env_vars_count] != NULL)
-		{
-			write(pipe_fd[1], env_vars[env_vars_count]->env_name, strlen(env_vars[env_vars_count]->env_name) + 1);
-			env_vars_count++;
-		}
-		write(pipe_fd[1], "", 1); // Write an empty string to indicate the end of the env_vars list
-		close(pipe_fd[1]); // Close the write end of the pipe
-		waitpid(pid, &status, 0); // Wait for the child process to finish
+		execve(av[0], av, environ);
+		perror("execve");
+		exit(1);
 	}
+	else
+		waitpid(pid, &status, 0);
 }
+
+void execute_command(char **av, t_env **env_vars)
+{
+	int pipe_index;
+	int fd[2];
+	int in_fd;
+
+	in_fd = 0;
+	while ((pipe_index = find_pipe(av)) != -1)
+	{
+		if (pipe(fd) == -1)
+		{
+			perror("pipe");
+			exit(1);
+		}
+		av[pipe_index] = NULL;
+		run_commands_aux(av, env_vars, in_fd, fd[1]);
+		close(fd[1]);
+		if (in_fd != 0)
+			close(in_fd);
+		in_fd = fd[0];
+		av += pipe_index + 1;
+	}
+	run_commands_aux(av, env_vars, in_fd, STDOUT_FILENO);
+	if (in_fd != 0)
+		close(in_fd);
+}
+
 
 void execute_external_command(char **av, t_env **env_vars)
 {
@@ -204,7 +155,7 @@ void execute_external_command(char **av, t_env **env_vars)
 	while (path_dirs[i])
 	{
 		temp = ft_strjoin(path_dirs[i], "/");
-        full_path = ft_strjoin(temp, av[0]);
+		full_path = ft_strjoin(temp, av[0]);
 		free(temp);
 		if (access(cmd_path, X_OK) == 0)
 		{
@@ -215,7 +166,6 @@ void execute_external_command(char **av, t_env **env_vars)
 		free(cmd_path);
 		i++;
 	}
-
 	free_double_array(path_dirs);
 	perror("minishell");
 	exit(1);

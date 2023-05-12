@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:17:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/07 13:44:53 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/12 18:17:54 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ void sep_name_value_env(t_env *new, char *env_var)
 	env_name[env_name_l] = '\0';
 	env_value = eq_pos + 1;
 	new->env_name = env_name;
-	new->env_value = ft_strdup(env_value);
+	if(eq_pos != 0)
+		new->env_value = ft_strdup(env_value);
+	else
+		new->env_value = NULL;
 	new->next = NULL;
 }
 
@@ -130,10 +133,9 @@ t_env	*search_env_name(t_env **stack, char *var_to_find)
 	int		len;
 
 	temp = (*stack);
-	len = ft_strlen(var_to_find);
 	while (temp != NULL)
 	{
-		if (!ft_strncmp(temp->env_name, var_to_find, len))
+		if (!ft_strcmp(temp->env_name, var_to_find))
 			break ;
 		temp = temp->next;
 	}
