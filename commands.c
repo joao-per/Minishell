@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/12 17:27:14 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/12 19:04:44 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,15 @@ void cd_command(char **av, t_env **env_vars)
 	free(oldwd);
 }
 
-int	check_commands(char **av, t_env **child_env_vars)
+int	check_commands2(char **av, t_env **child_env_vars)
 {
 	char	cwd[MAX_LINE];
 	int i;
+
 	if (strcmp(av[0], "cd") == 0)
 	{
 		cd_command(av, child_env_vars);
 		return 0;
-	}
-	if (strcmp(av[0], "pwd") == 0)
-	{
-		if (getcwd(cwd, sizeof(cwd)) == NULL)
-			perror("minishell");
-		else
-		{
-			write(STDOUT_FILENO, cwd, ft_strlen(cwd));
-			write(STDOUT_FILENO, "\n", 1);
-		}
-		return (0);
 	}
 	if (strcmp(av[0], "export") == 0)
 	{
@@ -79,43 +69,33 @@ int	check_commands(char **av, t_env **child_env_vars)
 		unset_variable(child_env_vars, av[1]);
 		return (0);
 	}
+	//execute_external_command(av, child_env_vars);
+	return (1);
+}
+
+int	check_commands(char **av, t_env **child_env_vars)
+{
+	char	cwd[MAX_LINE];
+	int i;
+
+	if (strcmp(av[0], "pwd") == 0)
+	{
+		if (getcwd(cwd, sizeof(cwd)) == NULL)
+			perror("minishell");
+		else
+		{
+			write(STDOUT_FILENO, cwd, ft_strlen(cwd));
+			write(STDOUT_FILENO, "\n", 1);
+		}
+		return (0);
+	}
 	if (strcmp(av[0], "echo") == 0)
 	{
 		echo_command(av);
 		return (0);
 	}
-	//execute_external_command(av, child_env_vars);
-	return (1);
+	return (check_commands2(av,child_env_vars));
 }
-
-/* int	check_commands2(char **av, t_env **child_env_vars)
-{
-	struct dirent	*entry;
-	DIR				*dir;
-	char			*dir_path;
-
-	if (strcmp(av[0], "ls") == 0)
-	{
-		if (av[1] == NULL)
-			dir_path = ".";
-		else
-			dir_path = av[1];
-		if ((dir = opendir(dir_path)) == NULL)
-			perror("minishell");
-		else
-		{
-			while ((entry = readdir(dir)) != NULL)
-			{
-				write(1, entry->d_name, ft_strlen(entry->d_name));
-				write(STDOUT_FILENO, "\n", 1);
-			}
-			closedir(dir);
-		}
-		return (0);
-	}
-	execute_external_command(av, child_env_vars);
-	return (1);
-} */
 
 void	export_variable(t_env **env_vars, char *new_var)
 {

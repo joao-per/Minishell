@@ -86,18 +86,20 @@ void run_commands_aux(char **av, t_env **env_vars, int in_fd, int out_fd)
 	{
 		file_descriptor_handler(in_fd, out_fd);
 		handle_redirection(av);
-		//built_in_command_executed = check_commands(av, env_vars);
+		//built_in_command_executed = check_commands(av, env_vars)
 		// Return if a built-in command was executed
 		built_in_command_executed = check_commands(av, env_vars);
 		if (!built_in_command_executed)
 			exit(0);
-
 		execve(av[0], av, environ);
 		perror("execve");
 		exit(1);
 	}
 	else
+	{
 		waitpid(pid, &status, 0);
+		check_commands2(av, env_vars);
+	}
 }
 
 void execute_command(char **av, t_env **env_vars)
