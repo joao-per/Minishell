@@ -17,7 +17,7 @@ void handle_redirection(char **av)
 	j = 0;
 	while (av[j] != NULL)
 	{
-		if (strcmp(av[j], "<") == 0)
+		if (ft_strcmp(av[j], "<") == 0)
 		// Input redirection
 		{
 			input_file = av[j + 1];
@@ -32,7 +32,7 @@ void handle_redirection(char **av)
 			av[j] = NULL;
 			break ;
 		}
-		else if (strcmp(av[j], ">") == 0)
+		else if (ft_strcmp(av[j], ">") == 0)
 		// Output redirection
 		{
 			output_file = av[j + 1];

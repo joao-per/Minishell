@@ -21,7 +21,7 @@ int find_pipe(char **av)
 	int i = 0;
 	while (av[i] != NULL)
 	{
-		if (strcmp(av[i], "|") == 0)
+		if (ft_strcmp(av[i], "|") == 0)
 			return i;
 		i++;
 	}

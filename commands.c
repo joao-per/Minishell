@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/12 19:04:44 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/14 12:25:06 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ int	check_commands2(char **av, t_env **child_env_vars)
 	char	cwd[MAX_LINE];
 	int i;
 
-	if (strcmp(av[0], "cd") == 0)
+	if (ft_strcmp(av[0], "cd") == 0)
 	{
 		cd_command(av, child_env_vars);
 		return 0;
 	}
-	if (strcmp(av[0], "export") == 0)
+	if (ft_strcmp(av[0], "export") == 0)
 	{
 		i = 1;
 		if (!av[i])
@@ -78,7 +78,7 @@ int	check_commands(char **av, t_env **child_env_vars)
 	char	cwd[MAX_LINE];
 	int i;
 
-	if (strcmp(av[0], "pwd") == 0)
+	if (ft_strcmp(av[0], "pwd") == 0)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 			perror("minishell");
@@ -89,7 +89,7 @@ int	check_commands(char **av, t_env **child_env_vars)
 		}
 		return (0);
 	}
-	if (strcmp(av[0], "echo") == 0)
+	if (ft_strcmp(av[0], "echo") == 0)
 	{
 		echo_command(av);
 		return (0);
@@ -182,7 +182,7 @@ void	echo_command(char **av)
 
 	new_line = 1;
 	i = 1;
-	if (av[i] && strcmp(av[i], "-n") == 0)
+	if (av[i] && ft_strcmp(av[i], "-n") == 0)
 	{
 		new_line = 0;
 		i++;

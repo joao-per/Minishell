@@ -1,0 +1,9 @@
+TO DO:
+- >> 
+- <
+- <<
+- comandos exteriores funcionarem sem /bin/
+- minishell não interativo
+- fazer parser (estrutura minishell que acessa todas as outras estruturas)
+- Gerenciamento de memória
+- norminette

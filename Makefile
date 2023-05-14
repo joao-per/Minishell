@@ -2,7 +2,7 @@ NAME = minishell
 CC = cc
 CFLAGS =  -Wall -Werror -Wextra -g -fsanitize=address
 
-FILES = main.c env_utils.c commands.c pipes.c utils.c parser.c
+FILES = main.c env_utils.c commands.c pipes.c utils.c parser.c signals.c
 
 all:
 		$(MAKE) -C Libft all
@@ -10,5 +10,6 @@ all:
 
 fclean:
 		rm -f $(NAME)
+		$(MAKE) -C Libft fclean
 
 re: fclean all

@@ -56,6 +56,7 @@ int main(int ac, char **argv, char **env)
 	t_env **env_vars;
 	int i;
 	char *line;
+	int ret_number = 0;
 
 	(void)ac;
 	(void)argv;
@@ -71,6 +72,7 @@ int main(int ac, char **argv, char **env)
 	parse_input(input, av, " ");
 	while (should_run)
 	{
+		run_signals(1, &ret_number);
 		line = readline("\033[0;93m Minishell>$ \033[0;39m");
 		pre_split = ft_calloc((ft_strlen(line) * 2 + 1), 1);
 		//parse(pre_split, line, 0, 0);
@@ -92,13 +94,13 @@ int main(int ac, char **argv, char **env)
 		// Check for built-in commands
 		if (av[0] == NULL)
 			continue ;
-		else if (strcmp(av[0], "exit") == 0)
+		else if (ft_strcmp(av[0], "exit") == 0)
 		{
 			should_run = 0;
 			break ;
 		}
 		add_history(input);
-		if (strcmp(av[0], "env") == 0)
+		if (ft_strcmp(av[0], "env") == 0)
 		{
 			print_env_vars(env_vars);
 			continue ;
