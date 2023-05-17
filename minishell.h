@@ -39,6 +39,17 @@ typedef struct s_history
 	int history_count;          // Current count of commands in history
 }	t_history;
 
+
+typedef struct s_arg
+{
+	char			*name;
+	int				arg_len;
+	int				in_quotes;
+	char			quote_type;
+	char			arg_type;
+	struct s_arg 	*next;
+}					t_arg;
+
 /*				Environment				*/
 t_env	**env_init(char **env);
 t_env	*env_new(char *env_var);
