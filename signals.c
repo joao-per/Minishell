@@ -11,66 +11,47 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <readline/readline.h>
 
-void restore_prompt(int sig, siginfo_t *info, void *ucontext)
+void restore_prompt(int sig) 
 {
-    int *ret_number = info->si_value.sival_ptr;
-
-    *ret_number = 130;
-    write(1, "\n", 1);
-    rl_replace_line("", 0);
-    rl_on_new_line();
-    rl_redisplay();
-    (void)sig;
-    (void)ucontext;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	(void)sig;
 }
 
-void ctrl_c(int sig)
+void back_slash(int sig) 
 {
-    write(1, "\n", 1);
-    (void)sig;
+	printf("Quit (core dumped)\n");
+	exit(0);
 }
 
-void back_slash(int sig)
+void setup_signals() 
 {
-    printf("Quit (core dumped)\n");
-    (void)sig;
-}
+	struct sigaction action;
 
-// Signal setup function
+	// Handle SIGINT
+	action.sa_handler = restore_prompt;
+	action.sa_flags = 0;
+	sigemptyset(&action.sa_mask);
+	if (sigaction(SIGINT, &action, NULL) < 0)
+	{
+		perror("sigaction");
+		exit(1);
+	}
 
-void run_signals(int sig, int *ret_number)
-{
-    struct sigaction action;
-
-    if (sig == 1)
-    {
-        action.sa_flags = SA_SIGINFO;
-        action.sa_sigaction = restore_prompt;
-        sigaction(SIGINT, &action, NULL);
-        action.sa_handler = SIG_IGN;
-        sigaction(SIGQUIT, &action, NULL);
-        action.sa_sigaction = restore_prompt;
-        action.sa_flags = SA_SIGINFO;
-        sigemptyset(&action.sa_mask);
-        action.sa_restorer = NULL;
-        action.sa_flags = 0;
-        sigaction(SIGINT, &action, NULL);
-    }
-    else if (sig == 2)
-    {
-        action.sa_handler = ctrl_c;
-        sigaction(SIGINT, &action, NULL);
-        action.sa_handler = back_slash;
-        sigaction(SIGQUIT, &action, NULL);
-    }
-    else if (sig == 3)
-    {
-        printf("exit\n");
-        exit(0);
-    }
-    action.sa_sigaction = NULL;
-    action.sa_flags = 0;
-    sigemptyset(&action.sa_mask);
-    action.sa_restorer = NULL;
+	// Handle SIGQUIT
+	action.sa_handler = back_slash;
+	action.sa_flags = 0;
+	sigemptyset(&action.sa_mask);
+	if (sigaction(SIGQUIT, &action, NULL) < 0)
+	{
+		perror("sigaction");
+		exit(1);
+	}
 }

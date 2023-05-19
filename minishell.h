@@ -77,5 +77,6 @@ void	free_double_array(char **doubles);
 char	*get_env_value(char *name, t_env **env_vars);
 void 	run_signals(int sig, int *ret_number);
 int 	find_pipe(char **av);
+void	setup_signals();
 
 #endif

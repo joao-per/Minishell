@@ -72,7 +72,7 @@ int main(int ac, char **argv, char **env)
 	parse_input(input, av, " ");
 	while (should_run)
 	{
-		run_signals(1, &ret_number);
+		setup_signals();
 		line = readline("\033[0;93m Minishell>$ \033[0;39m");
 		pre_split = ft_calloc((ft_strlen(line) * 2 + 1), 1);
 		//parse(pre_split, line, 0, 0);

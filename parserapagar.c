@@ -1,19 +1,62 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parserapagar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/19 23:38:40 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/19 23:38:47 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Libft/libft.h"
 #include "minishell.h"
 
+/* int	check_sep(char *str, int *slen)
+{
+	*slen = 0;
+	if ((str[0] == '<' && str[1] == '<') || (str[0] == '>' && str[1] == '>'))
+		*slen = 2;
+	else if (str[0] == '<' || str[0] == '>')
+		*slen = 1;
+	else if (str[0] == '|')
+		*slen = 1;
+	return (*slen);
+}
 
+int	count_redir_pipe(char c1, char c2, int *rp_len)
+{
+	*rp_len = 0;
+	if ((c1 == '>' && c2 == '>') || (c1 == '<' && c2 == '<'))
+		*rp_len = 2;
+	else if (c1 == '>' || c1 == '<')
+		*rp_len = 1;
+	else if (c1 == '|')
+		*rp_len = 1;
+	return (*rp_len);
+}
+
+char	change_quotes(char c, char quote)
+{
+	if ((c == '\'' || c == '\"') && (quote == 0 || quote == c))
+		quote = c * (quote != c);
+	return (quote);
+} */
+/* Esta funcao faz o parsing do minishell 
+Linha 47: -Se sep encontrado e se encontrado novamente desligado
+		if (sep != *str) -> inicializa sep -> sep = 1
+		if (sep == *str) -> reinicia sep -> sep = 0;
+Linha 49: -Se seo = 0 e ' ' torna em 2 na str
+Linha 51: -Se for um token {<, <<, >, >>, |} e sep = 0: 
+			meter um 3 na casa do separador (tem de ser o unico 3 até ver uma 
+			algo diferente de token -> len = 0).
+			-Se nao for um pipe e len>0 --> manter o elemento na str
+			-Se nao for um pipe e slen==2 --> manter o proximo, fazendo dois
+			-No final meter um 2 extra e len passa para 1
+Linha 56: Incrementamos o str aqui para poupar linhas
+Linha 61: -Caso geral: é ir colando as letras na string res e dizer que 
+			pode começar um novo token -> len = 0*/
 int	is_whitespace(char c)
 {
 	if (c == 32 || (c >= 9 && c <= 13))
@@ -180,14 +223,13 @@ int	parsing_tree(t_arg **args, int *i, char *str)
 	return (0);
 }
 
-void free_extra_string_mem (t_arg **arg)
-{
-	char *temp;
-	
-	temp = ft_strdup((*arg)->name);
-	free((*arg)->name);
-	(*arg)->name = temp;
-}
+/* ft_strncmp(&str[*i], ">>", 2) == 0
+if (!(temp_arg = create_arg(args)))
+				return ;
+			temp_arg->name = ft_strdup(">>");
+			(*i)++;
+			(*i)++;
+			break ; */
 
 void	eliminate_extra_arg(t_arg **arg)
 {
@@ -264,34 +306,71 @@ t_arg	**parse_arguments(char *string)
 			return (NULL);
 		parse_aux(args, temp, string, i);
 	}
-	free(i);
 	return (args);
 }
-void	ft_argdelone(t_arg *arg)
+
+/* void	parse(char *res, char *str, char sep, int slen)
 {
-	if (!arg)
-		return ;
-	free(arg->name);
-	free(arg);
-}
+	int	len;
+	int	i;
+	int	j;
 
-
-void	ft_argclear(t_arg **arg)
-{
-	t_arg	*temp;
-
-	if (!arg || !*arg)
-		return ;
-	while (*arg)
+	i = 0;
+	j = 0;
+	len = 0;
+	while (&str[i] && str[i])
 	{
-		temp = (*arg)->next;
-		ft_argdelone(*arg);
-		*arg = temp;
+		sep = change_quotes(str[i], sep);
+		if (is_whitespace(str[i]) && !sep)
+			str[i] = '2';
+		if (!sep && count_redir_pipe(str[i], str[i + 1], &slen))
+		// sub de pipes por 3 ou no caso de > colocacao de um tres e do proprio cha
+		{
+			res[j++] = ('3' - (len != 0));
+			if (str[i] != '|' || len)
+				res[j++] = str[i];
+			if (&str[++i] && str[i] != '|' && slen == 2)
+				res[j++] = str[i++];
+			res[j++] = '2';
+			len++;
+		}
+		else
+		{
+			if (!(str[i] == '\'' || str[i] == '\"'))
+				res[j++] = str[i++];
+			else
+				i++;
+			len = 0;
+		}
 	}
-	free(arg);
-	arg = 0;
-}
+} */
 
+//Example : wc | cat>out ls
+//Output:   wc2322cat3>2out2ls
+
+//Example : cat | "grep a" | >>> something
+//Output:  cat2322"grep a"23223>>22>22something
+
+//----------------------------------------------------------------
+//--  "Makefile < cat"     -- Makefile < cat: command not found --                        --
+//----------------------------------------------------------------
+//--  "< Makefile cat"     -- Faz here doc e escreve num        --
+//--                       -- ficheiro chamado cat              --
+//----------------------------------------------------------------
+//--  < Makefile cat       --  Faz cat do Makefile no terminal  --
+//----------------------------------------------------------------
+//--< Makefile cat > out   -- Faz cat para um ficheiro out      --
+//----------------------------------------------------------------
+//--"< Makefilecat "< cat""-- < Makefilecat : command not found --
+//----------------------------------------------------------------
+//--    "ls"< cat""        --  Faz o ls no terminal             --
+//----------------------------------------------------------------
+//--  "Makefile"< ls"      --  Faz o here doc para lado nenhum  --
+//----------------------------------------------------------------
+//--     ls >>> cat        --  error near unexpected token `>'  --
+//----------------------------------------------------------------
+//--     ls <<< ola       --   executa o ls                     --
+//----------------------------------------------------------------
 
 /* int	main(int ac, char **av)
 {
@@ -299,18 +378,16 @@ void	ft_argclear(t_arg **arg)
 	(void)ac;
 	char **res3;
 	char **res31;
+	static char res[1000];
 	t_arg **args;
-	t_arg *temp;
 
 	args = parse_arguments(line);
-	temp = (*args);
 
 	//printf("%s", line);
 
-	while (args && temp)
+	while (args && (*args))
 	{
-		printf("%s\n", temp->name);
-		temp = temp->next;
+		printf("%s\n", (*args)->name);
+		(*args) = (*args)->next;
 	}
-	ft_argclear(args);
 } */

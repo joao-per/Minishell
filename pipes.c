@@ -2,57 +2,6 @@
 #include "Libft/libft.h"
  
 
-void handle_redirection(char **av)
-{
-	char	*input_file;
-	char	*output_file;
-	int		input_fd;
-	int		output_fd;
-	int		j;
-
-	input_file = NULL;
-	output_file = NULL;
-	input_fd = 0;
-	output_fd = 0;
-	j = 0;
-	while (av[j] != NULL)
-	{
-		if (ft_strcmp(av[j], "<") == 0)
-		// Input redirection
-		{
-			input_file = av[j + 1];
-			input_fd = open(input_file, O_RDONLY);
-			if (input_fd < 0)
-			{
-				perror("open");
-				exit(1);
-			}
-			dup2(input_fd, STDIN_FILENO);
-			close(input_fd);
-			av[j] = NULL;
-			break ;
-		}
-		else if (ft_strcmp(av[j], ">") == 0)
-		// Output redirection
-		{
-			output_file = av[j + 1];
-			output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (output_fd < 0)
-			{
-				perror("open");
-				exit(1);
-			}
-			dup2(output_fd, STDOUT_FILENO);
-			close(output_fd);
-			av[j] = NULL;
-			break ;
-		}
-		j++;
-	}
-}
-
-
-
 /*
 while the parent process is responsible for passing environment variables to the child and waiting for the child process to complete.
 */
