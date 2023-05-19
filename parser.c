@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/19 23:38:40 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/20 00:07:41 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,7 @@ void	eliminate_extra_arg(t_arg **arg)
 			end = temp;
 		temp = temp->next;
 	}
+	free(temp->name);
 	free(temp);
 	end->next = NULL;
 }
@@ -229,7 +230,7 @@ void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i)
 			if (ft_strcmp(arg->name, "") == 0)
 				eliminate_extra_arg(args);
 			change = parsing_tree(args, i, str);
-			break ;
+			return ;
 		}
 		if (change)
 			continue ;
@@ -293,7 +294,7 @@ void	ft_argclear(t_arg **arg)
 }
 
 
-/* int	main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	char *line = readline(">");
 	(void)ac;
@@ -313,4 +314,4 @@ void	ft_argclear(t_arg **arg)
 		temp = temp->next;
 	}
 	ft_argclear(args);
-} */
+}
