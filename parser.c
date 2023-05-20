@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/20 00:07:41 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/20 19:33:48 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ int	is_even_quotes(char *str)
 		i++;
 	}
 	if (quotes_open == 1)
+	{
+		printf("error: unclosed quotes\n");
 		return (0);
+	}
 	return (1);
 }
 
@@ -147,6 +150,23 @@ int	edit_parse_struct(t_arg *arg, int *i, char c, int quotes)
 	return (1);
 }
 
+int	ft_argsize(t_arg *arg)
+{
+	t_arg	*temp;
+	int			i;
+
+	temp = arg;
+	i = 1;
+	if (arg == NULL)
+		return (0);
+	while (temp->next != NULL)
+	{
+		temp = temp->next;
+		i++;
+	}
+	return (i);
+}
+
 int	parse_pipe_red(t_arg **args, int *i, char *str, char *sep)
 {
 	char	c;
@@ -189,14 +209,14 @@ void free_extra_string_mem (t_arg **arg)
 	(*arg)->name = temp;
 }
 
+
 void	eliminate_extra_arg(t_arg **arg)
 {
 	t_arg	*temp;
-	t_arg	*head;
 	t_arg	*end;
 
 	temp = (*arg);
-	head = (*arg);
+	end = NULL;
 	while (temp->next != NULL)
 	{
 		if (temp->next->next == NULL)
@@ -205,7 +225,10 @@ void	eliminate_extra_arg(t_arg **arg)
 	}
 	free(temp->name);
 	free(temp);
-	end->next = NULL;
+	if (end)
+		end->next = NULL;
+	else
+		(*arg) = NULL;
 }
 
 void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i)
@@ -249,11 +272,8 @@ t_arg	**parse_arguments(char *string)
 	t_arg	**args;
 	t_arg	*temp;
 
-	if (!is_even_quotes(string))
-	{
-		printf("error\n");
+	if (!is_even_quotes(string) || !string[0])
 		return (0);
-	}
 	len = ft_strlen(string);
 	i = ft_calloc(1, sizeof(int));
 	args = ft_calloc(1, sizeof(t_arg *));
@@ -268,6 +288,7 @@ t_arg	**parse_arguments(char *string)
 	free(i);
 	return (args);
 }
+
 void	ft_argdelone(t_arg *arg)
 {
 	if (!arg)
@@ -294,7 +315,7 @@ void	ft_argclear(t_arg **arg)
 }
 
 
-int	main(int ac, char **av)
+/* int	main(int ac, char **av)
 {
 	char *line = readline(">");
 	(void)ac;
@@ -314,4 +335,4 @@ int	main(int ac, char **av)
 		temp = temp->next;
 	}
 	ft_argclear(args);
-}
+}   */

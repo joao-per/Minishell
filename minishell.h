@@ -78,5 +78,8 @@ char	*get_env_value(char *name, t_env **env_vars);
 void 	run_signals(int sig, int *ret_number);
 int 	find_pipe(char **av);
 void	setup_signals();
+t_arg	**parse_arguments(char *string);
+int		ft_argsize(t_arg *arg);
+
 
 #endif

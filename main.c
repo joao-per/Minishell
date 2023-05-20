@@ -13,49 +13,33 @@
 #include "Libft/libft.h"
 #include "minishell.h"
 
-void	parse_input(char *input, char **av, const char *delimiter)
+char **create_args_arr(t_arg **args)
 {
-	int	i;
-	int	j;
-	int	start;
+	char **av;
+	t_arg *temp;
+	int i;
 
+	temp = (*args);
 	i = 0;
-	j = 0;
-	start = -1;
-	while (input[j] != '\0')
+	av = ft_calloc(ft_argsize(*args) + 1, sizeof(char *));
+	while (temp)
 	{
-		if (start == -1 && input[j] != *delimiter)
-		{
-			start = j;
-			if (input[j + 1] == '\0')
-			{
-				j++;
-				av[i++] = ft_strndup(input + start, j - start);
-				start = -1;
-			}
-		}
-		else if (start != -1 && (input[j] == *delimiter || input[j
-					+ 1] == '\0'))
-		{
-			if (input[j + 1] == '\0')
-				j++;
-			av[i++] = ft_strndup(input + start, j - start);
-			start = -1;
-		}
-		j++;
+		av[i] = ft_strdup(temp->name);
+		temp = temp->next;
+		i++;
 	}
-	av[i] = NULL; // Add NULL terminator to the end of av array
+	av[i] = 0;
+	return (av);
 }
 
 int main(int ac, char **argv, char **env)
 {
-	char input[MAX_LINE]; // Buffer to store user input
-	char *av[MAX_ARGS];   // Array to store parsed user input
 	int should_run;       // Flag to indicate when to exit the loop
-	char * pre_split;
 	t_env **env_vars;
+	t_arg **args;
 	int i;
 	char *line;
+	char **av;
 	int ret_number = 0;
 
 	(void)ac;
@@ -63,44 +47,31 @@ int main(int ac, char **argv, char **env)
 	(void)env;
 	should_run = 1;
 	env_vars = env_init(env);
-	i = -1;
-	while (++i < MAX_ARGS)
-		av[i] = 0;
-	i = -1;
-	while (++i < MAX_LINE)
-		input[i] = 0;
-	parse_input(input, av, " ");
 	while (should_run)
 	{
 		setup_signals();
 		line = readline("\033[0;93m Minishell>$ \033[0;39m");
-		pre_split = ft_calloc((ft_strlen(line) * 2 + 1), 1);
-		//parse(pre_split, line, 0, 0);
-		//printf("%s\n", pre_split);
 		if (line == NULL)
 		// End of file (e.g. user pressed Ctrl-D)
 		{
 			should_run = 0;
 			break;
 		}
-		strncpy(input, line, MAX_LINE - 1);
-		input[MAX_LINE - 1] = '\0'; // Ensure null terminator
-		free(line); // Free memory allocated by readline
-
-
-		// Parse the input into separate arguments
-		parse_input(input, av, " ");
+		args = parse_arguments(line);
+		if (!args)
+			continue;
+		av = create_args_arr(args);
 		//if (!check_commands(av, env_vars))
 		// Check for built-in commands
-		if (av[0] == NULL)
+		if ((*args)->name == NULL)
 			continue ;
-		else if (ft_strcmp(av[0], "exit") == 0)
+		else if (ft_strcmp((*args)->name, "exit") == 0)
 		{
 			should_run = 0;
 			break ;
 		}
-		add_history(input);
-		if (ft_strcmp(av[0], "env") == 0)
+		add_history(line);
+		if (ft_strcmp((*args)->name, "env") == 0)
 		{
 			print_env_vars(env_vars);
 			continue ;
