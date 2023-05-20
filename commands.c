@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/14 12:25:06 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/05/20 19:48:31 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,12 @@ int	check_commands2(char **av, t_env **child_env_vars)
 	}
 	if (strcmp(av[0], "unset") == 0)
 	{
-		unset_variable(child_env_vars, av[1]);
+		i = 1;
+		while (av[i])
+		{
+			unset_variable(child_env_vars, av[1]);
+			i++;
+		}
 		return (0);
 	}
 	//execute_external_command(av, child_env_vars);
