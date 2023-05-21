@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/20 19:48:31 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/20 19:56:53 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	check_commands2(char **av, t_env **child_env_vars)
 		}
 		return (0);
 	}
-	if (strcmp(av[0], "unset") == 0)
+	if (ft_strcmp(av[0], "unset") == 0)
 	{
 		i = 1;
 		while (av[i])

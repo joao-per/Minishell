@@ -21,7 +21,7 @@ char **create_args_arr(t_arg **args)
 
 	temp = (*args);
 	i = 0;
-	av = ft_calloc(ft_argsize(*args) + 1, sizeof(char *));
+	av = (char **)ft_calloc(ft_argsize(*args) + 1, sizeof(char *));
 	while (temp)
 	{
 		av[i] = ft_strdup(temp->name);
