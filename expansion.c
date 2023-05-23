@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/23 22:28:34 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:50:00 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ char *expansion(char *input, char *str_exp, t_env **env, int *i)
 	end = *i;
 	search = ft_substr(input, start, end - start);
 	env_var = search_env_name(env, search);
+	free(search);
 	if (env_var)
 	{
 		search = str_exp;
