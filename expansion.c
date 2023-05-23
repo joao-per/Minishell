@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/23 22:50:00 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:54:39 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ char *expansion(char *input, char *str_exp, t_env **env, int *i)
 	{
 		search = str_exp;
 		str_exp = ft_strjoin(str_exp, env_var->env_value);
+		free(search);
 	}
-	free(search);
 	return (str_exp);
 }
 
