@@ -82,6 +82,6 @@ t_arg	**parse_arguments(char *string);
 int		ft_argsize(t_arg *arg);
 int		is_whitespace(char c);
 int		quote_type(char c);
-
+char	*treat_expansion(char *input, t_env **env);
 
 #endif

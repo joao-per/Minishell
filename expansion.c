@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/23 22:16:20 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:28:34 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*treat_expansion(char *input, t_env **env)
 	return (str_exp);
 }
 
-int	main(int ac, char **av, char **env)
+/* int	main(int ac, char **av, char **env)
 {
 	char *line = readline(">");
 	(void)ac;
@@ -102,3 +102,4 @@ int	main(int ac, char **av, char **env)
 
 	
 }  
+ */

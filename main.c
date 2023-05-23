@@ -39,6 +39,7 @@ int main(int ac, char **argv, char **env)
 	t_arg **args;
 	int i;
 	char *line;
+	char *line_exp;
 	char **av;
 	int ret_number = 0;
 
@@ -57,7 +58,9 @@ int main(int ac, char **argv, char **env)
 			should_run = 0;
 			break;
 		}
-		args = parse_arguments(line);
+		line_exp = treat_expansion(line, env_vars);
+		free(line);
+		args = parse_arguments(line_exp);
 		if (!args)
 			continue;
 		av = create_args_arr(args);
@@ -70,7 +73,7 @@ int main(int ac, char **argv, char **env)
 			should_run = 0;
 			break ;
 		}
-		add_history(line);
+		add_history(line_exp);
 		if (ft_strcmp((*args)->name, "env") == 0)
 		{
 			print_env_vars(env_vars);
