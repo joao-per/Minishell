@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/21 19:24:55 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:16:20 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,13 @@ char *expansion(char *input, char *str_exp, t_env **env, int *i)
 	end = *i;
 	search = ft_substr(input, start, end - start);
 	env_var = search_env_name(env, search);
-	free(search);
-	end = ft_strlen(input) - (end - start + 2) + ft_strlen(env_var->env_value);
-	search = ft_calloc(end + 1, sizeof(char));
-	start = -1;
-	while (str_exp[++start] != '$')
-		search[start] = str_exp[start];
-	end = -1;
-	while (env_var->env_value[++end])
+	if (env_var)
 	{
-		search[start] = env_var->env_value[end];
-		start++;
+		search = str_exp;
+		str_exp = ft_strjoin(str_exp, env_var->env_value);
 	}
-	free(str_exp);
-	return (search);
+	free(search);
+	return (str_exp);
 }
 
 void	exp_quote_update(char c, int *flag_type, int *quotes_open)
@@ -67,22 +60,22 @@ char	*treat_expansion(char *input, t_env **env)
 	int		*quotes_open;
 	int		*flag_type;
 	char	*str_exp;
+	char	*temp;
 
 	quotes_open = ft_calloc(1, sizeof(int));
 	flag_type = ft_calloc(1, sizeof(int));
-	str_exp = ft_calloc(ft_strlen(input) + 1, sizeof(char));
+	str_exp = ft_calloc(1, sizeof(char));
 	i = ft_calloc(1, sizeof(int));
 	while (input[*i])
 	{
 		exp_quote_update(input[*i], flag_type, quotes_open);
 		if (input[*i] == '$' && *flag_type != 1)
-		{
-			str_exp[*i] = input[*i];
 			str_exp = expansion(input, str_exp, env, i);
-		}
 		else
 		{
-			str_exp[*i] = input[*i];
+			temp = str_exp;
+			str_exp = ft_charjoin(str_exp, input[*i]);
+			free(temp);
 			(*i)++;
 		}
 	}
