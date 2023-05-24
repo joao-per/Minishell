@@ -24,8 +24,6 @@
 # define MAX_HISTORY 100          
 	// Maximum number of commands to be stored in history
 
-extern char	**environ;
-
 typedef struct s_env
 {
 	char *env_name;
