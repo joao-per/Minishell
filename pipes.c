@@ -46,7 +46,14 @@ void run_commands_aux(char **av, t_env **env_vars, int in_fd, int out_fd)
 	}
 	else
 	{
+		/* int i=-1;
+		while (av[++i])
+		{
+			printf("%s\n", av[i]);
+		}
+		printf("waiting for %s\n", av[0]); */
 		waitpid(pid, &status, 0);
+		//printf("finished waiting for %s\n", av[0]);
 		check_commands2(av, env_vars);
 	}
 }

@@ -6,19 +6,19 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/23 22:54:39 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:39:31 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Libft/libft.h"
 #include "minishell.h"
 
-char *expansion(char *input, char *str_exp, t_env **env, int *i)
+char	*expansion(char *input, char *str_exp, t_env **env, int *i)
 {
-	int start;
-	int end;
-	char *search;
-	t_env *env_var;
+	int		start;
+	int		end;
+	char	*search;
+	t_env	*env_var;
 
 	(*i)++;
 	start = *i;
@@ -37,8 +37,17 @@ char *expansion(char *input, char *str_exp, t_env **env, int *i)
 	return (str_exp);
 }
 
+void	free_expansion_aux(int *i, int *quotes_open, int *flag_type)
+{
+	free(i);
+	free(quotes_open);
+	free(flag_type);
+}
+
 void	exp_quote_update(char c, int *flag_type, int *quotes_open)
 {
+	int	flag;
+
 	if (quote_type(c))
 	{
 		if (*quotes_open == 0)
@@ -47,11 +56,13 @@ void	exp_quote_update(char c, int *flag_type, int *quotes_open)
 			*quotes_open = 1;
 		}
 		else if (*quotes_open == 1)
+		{
 			if (*flag_type == quote_type(c))
 			{
 				*quotes_open = 0;
 				*flag_type = 0;
 			}
+		}
 	}
 }
 
@@ -80,9 +91,7 @@ char	*treat_expansion(char *input, t_env **env)
 			(*i)++;
 		}
 	}
-	free(i);
-	free(quotes_open);
-	free(flag_type);
+	free_expansion_aux(i, quotes_open, flag_type);
 	return (str_exp);
 }
 
