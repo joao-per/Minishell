@@ -1,5 +1,17 @@
-abc
-agh
-add_historyq
-qwe
-qwer
+a.out
+a.txt
+commands.c
+env_utils.c
+expansion.c
+Libft
+main.c
+Makefile
+minishell
+minishell.h
+parserapagar.c
+parser.c
+pipes.c
+redirections.c
+signals.c
+TO DO.txt
+utils.c

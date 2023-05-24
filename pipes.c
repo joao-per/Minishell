@@ -40,20 +40,15 @@ void run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
 		built_in_command_executed = check_commands(shell, env_vars);
 		if (!built_in_command_executed)
 			exit(0);
-		execve(shell->args_str[0], shell->args_str, shell->envs_str);
+		execute_external_command(shell, env_vars);
 		perror("execve");
 		exit(1);
 	}
 	else
 	{
-		/* int i=-1;
-		while (av[++i])
-		{
-			printf("%s\n", av[i]);
-		}
-		printf("waiting for %s\n", av[0]); */
+		//printf("waiting for %s\n", shell->args_str[0]);
 		waitpid(pid, &status, 0);
-		//printf("finished waiting for %s\n", av[0]);
+		//printf("finished waiting for %s\n", shell->args_str[0]);
 		check_commands2(shell, env_vars);
 	}
 }
@@ -86,46 +81,41 @@ void execute_command(t_shell *shell, t_env **env_vars)
 }
 
 
-/* void execute_external_command(char **av, t_env **env_vars)
+
+void execute_external_command(t_shell *shell, t_env **env_vars)
 {
 	char	*path_var;
 	char	**path_dirs;
-	char	*cmd_path;
 	char	*temp;
 	char	*full_path;
 	int		i;
 
-	if (strchr(av[0], '/'))
+	if (ft_strchr(shell->args_str[0], '/'))
 	{
-		execve(av[0], av, env_vars_to_char_arr(env_vars));
+		execve(shell->args_str[0], shell->args_str, shell->envs_str);
 		perror("minishell");
 		exit(1);
 	}
 	path_var = get_env_value("PATH", env_vars);
-	if (!path_var)
-	{
-		perror("minishell: PATH not set");
-		exit(1);
-	}
 	path_dirs = ft_split(path_var, ':');
 	free(path_var);
 	i = 0;
 	while (path_dirs[i])
 	{
 		temp = ft_strjoin(path_dirs[i], "/");
-		full_path = ft_strjoin(temp, av[0]);
+		full_path = ft_strjoin(temp, shell->args_str[0]);
 		free(temp);
-		if (access(cmd_path, X_OK) == 0)
+		if (access(full_path, X_OK) == 0)
 		{
-			execve(cmd_path, av, env_vars_to_char_arr(env_vars));
-			free(cmd_path);
-			break;
+			execve(full_path, shell->args_str, shell->envs_str);
+			free(full_path);
+			printf("a");
+			break ;
 		}
-		free(cmd_path);
+		free(full_path);
 		i++;
 	}
 	free_double_array(path_dirs);
 	perror("minishell");
 	exit(1);
 }
- */

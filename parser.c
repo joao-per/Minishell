@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/24 19:04:44 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/24 21:27:25 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,9 +260,9 @@ void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i)
 		arg->name[arg->arg_len++] = c;
 		(*i)++;
 	}
-	temp = ft_strdup(arg->name);
+	/* temp = ft_strdup(arg->name);
 	free(arg->name);
-	arg->name = temp;
+	arg->name = temp; */
 }
 
 t_arg	**parse_arguments(char *string)
