@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/20 19:56:53 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:01:16 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,34 +42,34 @@ void cd_command(char **av, t_env **env_vars)
 	free(oldwd);
 }
 
-int	check_commands2(char **av, t_env **child_env_vars)
+int	check_commands2(t_shell *shell, t_env **child_env_vars)
 {
 	char	cwd[MAX_LINE];
 	int i;
 
-	if (ft_strcmp(av[0], "cd") == 0)
+	if (ft_strcmp(shell->args_str[0], "cd") == 0)
 	{
-		cd_command(av, child_env_vars);
+		cd_command(shell->args_str, child_env_vars);
 		return 0;
 	}
-	if (ft_strcmp(av[0], "export") == 0)
+	if (ft_strcmp(shell->args_str[0], "export") == 0)
 	{
 		i = 1;
-		if (!av[i])
-			export_variable(child_env_vars, av[i]);
-		while (av[i])
+		if (!shell->args_str[i])
+			export_variable(child_env_vars, shell->args_str[i]);
+		while (shell->args_str[i])
 		{
-			export_variable(child_env_vars, av[i]);
+			export_variable(child_env_vars, shell->args_str[i]);
 			i++;
 		}
 		return (0);
 	}
-	if (ft_strcmp(av[0], "unset") == 0)
+	if (ft_strcmp(shell->args_str[0], "unset") == 0)
 	{
 		i = 1;
-		while (av[i])
+		while (shell->args_str[i])
 		{
-			unset_variable(child_env_vars, av[1]);
+			unset_variable(child_env_vars, shell->args_str[1]);
 			i++;
 		}
 		return (0);
@@ -78,12 +78,12 @@ int	check_commands2(char **av, t_env **child_env_vars)
 	return (1);
 }
 
-int	check_commands(char **av, t_env **child_env_vars)
+int	check_commands(t_shell *shell, t_env **child_env_vars)
 {
 	char	cwd[MAX_LINE];
 	int i;
 
-	if (ft_strcmp(av[0], "pwd") == 0)
+	if (ft_strcmp(shell->args_str[0], "pwd") == 0)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 			perror("minishell");
@@ -94,12 +94,12 @@ int	check_commands(char **av, t_env **child_env_vars)
 		}
 		return (0);
 	}
-	if (ft_strcmp(av[0], "echo") == 0)
+	if (ft_strcmp(shell->args_str[0], "echo") == 0)
 	{
-		echo_command(av);
+		echo_command(shell->args_str);
 		return (0);
 	}
-	return (check_commands2(av,child_env_vars));
+	return (check_commands2(shell, child_env_vars));
 }
 
 void	export_variable(t_env **env_vars, char *new_var)

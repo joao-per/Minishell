@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/20 19:33:48 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/24 19:04:44 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,35 +40,32 @@ int	quote_type(char c)
 int	is_even_quotes(char *str)
 {
 	int	i;
-	int	quotes_open;
+	int	quotes_closed;
 	int	flag_type;
 
 	i = 0;
-	quotes_open = 0;
+	quotes_closed = 1;
 	while (str[i])
 	{
 		if (quote_type(str[i]))
 		{
-			if (quotes_open == 0)
+			if (quotes_closed == 1)
 			{
 				flag_type = quote_type(str[i]);
-				quotes_open = 1;
+				quotes_closed = 0;
 			}
-			else if (quotes_open == 1)
+			else if (quotes_closed == 0)
 				if (flag_type == quote_type(str[i]))
-					quotes_open = 0;
+					quotes_closed = 1;
 		}
 		i++;
 	}
-	if (quotes_open == 1)
-	{
+	if (quotes_closed == 0)
 		printf("error: unclosed quotes\n");
-		return (0);
-	}
-	return (1);
+	return (quotes_closed);
 }
 
-char	*del_quotes(char *str)
+/* char	*del_quotes(char *str)
 {
 	int	i;
 	int	j;
@@ -102,6 +99,7 @@ char	*del_quotes(char *str)
 	str[j] = '\0';
 	return (str);
 }
+ */
 
 t_arg	*arg_last(t_arg *arg)
 {
@@ -152,7 +150,7 @@ int	edit_parse_struct(t_arg *arg, int *i, char c, int quotes)
 
 int	ft_argsize(t_arg *arg)
 {
-	t_arg	*temp;
+	t_arg		*temp;
 	int			i;
 
 	temp = arg;
@@ -202,8 +200,8 @@ int	parsing_tree(t_arg **args, int *i, char *str)
 
 void free_extra_string_mem (t_arg **arg)
 {
-	char *temp;
-	
+	char	*temp;
+
 	temp = ft_strdup((*arg)->name);
 	free((*arg)->name);
 	(*arg)->name = temp;
@@ -230,6 +228,8 @@ void	eliminate_extra_arg(t_arg **arg)
 	else
 		(*arg) = NULL;
 }
+
+
 
 void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i)
 {
@@ -281,7 +281,8 @@ t_arg	**parse_arguments(char *string)
 	{
 		while (*i < len && is_whitespace(string[*i]))
 			(*i)++;
-		if (!(temp = create_arg(args)))
+		temp = create_arg(args);
+		if (!temp)
 			return (NULL);
 		parse_aux(args, temp, string, i);
 	}

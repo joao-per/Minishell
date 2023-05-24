@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2023/04/07 14:54:09 by joao-per          #+#    #+#             */
 /*   Updated: 2023/04/07 14:54:09 by joao-per         ###   ########.fr       */
 /*                                                                            */
@@ -13,7 +16,29 @@
 #include "Libft/libft.h"
 #include "minishell.h"
 
-char **create_args_arr(t_arg **args)
+char	**create_env_arr(t_env **envs)
+{
+	char **env;
+	char *temp_str;
+	t_env *temp;
+	int i;
+
+	temp = (*envs);
+	i = 0;
+	env = (char **)ft_calloc(ft_envsize(*envs) + 1, sizeof(char *));
+	while (temp)
+	{
+		temp_str = ft_charjoin(temp->env_name, '=');
+		env[i] = ft_strjoin(temp_str, temp->env_value);
+		free(temp_str);
+		temp = temp->next;
+		i++;
+	}
+	env[i] = 0;
+	return (env);
+}
+
+char	**create_args_arr(t_arg **args)
 {
 	char **av;
 	t_arg *temp;
@@ -32,15 +57,32 @@ char **create_args_arr(t_arg **args)
 	return (av);
 }
 
-int main(int ac, char **argv, char **env)
+t_shell *shell_init(t_env **env_vars, t_arg **args, char **envs, char **av)
 {
-	int should_run;       // Flag to indicate when to exit the loop
+	t_shell *shell;
+
+	shell = ft_calloc(1, sizeof(t_shell));
+	if (!shell)
+		return (0);
+	shell->envs = env_vars;
+	shell->args = args;
+	shell->envs_str = envs;
+	shell->args_str = av;
+
+	return (shell);
+}
+
+int	main(int ac, char **argv, char **env)
+{
+	int should_run; // Flag to indicate when to exit the loop
+	t_shell *shell;
 	t_env **env_vars;
 	t_arg **args;
 	int i;
 	char *line;
 	char *line_exp;
 	char **av;
+	char **envs;
 	int ret_number = 0;
 
 	(void)ac;
@@ -48,6 +90,7 @@ int main(int ac, char **argv, char **env)
 	(void)env;
 	should_run = 1;
 	env_vars = env_init(env);
+	envs = create_env_arr(env_vars);
 	while (should_run)
 	{
 		setup_signals();
@@ -56,18 +99,14 @@ int main(int ac, char **argv, char **env)
 		// End of file (e.g. user pressed Ctrl-D)
 		{
 			should_run = 0;
-			break;
+			break ;
 		}
 		line_exp = treat_expansion(line, env_vars);
 		args = parse_arguments(line_exp);
 		if (!args)
-			continue;
+			continue ;
 		av = create_args_arr(args);
-		i = -1;
-		/* while (av[++i])
-		{
-			printf("%s\n", av[i]);
-		} */
+		shell = shell_init(env_vars, args, envs, av);
 		//if (!check_commands(av, env_vars))
 		// Check for built-in commands
 		if ((*args)->name == NULL)
@@ -85,7 +124,7 @@ int main(int ac, char **argv, char **env)
 			continue ;
 		}
 		//check_commands(av, env_vars);
-		execute_command(av, env_vars);
+		execute_command(shell, env_vars);
 		// We can add code for commands HERE!!!!!
 		//continue ;
 		// Fork a child process to execute the command

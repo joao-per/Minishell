@@ -33,12 +33,6 @@ typedef struct s_env
 	struct s_env *next; // next variable
 }	t_env;
 
-typedef struct s_history
-{
-	char *history[MAX_HISTORY]; // Array to store history of commands
-	int history_count;          // Current count of commands in history
-}	t_history;
-
 
 typedef struct s_arg
 {
@@ -50,6 +44,14 @@ typedef struct s_arg
 	struct s_arg 	*next;
 }					t_arg;
 
+typedef struct s_shell
+{
+	char **args_str;
+	char **envs_str;
+	t_env **envs;
+	t_arg **args;
+}	t_shell;
+
 /*				Environment				*/
 t_env	**env_init(char **env);
 t_env	*env_new(char *env_var);
@@ -60,13 +62,11 @@ t_env	*search_env_name(t_env **stack, char *var_to_find);
 char	*ft_strncpy(char *s1, char *s2, int n);
 void	parse(char *res, char *str, char sep, int slen);
 /*				Commands				*/
-int		check_commands(char **av, t_env **child_env_vars);
-int		check_commands2(char **av, t_env **child_env_vars);
+int		check_commands(t_shell *shell, t_env **child_env_vars);
+int		check_commands2(t_shell *shell, t_env **child_env_vars);
 void	handle_pipe(char **av, int status, int i);
 void	handle_redirection(char **av);
-void	execute_command(char **av, t_env **env_vars);
-void	add_to_history(t_history *cmd_history, char *input);
-void	print_history(t_history *cmd_history);
+void	execute_command(t_shell *shell, t_env **env_vars);
 void	export_variable(t_env **env_vars, char *new_var);
 void	unset_variable(t_env **env_vars, const char *var_name);
 void	echo_command(char **av);
@@ -83,5 +83,6 @@ int		ft_argsize(t_arg *arg);
 int		is_whitespace(char c);
 int		quote_type(char c);
 char	*treat_expansion(char *input, t_env **env);
+int		ft_envsize(t_env *env);
 
 #endif

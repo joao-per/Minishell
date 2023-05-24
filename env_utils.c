@@ -6,11 +6,28 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:17:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/12 18:17:54 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/24 19:04:25 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_envsize(t_env *env)
+{
+	t_env		*temp;
+	int			i;
+
+	temp = env;
+	i = 1;
+	if (env == NULL)
+		return (0);
+	while (temp->next != NULL)
+	{
+		temp = temp->next;
+		i++;
+	}
+	return (i);
+}
 
 t_env	*env_last(t_env *env)
 {
