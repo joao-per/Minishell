@@ -109,7 +109,6 @@ void execute_external_command(t_shell *shell, t_env **env_vars)
 		{
 			execve(full_path, shell->args_str, shell->envs_str);
 			free(full_path);
-			printf("a");
 			break ;
 		}
 		free(full_path);
