@@ -126,19 +126,7 @@ int	main(int ac, char **argv, char **env)
 		// We can add code for commands HERE!!!!!
 		//continue ;
 		// Fork a child process to execute the command
-		free_args_env(shell);
-		free(line_exp);
-		if(shell)
-			free(shell);
 	}
-	if (shell->envs)
-		free_env_struct(shell->envs);
-	if (shell->envs_str)
-		free_string_array(shell->envs_str);
-	free_args_env(shell);
-	free(line_exp);
-	if(shell)
-		free(shell);
 	rl_clear_history();
 	return (0);
 }

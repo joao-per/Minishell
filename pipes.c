@@ -80,8 +80,6 @@ void execute_command(t_shell *shell, t_env **env_vars)
 		close(in_fd);
 }
 
-
-
 void execute_external_command(t_shell *shell, t_env **env_vars)
 {
 	char	*path_var;

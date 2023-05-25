@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 14:18:43 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/25 20:16:49 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:45:15 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_string_array(char **str_arr)
 		i++;
 	}
 	free(str_arr[i]);
-	//free(str_arr);
+	free(str_arr);
 }
 
 void	free_args_struct(t_arg **args)
