@@ -16,20 +16,6 @@
 #include "Libft/libft.h"
 #include "minishell.h"
 
-void free_string_array(char **str_arr)
-{
-	int i;
-
-	i = 0;
-	while (str_arr[i])
-	{
-		free(str_arr[i]);
-		i++;
-	}
-	free(str_arr[i]);
-	free(str_arr);
-}
-
 char	**create_env_arr(t_env **envs)
 {
 	char **env;
@@ -92,19 +78,17 @@ int	main(int ac, char **argv, char **env)
 	t_shell *shell;
 	t_env **env_vars;
 	t_arg **args;
-	int i;
 	char *line;
 	char *line_exp;
 	char **av;
 	char **envs;
-	int ret_number = 0;
 
 	(void)ac;
 	(void)argv;
 	(void)env;
-	should_run = 1;
 	env_vars = env_init(env);
 	envs = create_env_arr(env_vars);
+	should_run = 1;
 	while (should_run)
 	{
 		setup_signals();
@@ -142,6 +126,19 @@ int	main(int ac, char **argv, char **env)
 		// We can add code for commands HERE!!!!!
 		//continue ;
 		// Fork a child process to execute the command
+		free_args_env(shell);
+		free(line_exp);
+		if(shell)
+			free(shell);
 	}
+	if (shell->envs)
+		free_env_struct(shell->envs);
+	if (shell->envs_str)
+		free_string_array(shell->envs_str);
+	free_args_env(shell);
+	free(line_exp);
+	if(shell)
+		free(shell);
+	rl_clear_history();
 	return (0);
 }
