@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/24 15:39:31 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/25 19:55:45 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ void	free_expansion_aux(int *i, int *quotes_open, int *flag_type)
 
 void	exp_quote_update(char c, int *flag_type, int *quotes_open)
 {
-	int	flag;
-
 	if (quote_type(c))
 	{
 		if (*quotes_open == 0)

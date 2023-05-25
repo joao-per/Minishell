@@ -37,6 +37,7 @@ typedef struct s_arg
 	char			*name;
 	int				arg_len;
 	int				in_quotes;
+	int 			quotes_perm;
 	char			quote_type;
 	char			arg_type;
 	struct s_arg 	*next;
@@ -63,7 +64,7 @@ void	parse(char *res, char *str, char sep, int slen);
 int		check_commands(t_shell *shell, t_env **child_env_vars);
 int		check_commands2(t_shell *shell, t_env **child_env_vars);
 void	handle_pipe(char **av, int status, int i);
-void	handle_redirection(char **av);
+void	handle_redirection(t_shell *shell);
 void	execute_command(t_shell *shell, t_env **env_vars);
 void	export_variable(t_env **env_vars, char *new_var);
 void	unset_variable(t_env **env_vars, const char *var_name);
@@ -82,5 +83,9 @@ int		is_whitespace(char c);
 int		quote_type(char c);
 char	*treat_expansion(char *input, t_env **env);
 int		ft_envsize(t_env *env);
+void	free_env_struct(t_env **envs);
+void	free_args_struct(t_arg **args);
+void	free_string_array(char **str_arr);
+void	free_args_env(t_shell *shell);
 
 #endif

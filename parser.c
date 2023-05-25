@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/24 21:27:25 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:03:29 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,12 +229,9 @@ void	eliminate_extra_arg(t_arg **arg)
 		(*arg) = NULL;
 }
 
-
-
 void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i)
 {
 	char	c;
-	char	*temp;
 	int		change;
 
 	arg->name = ft_calloc(ft_strlen(str) + 1, sizeof(char));
@@ -245,7 +242,10 @@ void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i)
 		if (!arg->in_quotes && is_whitespace(c))
 			break ;
 		if (!arg->in_quotes && quote_type(c) && !change)
+		{
 			change = edit_parse_struct(arg, i, c, 1);
+			arg->quotes_perm = 1;
+		}
 		if (arg->in_quotes && arg->quote_type == c && !change)
 			change = edit_parse_struct(arg, i, 0, 0);
 		if (!arg->in_quotes && is_pipes_red(c))

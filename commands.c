@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/24 20:01:16 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/25 19:55:31 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void cd_command(char **av, t_env **env_vars)
 
 int	check_commands2(t_shell *shell, t_env **child_env_vars)
 {
-	char	cwd[MAX_LINE];
 	int i;
 
 	if (ft_strcmp(shell->args_str[0], "cd") == 0)
@@ -81,7 +80,6 @@ int	check_commands2(t_shell *shell, t_env **child_env_vars)
 int	check_commands(t_shell *shell, t_env **child_env_vars)
 {
 	char	cwd[MAX_LINE];
-	int i;
 
 	if (ft_strcmp(shell->args_str[0], "pwd") == 0)
 	{
@@ -152,7 +150,6 @@ void	unset_variable(t_env **env_vars, const char *var_name)
 {
 	t_env	*curr;
 	t_env	*prev;
-	char	*equal_pos;
 
 	curr = *env_vars;
 	prev = NULL;

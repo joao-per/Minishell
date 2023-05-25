@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:17:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/24 19:04:25 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/25 19:54:09 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,6 @@ void	print_export_vars(t_env **env_arr)
 t_env	*search_env_name(t_env **stack, char *var_to_find)
 {
 	t_env	*temp;
-	int		len;
 
 	temp = (*stack);
 	while (temp != NULL)

@@ -74,33 +74,36 @@ void handle_append_redirection(char **av, int *j)
 	av[*j] = NULL;
 }
 
-void handle_redirection(char **av)
+void handle_redirection(t_shell *shell)
 {
 	int j;
+	t_arg *temp;
 
 	j = 0;
-	while (av[j] != NULL)
+	temp = (*shell->args);
+	while (temp)
 	{
-		if (ft_strcmp(av[j], "<") == 0)
+		if (ft_strcmp(temp->name, "<") == 0 && temp->quotes_perm == 0)
 		{
-			handle_input_redirection(av, &j);
+			handle_input_redirection(shell->args_str, &j);
 			break ;
 		}
-		else if (ft_strcmp(av[j], "<<") == 0)
+		else if (ft_strcmp(temp->name, "<<") == 0 && temp->quotes_perm == 0)
 		{
-			handle_heredoc_redirection(av, &j);
+			handle_heredoc_redirection(shell->args_str, &j);
 			break ;
 		}
-		else if (ft_strcmp(av[j], ">") == 0)
+		else if (ft_strcmp(temp->name, ">") == 0 && temp->quotes_perm == 0)
 		{
-			handle_output_redirection(av, &j);
+			handle_output_redirection(shell->args_str, &j);
 			break ;
 		}
-		else if (ft_strcmp(av[j], ">>") == 0)
+		else if (ft_strcmp(temp->name, ">>") == 0 && temp->quotes_perm == 0)
 		{
-			handle_append_redirection(av, &j);
+			handle_append_redirection(shell->args_str, &j);
 			break ;
 		}
 		j++;
+		temp=temp->next;
 	}
 }

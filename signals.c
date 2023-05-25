@@ -27,6 +27,7 @@ void restore_prompt(int sig)
 
 void back_slash(int sig) 
 {
+	(void)sig;
 	printf("Quit (core dumped)\n");
 	exit(0);
 }

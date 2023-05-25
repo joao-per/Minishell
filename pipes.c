@@ -34,7 +34,7 @@ void run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
 	else if (pid == 0)
 	{
 		file_descriptor_handler(in_fd, out_fd);
-		handle_redirection(shell->args_str);
+		handle_redirection(shell);
 		//built_in_command_executed = check_commands(av, env_vars)
 		// Return if a built-in command was executed
 		built_in_command_executed = check_commands(shell, env_vars);
