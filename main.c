@@ -16,6 +16,20 @@
 #include "Libft/libft.h"
 #include "minishell.h"
 
+void free_string_array(char **str_arr)
+{
+	int i;
+
+	i = 0;
+	while (str_arr[i])
+	{
+		free(str_arr[i]);
+		i++;
+	}
+	free(str_arr[i]);
+	free(str_arr);
+}
+
 char	**create_env_arr(t_env **envs)
 {
 	char **env;
