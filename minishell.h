@@ -6,6 +6,8 @@
 # include <dirent.h>
 # include <errno.h>
 # include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -14,42 +16,40 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 
 # define MAX_LINE 80               // Maximum length of user input
 # define MAX_ARGS MAX_LINE / 2 + 1 // Maximum number of arguments for a command
 # define READ_END 0                // File descriptor for read end of a pipe
 # define WRITE_END 1               // File descriptor for write end of a pipe
-# define MAX_HISTORY 100          
-	// Maximum number of commands to be stored in history
+# define MAX_HISTORY 100
+// Maximum number of commands to be stored in history
 
 typedef struct s_env
 {
 	char *env_name;
 	char *env_value;
 	struct s_env *next; // next variable
-}	t_env;
-
+} t_env;
 
 typedef struct s_arg
 {
-	char			*name;
-	int				arg_len;
-	int				in_quotes;
-	int 			quotes_perm;
-	char			quote_type;
-	char			arg_type;
-	struct s_arg 	*next;
-}					t_arg;
+	char *name;
+	int arg_len;
+	int in_quotes;
+	int quotes_perm;
+	char quote_type;
+	char arg_type;
+	struct s_arg *next;
+} t_arg;
 
 typedef struct s_shell
 {
 	char **args_str;
 	char **envs_str;
+	int len_args;
 	t_env **envs;
 	t_arg **args;
-}	t_shell;
+} t_shell;
 
 /*				Environment				*/
 t_env	**env_init(char **env);
@@ -61,8 +61,8 @@ t_env	*search_env_name(t_env **stack, char *var_to_find);
 char	*ft_strncpy(char *s1, char *s2, int n);
 void	parse(char *res, char *str, char sep, int slen);
 /*				Commands				*/
-int		check_commands(t_shell *shell, t_env **child_env_vars);
-int		check_commands2(t_shell *shell, t_env **child_env_vars);
+int	check_commands(t_shell *shell, t_env **child_env_vars);
+int	check_commands2(t_shell *shell, t_env **child_env_vars);
 void	handle_pipe(char **av, int status, int i);
 void	handle_redirection(t_shell *shell);
 void	execute_command(t_shell *shell, t_env **env_vars);
@@ -74,17 +74,17 @@ void	execute_external_command(t_shell *shell, t_env **env_vars);
 char	**env_vars_to_char_arr(t_env **env_vars);
 void	free_double_array(char **doubles);
 char	*get_env_value(char *name, t_env **env_vars);
-void 	run_signals(int sig, int *ret_number);
-int 	find_pipe(char **av);
-void	setup_signals();
+void	run_signals(int sig, int *ret_number);
+int	find_pipe(char **av);
+void	setup_signals(void);
 t_arg	**parse_arguments(char *string);
-int		ft_argsize(t_arg *arg);
-int		is_whitespace(char c);
-int		quote_type(char c);
+int	ft_argsize(t_arg *arg);
+int	is_whitespace(char c);
+int	quote_type(char c);
 char	*treat_expansion(char *input, t_env **env);
-int		ft_envsize(t_env *env);
+int	ft_envsize(t_env *env);
 void	free_args(t_shell *shell, int len);
 void	free_env(t_shell *shell);
-int		count_strings(char **str_arr);
+int	count_strings(char **str_arr);
 
 #endif

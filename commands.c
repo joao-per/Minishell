@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/26 01:36:26 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/26 01:49:06 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	check_commands2(t_shell *shell, t_env **child_env_vars)
 		i = 1;
 		while (shell->args_str[i])
 		{
-			unset_variable(child_env_vars, shell->args_str[1]);
+			unset_variable(child_env_vars, shell->args_str[i]);
 			i++;
 		}
 		return (0);

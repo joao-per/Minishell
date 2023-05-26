@@ -96,6 +96,8 @@ void execute_external_command(t_shell *shell, t_env **env_vars)
 	if (ft_strchr(shell->args_str[0], '/'))
 	{
 		execve(shell->args_str[0], shell->args_str, shell->envs_str);
+		free_args(shell, shell->len_args);
+		free(shell);
 		perror("minishell");
 		exit(1);
 	}

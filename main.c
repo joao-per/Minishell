@@ -68,6 +68,7 @@ t_shell *shell_init(t_env **env_vars, t_arg **args, char **envs, char **av)
 	shell->args = args;
 	shell->envs_str = envs;
 	shell->args_str = av;
+	shell->len_args = count_strings(av);
 
 	return (shell);
 }
@@ -82,7 +83,6 @@ int	main(int ac, char **argv, char **env)
 	char *line_exp;
 	char **av;
 	char **envs;
-	int len;
 
 	(void)ac;
 	(void)argv;
@@ -106,7 +106,6 @@ int	main(int ac, char **argv, char **env)
 		if (!args)
 			continue ;
 		av = create_args_arr(args);
-		len = count_strings(av);
 		shell = shell_init(env_vars, args, envs, av);
 		//if (!check_commands(av, env_vars))
 		// Check for built-in commands
@@ -129,11 +128,11 @@ int	main(int ac, char **argv, char **env)
 		// We can add code for commands HERE!!!!!
 		//continue ;
 		// Fork a child process to execute the command
-		free_args(shell, len);
+		free_args(shell, shell->len_args);
 		free(shell);
 	}
 	free_env(shell);
-	free_args(shell, len);
+	free_args(shell, shell->len_args);
 	free(shell);
 	free(line);
 	rl_clear_history();
