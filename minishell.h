@@ -126,6 +126,7 @@ void	unset_variable(t_env **env_vars, const char *var_name);
 void	echo_command(char **av);
 
 void	free_double_array(char **doubles);
+t_arg	*get_arg_byindex(t_shell *shell, int index);
 
 
 #endif

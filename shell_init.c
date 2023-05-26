@@ -1,17 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_args_aux.c                                     :+:      :+:    :+:   */
+/*   shell_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:12:13 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/26 20:13:00 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/26 22:19:32 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Libft/libft.h"
 #include "minishell.h"
+
+t_arg	*get_arg_byindex(t_shell *shell, int index)
+{
+	t_arg	*temp;
+	int		i;
+
+	temp = (*shell->args);
+	i = 0;
+	while (temp != NULL)
+	{
+		if (i == index)
+			return (temp);
+		temp = temp->next;
+		i++;
+	}
+	return (NULL);
+}
 
 char	**create_env_arr(t_env **envs)
 {
