@@ -83,9 +83,8 @@ int		is_whitespace(char c);
 int		quote_type(char c);
 char	*treat_expansion(char *input, t_env **env);
 int		ft_envsize(t_env *env);
-void	free_env_struct(t_env **envs);
-void	free_args_struct(t_arg **args);
-void	free_string_array(char **str_arr);
-void	free_args_env(t_shell *shell);
+void	free_args(t_shell *shell, int len);
+void	free_env(t_shell *shell);
+int		count_strings(char **str_arr);
 
 #endif

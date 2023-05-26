@@ -58,7 +58,10 @@ void execute_command(t_shell *shell, t_env **env_vars)
 	int pipe_index;
 	int fd[2];
 	int in_fd;
+	char **av;
 
+	av = shell->args_str;
+	(void) av;
 	in_fd = 0;
 	while ((pipe_index = find_pipe(shell->args_str)) != -1)
 	{
@@ -67,6 +70,7 @@ void execute_command(t_shell *shell, t_env **env_vars)
 			perror("pipe");
 			exit(1);
 		}
+		free(shell->args_str[pipe_index]);
 		shell->args_str[pipe_index] = NULL;
 		run_commands_aux(shell, env_vars, in_fd, fd[1]);
 		close(fd[1]);
@@ -78,6 +82,7 @@ void execute_command(t_shell *shell, t_env **env_vars)
 	run_commands_aux(shell, env_vars, in_fd, STDOUT_FILENO);
 	if (in_fd != 0)
 		close(in_fd);
+	shell->args_str = av;
 }
 
 void execute_external_command(t_shell *shell, t_env **env_vars)

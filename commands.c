@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/25 19:55:31 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/26 01:36:26 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ void	export_variable(t_env **env_vars, char *new_var)
 	env_name[env_name_l] = '\0';
 	env_value = eq_pos + 1;
 	curr = search_env_name(env_vars, env_name);
+	free(env_name);
 	if(curr != NULL)
 	{
 		free(curr->env_value);

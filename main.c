@@ -82,6 +82,7 @@ int	main(int ac, char **argv, char **env)
 	char *line_exp;
 	char **av;
 	char **envs;
+	int len;
 
 	(void)ac;
 	(void)argv;
@@ -101,9 +102,11 @@ int	main(int ac, char **argv, char **env)
 		}
 		line_exp = treat_expansion(line, env_vars);
 		args = parse_arguments(line_exp);
+		free(line_exp);
 		if (!args)
 			continue ;
 		av = create_args_arr(args);
+		len = count_strings(av);
 		shell = shell_init(env_vars, args, envs, av);
 		//if (!check_commands(av, env_vars))
 		// Check for built-in commands
@@ -126,7 +129,13 @@ int	main(int ac, char **argv, char **env)
 		// We can add code for commands HERE!!!!!
 		//continue ;
 		// Fork a child process to execute the command
+		free_args(shell, len);
+		free(shell);
 	}
+	free_env(shell);
+	free_args(shell, len);
+	free(shell);
+	free(line);
 	rl_clear_history();
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/25 20:03:29 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/26 00:35:45 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,12 +165,10 @@ int	ft_argsize(t_arg *arg)
 	return (i);
 }
 
-int	parse_pipe_red(t_arg **args, int *i, char *str, char *sep)
+int	parse_pipe_red(t_arg **args, int *i, char *sep)
 {
-	char	c;
 	t_arg	*temp;
 
-	c = str[*i];
 	temp = create_arg(args);
 	temp->name = ft_strdup(sep);
 	(*i)++;
@@ -180,21 +178,21 @@ int	parse_pipe_red(t_arg **args, int *i, char *str, char *sep)
 int	parsing_tree(t_arg **args, int *i, char *str)
 {
 	if (str[*i] == '|')
-		return (parse_pipe_red(args, i, str, "|"));
+		return (parse_pipe_red(args, i, "|"));
 	if (ft_strncmp(&str[*i], ">>", 2) == 0)
 	{
 		(*i)++;
-		return (parse_pipe_red(args, i, str, ">>"));
+		return (parse_pipe_red(args, i, ">>"));
 	}
 	if (ft_strncmp(&str[*i], "<<", 2) == 0)
 	{
 		(*i)++;
-		return (parse_pipe_red(args, i, str, "<<"));
+		return (parse_pipe_red(args, i, "<<"));
 	}
 	if (str[*i] == '>')
-		return (parse_pipe_red(args, i, str, ">"));
+		return (parse_pipe_red(args, i, ">"));
 	if (str[*i] == '<')
-		return (parse_pipe_red(args, i, str, "<"));
+		return (parse_pipe_red(args, i, "<"));
 	return (0);
 }
 
