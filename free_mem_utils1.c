@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 14:18:43 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/26 01:30:58 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/26 19:46:12 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,20 +81,4 @@ void	free_env_struct(t_env **envs)
 		free(temp);
 	}
 	free(envs);
-}
-
-void	free_args(t_shell *shell, int len)
-{
-	if (shell->args_str)
-		free_args_array(shell->args_str, len);
-	if (shell->args)
-		free_args_struct(shell->args);
-}
-
-void	free_env(t_shell *shell)
-{
-	if (shell->envs_str)
-		free_env_array(shell->envs_str);
-	if (shell->envs)
-		free_env_struct(shell->envs);
 }

@@ -1,11 +1,24 @@
-#include "minishell.h"
 #include "Libft/libft.h"
- 
+#include "minishell.h"
+
+int	find_pipe(char **av)
+{
+	int	i;
+
+	i = 0;
+	while (av[i] != NULL)
+	{
+		if (ft_strcmp(av[i], "|") == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
 
 /*
 while the parent process is responsible for passing environment variables to the child and waiting for the child process to complete.
 */
-void file_descriptor_handler(int in, int out)
+void	file_descriptor_handler(int in, int out)
 {
 	if (in != 0)
 	{
@@ -19,11 +32,11 @@ void file_descriptor_handler(int in, int out)
 	}
 }
 
-void run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
+void	run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
 {
-	pid_t pid;
-	int status;
-	int built_in_command_executed;
+	pid_t	pid;
+	int		status;
+	int		built_in_command_executed;
 
 	pid = fork();
 	if (pid < 0)
@@ -53,15 +66,15 @@ void run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
 	}
 }
 
-void execute_command(t_shell *shell, t_env **env_vars)
+void	execute_command(t_shell *shell, t_env **env_vars)
 {
-	int pipe_index;
-	int fd[2];
-	int in_fd;
-	char **av;
+	int		pipe_index;
+	int		fd[2];
+	int		in_fd;
+	char	**av;
 
 	av = shell->args_str;
-	(void) av;
+	(void)av;
 	in_fd = 0;
 	while ((pipe_index = find_pipe(shell->args_str)) != -1)
 	{
@@ -85,7 +98,7 @@ void execute_command(t_shell *shell, t_env **env_vars)
 	shell->args_str = av;
 }
 
-void execute_external_command(t_shell *shell, t_env **env_vars)
+void	execute_external_command(t_shell *shell, t_env **env_vars)
 {
 	char	*path_var;
 	char	**path_dirs;

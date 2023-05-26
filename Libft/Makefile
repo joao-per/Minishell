@@ -13,7 +13,7 @@
 NAME = libft.a
 
 SRC = ft_isalnum ft_isalpha ft_isascii ft_isdigit ft_isprint \
-ft_substr ft_strlcat ft_strlcpy ft_strlen ft_strncmp ft_strcmp ft_strnstr ft_strndup \
+ft_substr ft_strlcat ft_strlcpy ft_strncpy ft_strlen ft_strncmp ft_strcmp ft_strnstr ft_strndup \
 ft_strrchr ft_strdup ft_strjoin ft_charjoin ft_strtrim ft_strmapi ft_striteri ft_strchr\
 ft_tolower ft_toupper \
 ft_memchr ft_memcmp ft_memcpy ft_memmove ft_memset \
