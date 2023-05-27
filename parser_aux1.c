@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/26 19:21:11 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/27 13:18:55 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,11 @@ int	is_even_quotes(char *str)
 				if (flag_type == quote_type(str[i]))
 					quotes_closed = 1;
 		}
-		i++;
+		if (is_special_char(str[i++]) && quotes_closed == 1)
+			return (print_error_messages('S'));
 	}
 	if (quotes_closed == 0)
-		printf("error: unclosed quotes\n");
+		return (print_error_messages('U'));
 	return (quotes_closed);
 }
 

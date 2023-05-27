@@ -73,6 +73,7 @@ int		is_whitespace(char c);
 int		is_pipes_red(char c);
 int		quote_type(char c);
 int		is_even_quotes(char *str);
+int		is_special_char(char c);
 /*				Parser args				*/
 t_arg	*create_arg(t_arg **args);
 t_arg	*arg_last(t_arg *arg);
@@ -89,6 +90,7 @@ void	ft_argclear(t_arg **arg);
 int		parse_pipe_red(t_arg **args, int *i, char *sep);
 int		parsing_tree(t_arg **args, int *i, char *str);
 void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i);
+int		print_error_messages(char type_error);
 t_arg	**parse_arguments(char *string);
 /*				Shell Init				*/
 t_shell	*shell_init(t_env **env_vars, t_arg **args, char **envs, char **av);
@@ -111,6 +113,7 @@ void	file_descriptor_handler(int in, int out);
 void	run_commands_aux(t_shell *shell, t_env **env, int in_fd, int out_fd);
 void	execute_command(t_shell *shell, t_env **env_vars);
 void	execute_external_command(t_shell *shell, t_env **env_vars);
+int		is_builtin_command(t_shell *shell);
 /*				Redirections			*/
 void	handle_redirection(t_shell *shell);
 void	handle_append_redirection(char **av, int *j);

@@ -1,28 +1,22 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipes.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/27 21:36:14 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/27 21:41:26 by pedperei         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Libft/libft.h"
 #include "minishell.h"
 
-int	find_pipe(char **av)
+int	find_pipe(t_shell *shell, int pipe_index)
 {
 	int	i;
+	int pos;
+	t_arg *temp;
 
-	i = 0;
-	while (av[i] != NULL)
+	i = pipe_index;
+	pos = 0;
+	temp = get_arg_byindex(shell, pipe_index);
+	while (temp)
 	{
-		if (ft_strcmp(av[i], "|") == 0)
-			return (i);
+		if (ft_strcmp(shell->args_str[i], "|") == 0 && temp->quotes_perm == 0)
+			return (pos);
 		i++;
+		pos++;
+		temp = temp->next;
 	}
 	return (-1);
 }
@@ -84,11 +78,13 @@ void	execute_command(t_shell *shell, t_env **env_vars)
 	int		fd[2];
 	int		in_fd;
 	char	**av;
+	int		i;
 
 	av = shell->args_str;
 	(void)av;
 	in_fd = 0;
-	while ((pipe_index = find_pipe(shell->args_str)) != -1)
+	i = 0;
+	while ((pipe_index = find_pipe(shell, i)) != -1)
 	{
 		if (pipe(fd) == -1)
 		{
@@ -97,12 +93,12 @@ void	execute_command(t_shell *shell, t_env **env_vars)
 		}
 		free(shell->args_str[pipe_index]);
 		shell->args_str[pipe_index] = NULL;
-		run_commands_aux(shell, env_vars, in_fd, fd[1]);
+		run_commands_aux(shell, pipe_index, in_fd, fd[1]);
 		close(fd[1]);
 		if (in_fd != 0)
 			close(in_fd);
 		in_fd = fd[0];
-		shell->args_str += pipe_index + 1;
+		i += pipe_index + 1;
 	}
 	run_commands_aux(shell, env_vars, in_fd, STDOUT_FILENO);
 	if (in_fd != 0)

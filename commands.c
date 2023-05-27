@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/26 01:49:06 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/27 20:51:21 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,21 @@ int	check_commands2(t_shell *shell, t_env **child_env_vars)
 	}
 	//execute_external_command(av, child_env_vars);
 	return (1);
+}
+
+int is_builtin_command(t_shell *shell)
+{
+	if (ft_strcmp(shell->args_str[0], "pwd") == 0)
+		return (1);
+	if (ft_strcmp(shell->args_str[0], "echo") == 0)
+		return (1);
+	if (ft_strcmp(shell->args_str[0], "cd") == 0)
+		return (1);
+	if (ft_strcmp(shell->args_str[0], "export") == 0)
+		return (1);
+	if (ft_strcmp(shell->args_str[0], "unset") == 0)
+		return (1);
+	return (0);
 }
 
 int	check_commands(t_shell *shell, t_env **child_env_vars)
