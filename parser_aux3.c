@@ -6,14 +6,14 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/31 19:32:27 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/31 20:35:38 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Libft/libft.h"
 #include "minishell.h"
 
-void free_extra_string_mem (t_arg **arg)
+void	free_extra_string_mem(t_arg **arg)
 {
 	char	*temp;
 
@@ -21,7 +21,6 @@ void free_extra_string_mem (t_arg **arg)
 	free((*arg)->name);
 	(*arg)->name = temp;
 }
-
 
 void	eliminate_extra_arg(t_arg **arg)
 {

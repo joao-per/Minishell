@@ -91,7 +91,7 @@ void	ft_argclear(t_arg **arg);
 int		parse_pipe_red(t_arg **args, int *i, char *sep);
 int		parsing_tree(t_arg **args, int *i, char *str);
 void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i);
-int		print_error_messages(char type_error);
+int		print_error_messages(char type_error, char *error);
 t_arg	**parse_arguments(char *string);
 /*				Shell Init				*/
 t_shell	*shell_init(t_env **env_vars, t_arg **args, char **envs, char **av);

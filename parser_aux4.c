@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/31 18:55:50 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/31 20:36:40 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,19 @@ int	is_pipe_red(char *input)
 
 int	is_quote_parsed_valid(t_arg **args)
 {
-	t_arg *temp;
+	t_arg	*temp;
 
 	temp = *args;
 	while (temp)
 	{
 		if (is_pipe_red(temp->name) && temp->quotes_perm == 0
 			&& temp->next == NULL)
-			return (print_error_messages('U'));
+			return (print_error_messages('P', temp->name));
 		if (ft_strcmp(temp->name, "||") == 0 && temp->quotes_perm == 0)
-			return (print_error_messages('U'));
+			return (print_error_messages('P', temp->name));
 		if (temp->next && is_pipe_red(temp->name) && temp->quotes_perm == 0
 			&& is_pipe_red(temp->next->name) && temp->quotes_perm == 0)
-			return (print_error_messages('U'));
+			return (print_error_messages('P', temp->name));
 		temp = temp->next;
 	}
 	return (1);

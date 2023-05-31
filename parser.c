@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/26 19:18:01 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/31 20:28:21 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ t_arg	**parse_arguments(char *string)
 	{
 		while (*i < len && is_whitespace(string[*i]))
 			(*i)++;
+		if (*i == len)
+			break ;
 		temp = create_arg(args);
 		if (!temp)
 			return (NULL);

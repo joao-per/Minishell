@@ -6,13 +6,12 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/27 13:18:55 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/31 20:35:22 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Libft/libft.h"
 #include "minishell.h"
-
 
 int	is_whitespace(char c)
 {
@@ -59,10 +58,10 @@ int	is_even_quotes(char *str)
 					quotes_closed = 1;
 		}
 		if (is_special_char(str[i++]) && quotes_closed == 1)
-			return (print_error_messages('S'));
+			return (print_error_messages('S', 0));
 	}
 	if (quotes_closed == 0)
-		return (print_error_messages('U'));
+		return (print_error_messages('U', 0));
 	return (quotes_closed);
 }
 
