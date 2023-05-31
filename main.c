@@ -44,11 +44,15 @@ int	main(int ac, char **argv, char **env)
 			break ;
 		}
 		line_exp = treat_expansion(line, env_vars);
+		add_history(line);
+		free(line);
 		args = parse_arguments(line_exp);
 		free(line_exp);
 		if (!args)
 			continue ;
 		av = create_args_arr(args);
+		if (!av)
+			continue ;
 		shell = shell_init(env_vars, args, envs, av);
 		//if (!check_commands(av, env_vars))
 		// Check for built-in commands
@@ -59,8 +63,6 @@ int	main(int ac, char **argv, char **env)
 			should_run = 0;
 			break ;
 		}
-		add_history(line);
-		free(line);
 		if (ft_strcmp((*args)->name, "env") == 0)
 		{
 			print_env_vars(env_vars);

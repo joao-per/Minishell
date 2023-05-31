@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/26 19:17:41 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/31 19:32:27 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	ft_argdelone(t_arg *arg)
 	free(arg->name);
 	free(arg);
 }
-
 
 void	ft_argclear(t_arg **arg)
 {

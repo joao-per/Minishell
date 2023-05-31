@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:12:13 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/26 22:19:32 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/31 18:58:31 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ char	**create_args_arr(t_arg **args)
 
 	temp = (*args);
 	i = 0;
+	if (!is_quote_parsed_valid(args))
+	{
+		free_args_struct(args);
+		return (0);
+	}
 	av = (char **)ft_calloc(ft_argsize(*args) + 1, sizeof(char *));
 	while (temp)
 	{
