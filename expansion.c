@@ -6,12 +6,25 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/25 19:55:45 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/05/31 22:15:47 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Libft/libft.h"
 #include "minishell.h"
+
+char	*expansion_interrogation_mark(char *str_exp)
+{
+	char	*temp;
+	char	*status;
+
+	temp = str_exp;
+	status = ft_itoa(exit_status);
+	str_exp = ft_strjoin(str_exp, status);
+	free(temp);
+	free(status);
+	return (str_exp);
+}
 
 char	*expansion(char *input, char *str_exp, t_env **env, int *i)
 {
@@ -22,8 +35,12 @@ char	*expansion(char *input, char *str_exp, t_env **env, int *i)
 
 	(*i)++;
 	start = *i;
-	while (ft_isalnum(input[*i]) || input[*i] == '_')
+	while (ft_isalnum(input[*i]) || input[*i] == '_' || input[start] == '?')
+	{
 		(*i)++;
+		if (input[start] == '?')
+			return (expansion_interrogation_mark(str_exp));
+	}
 	end = *i;
 	search = ft_substr(input, start, end - start);
 	env_var = search_env_name(env, search);

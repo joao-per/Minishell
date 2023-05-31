@@ -26,6 +26,8 @@
 # define MAX_HISTORY 100
 // Maximum number of commands to be stored in history
 
+extern int	exit_status;
+
 typedef struct s_env
 {
 	char	*env_name;
@@ -74,7 +76,7 @@ int		is_pipes_red(char c);
 int		quote_type(char c);
 int		is_even_quotes(char *str);
 int		is_special_char(char c);
-int		is_quote_parsed_valid(t_arg **args);
+int		is_pipe_reds_valid(t_arg **args);
 /*				Parser args				*/
 t_arg	*create_arg(t_arg **args);
 t_arg	*arg_last(t_arg *arg);

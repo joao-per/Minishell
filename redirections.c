@@ -29,7 +29,7 @@ void handle_heredoc_redirection(char **av, int *j)
 	input_fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	while ((read = getline(&line, &len, stdin)) != -1) 
 	{
-		if (strcmp(line, delimiter) == 0)
+		if (ft_strcmp(line, delimiter) == 0)
 			break;
 		write(input_fd, line, read);
 	}

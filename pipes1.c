@@ -1,6 +1,7 @@
 #include "Libft/libft.h"
 #include "minishell.h"
 
+
 int	find_pipe(t_shell *shell, int pipe_index)
 {
 	int pos;
@@ -62,9 +63,7 @@ void	run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
 	}
 	else
 	{
-		//printf("waiting for %s\n", shell->args_str[0]);
 		waitpid(pid, &status, 0);
-		//printf("finished waiting for %s\n", shell->args_str[0]);
 		check_commands2(shell, env_vars);
 	}
 }
