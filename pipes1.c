@@ -64,6 +64,9 @@ void	run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
 	else
 	{
 		waitpid(pid, &status, 0);
+		if ( WIFEXITED(status)) 
+        	exit_status = WEXITSTATUS(status);
+		//printf("finished waiting for %s\n", shell->args_str[0]);
 		check_commands2(shell, env_vars);
 	}
 }
