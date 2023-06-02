@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void	run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
+void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
 {
 	pid_t	pid;
 	int		status;
@@ -24,13 +24,13 @@ void	run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
 		exit(1);
 	}
 	else if (pid == 0)
-		handle_child_process(shell, env_vars, in_fd, out_fd);
+		handle_child_process(shell, in_fd, out_fd);
 	else
 	{
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status)) 
 			exit_status = WEXITSTATUS(status);
-		check_commands2(shell, env_vars);
+		check_commands2(shell);
 	}
 }
 

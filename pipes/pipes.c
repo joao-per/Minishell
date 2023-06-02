@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/02 11:05:06 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/02 20:45:35 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Libft/libft.h"
 #include "../minishell.h"
 
-void	execute_command(t_shell *shell, t_env **env_vars)
+void	execute_command(t_shell *shell)
 {
 	int		pipe_index;
 	int		in_fd;
@@ -25,10 +25,10 @@ void	execute_command(t_shell *shell, t_env **env_vars)
 	i = 0;
 	while ((pipe_index = find_pipe(shell, i)) != -1)
 	{
-		handle_pipe(shell, env_vars, &in_fd, pipe_index);
+		handle_pipe(shell, &in_fd, pipe_index);
 		i += pipe_index + 1;
 	}
-	run_commands_aux(shell, env_vars, in_fd, STDOUT_FILENO);
+	run_commands_aux(shell, in_fd, STDOUT_FILENO);
 	if (in_fd != 0)
 		close(in_fd);
 	shell->args_str = av;
@@ -43,12 +43,12 @@ void	execute_absolute_path(t_shell *shell)
 	exit(1);
 }
 
-void	execute_relative_path(t_shell *shell, t_env **env_vars)
+void	execute_relative_path(t_shell *shell)
 {
 	char	*path_var;
 	char	**path_dirs;
 
-	path_var = get_env_value("PATH", env_vars);
+	path_var = get_env_value("PATH", shell->envs);
 	path_dirs = ft_split(path_var, ':');
 	free(path_var);
 
@@ -60,10 +60,10 @@ void	execute_relative_path(t_shell *shell, t_env **env_vars)
 }
 
 
-void	execute_external_command(t_shell *shell, t_env **env_vars)
+void	execute_external_command(t_shell *shell)
 {
 	if (ft_strchr(shell->args_str[0], '/'))
 		execute_absolute_path(shell);
 	else
-		execute_relative_path(shell, env_vars);
+		execute_relative_path(shell);
 }

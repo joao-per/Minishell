@@ -18,7 +18,6 @@
 # include <unistd.h>
 # include <signal.h>
 
-
 # define MAX_LINE 80               // Maximum length of user input
 # define MAX_ARGS MAX_LINE / 2 + 1 // Maximum number of arguments for a command
 # define READ_END 0                // File descriptor for read end of a pipe
@@ -113,16 +112,16 @@ void	back_slash(int sig);
 void	setup_signals(void);
 /*				Execute				*/
 void	file_descriptor_handler(int in, int out);
-void	handle_child_process(t_shell *shell, t_env **env_vars, int in_fd, int out_fd);
-void	handle_pipe(t_shell *shell, t_env **env_vars, int *in_fd, int pipe_index);
+void	handle_child_process(t_shell *shell, int in_fd, int out_fd);
+void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index);
 char	*construct_full_path(char *path_dir, char *command);
-void	run_commands(t_shell *shell, t_env **env_vars);
+void	run_commands(t_shell *shell);
 void	try_execve_at_each_path(t_shell *shell, char **path_dirs);
-void	run_commands_aux(t_shell *shell, t_env **env, int in_fd, int out_fd);
-void	execute_command(t_shell *shell, t_env **env_vars);
+void	run_commands_aux(t_shell *shell, int in_fd, int out_fd);
+void	execute_command(t_shell *shell);
 void	execute_absolute_path(t_shell *shell);
-void	execute_relative_path(t_shell *shell, t_env **env_vars);
-void	execute_external_command(t_shell *shell, t_env **env_vars);
+void	execute_relative_path(t_shell *shell);
+void	execute_external_command(t_shell *shell);
 int		is_builtin_command(t_shell *shell);
 /*				Redirections			*/
 void	handle_redirection(t_shell *shell);
@@ -132,8 +131,8 @@ void	handle_heredoc_redirection(char **av, int *j);
 void	handle_input_redirection(char **av, int *j);
 /*				Built in Commands				*/
 void	cd_command(char **av, t_env **env_vars);
-int		check_commands(t_shell *shell, t_env **child_env_vars);
-int		check_commands2(t_shell *shell, t_env **child_env_vars);
+int		check_commands(t_shell *shell);
+int		check_commands2(t_shell *shell);
 void	export_variable(t_env **env_vars, char *new_var);
 void	unset_variable(t_env **env_vars, const char *var_name);
 void	echo_command(char **av);
@@ -142,7 +141,6 @@ void	free_double_array(char **doubles);
 t_arg	*get_arg_byindex(t_shell *shell, int index);
 
 /*				Pipes				*/
-int	find_pipe(t_shell *shell, int pipe_index);
-
+int		find_pipe(t_shell *shell, int pipe_index);
 
 #endif

@@ -82,7 +82,6 @@ void	main_loop(t_env **env_vars, char **envs)
 	should_run = 1;
 	while (should_run)
 	{
-		setup_signals();
 		args = process_input(&line, env_vars);
 		if (!args)
 		{
@@ -96,7 +95,7 @@ void	main_loop(t_env **env_vars, char **envs)
 		should_run = check_command(shell);
 		if (should_run == 1)
 		{
-			execute_command(shell, env_vars);
+			execute_command(shell);
 			cleanup_after_command(shell);
 		}
 		else if (should_run == -1)
@@ -115,6 +114,7 @@ int	main(int ac, char **argv, char **env)
 	(void)argv;
 	(void)env;
 
+    setup_signals();
 	init_program(env, &env_vars, &envs);
 	main_loop(env_vars, envs);
 

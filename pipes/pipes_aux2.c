@@ -13,22 +13,22 @@
 #include "../minishell.h"
 #include "../Libft/libft.h"
 
-void	handle_child_process(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
+void	handle_child_process(t_shell *shell, int in_fd, int out_fd)
 {
 	int built_in_command_executed;
 
 	file_descriptor_handler(in_fd, out_fd);
 	handle_redirection(shell);
 	built_in_command_executed = is_builtin_command(shell);
-	check_commands(shell, env_vars);
+	check_commands(shell);
 	if (built_in_command_executed)
 		exit(0);
-	execute_external_command(shell, env_vars);
+	execute_external_command(shell);
 	perror("execve");
 	exit(1);
 }
 
-void	handle_pipe(t_shell *shell, t_env **env_vars, int *in_fd, int pipe_index)
+void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index)
 {
 	int fd[2];
 
@@ -39,7 +39,7 @@ void	handle_pipe(t_shell *shell, t_env **env_vars, int *in_fd, int pipe_index)
 	}
 	free(shell->args_str[pipe_index]);
 	shell->args_str[pipe_index] = NULL;
-	run_commands_aux(shell, env_vars, *in_fd, fd[1]);
+	run_commands_aux(shell, *in_fd, fd[1]);
 	close(fd[1]);
 	if (*in_fd != 0)
 		close(*in_fd);

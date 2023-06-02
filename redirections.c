@@ -104,6 +104,6 @@ void handle_redirection(t_shell *shell)
 			break ;
 		}
 		j++;
-		temp=temp->next;
+		temp = temp->next;
 	}
 }
