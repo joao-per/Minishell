@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/05/27 20:51:21 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/01 20:22:04 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ void cd_command(char **av, t_env **env_vars)
 	t_env 	*temp;
 
     if (av[1] == NULL)
-	{
 		chdir(getenv("HOME"));
-	}
 	else
 	{
 		if (chdir(av[1]) != 0)
@@ -73,7 +71,6 @@ int	check_commands2(t_shell *shell, t_env **child_env_vars)
 		}
 		return (0);
 	}
-	//execute_external_command(av, child_env_vars);
 	return (1);
 }
 
@@ -115,51 +112,78 @@ int	check_commands(t_shell *shell, t_env **child_env_vars)
 	return (check_commands2(shell, child_env_vars));
 }
 
-void	export_variable(t_env **env_vars, char *new_var)
+void	check_new_var_format(char *new_var)
 {
-	t_env	*curr;
-	char *eq_pos;
-	char *env_name;
-	char *env_value;
-	int env_name_l;
-
-	// If no argument is provided, display all environment variables
-	if (!new_var)
-	{
-		print_export_vars(env_vars);
-		return ;
-	}
 	if ((!ft_isalpha(new_var[0]) && !(new_var[0] == '_')))
 	{
 		printf("export: `%s': not a valid identifier \n", new_var);
 		return ;
 	}
+}
+
+void	update_existing_var(char *env_value, t_env *curr, char *eq_pos)
+{
+	free(curr->env_value);
+	if (eq_pos)
+		curr->env_value = ft_strdup(env_value);
+	else
+		curr->env_value = NULL;
+}
+
+void	create_new_var(char *new_var, char *eq_pos, t_env **env_vars)
+{
+	t_env *curr;
+
+	curr = env_new(new_var);
+	env_add_back(env_vars, curr);
+	if(!eq_pos)
+		curr->env_value = NULL;
+}
+
+void	get_env_name_and_value(char **env_name, char **env_value, char *new_var)
+{
+	char *eq_pos;
+	int env_name_l;
+
 	eq_pos = ft_strchr(new_var, '=');
 	if (eq_pos)
 		env_name_l = eq_pos - new_var;
 	else
 		env_name_l = ft_strlen(new_var);
-	env_name = malloc(env_name_l + 1);
-	ft_strncpy(env_name, new_var, env_name_l);
-	env_name[env_name_l] = '\0';
-	env_value = eq_pos + 1;
+
+	*env_name = malloc(env_name_l + 1);
+	ft_strncpy(*env_name, new_var, env_name_l);
+	(*env_name)[env_name_l] = '\0';
+	*env_value = eq_pos + 1;
+}
+
+void	update_or_create_variable(t_env **env_vars, char *new_var, char *env_name)
+{
+	t_env	*curr;
+	char *eq_pos;
+
+	eq_pos = ft_strchr(new_var, '=');
 	curr = search_env_name(env_vars, env_name);
 	free(env_name);
 	if(curr != NULL)
-	{
-		free(curr->env_value);
-		if (eq_pos)
-			curr->env_value = ft_strdup(env_value);
-		else
-			curr->env_value = NULL;
-	}
+		update_existing_var(eq_pos + 1, curr, eq_pos);
 	else
+		create_new_var(new_var, eq_pos, env_vars);
+}
+
+void	export_variable(t_env **env_vars, char *new_var)
+{
+	char *env_name;
+	char *env_value;
+
+	if (!new_var)
 	{
-		curr = env_new(new_var);
-		env_add_back(env_vars, curr);
-		if(!eq_pos)
-			curr->env_value = NULL;
+		print_export_vars(env_vars);
+		return ;
 	}
+	check_new_var_format(new_var);
+	get_env_name_and_value(&env_name, &env_value, new_var);
+	update_or_create_variable(env_vars, new_var, env_name);
 }
 
 void	unset_variable(t_env **env_vars, const char *var_name)
