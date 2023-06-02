@@ -113,8 +113,15 @@ void	back_slash(int sig);
 void	setup_signals(void);
 /*				Execute				*/
 void	file_descriptor_handler(int in, int out);
+void	handle_child_process(t_shell *shell, t_env **env_vars, int in_fd, int out_fd);
+void	handle_pipe(t_shell *shell, t_env **env_vars, int *in_fd, int pipe_index);
+char	*construct_full_path(char *path_dir, char *command);
+void	run_commands(t_shell *shell, t_env **env_vars);
+void	try_execve_at_each_path(t_shell *shell, char **path_dirs);
 void	run_commands_aux(t_shell *shell, t_env **env, int in_fd, int out_fd);
 void	execute_command(t_shell *shell, t_env **env_vars);
+void	execute_absolute_path(t_shell *shell);
+void	execute_relative_path(t_shell *shell, t_env **env_vars);
 void	execute_external_command(t_shell *shell, t_env **env_vars);
 int		is_builtin_command(t_shell *shell);
 /*				Redirections			*/
@@ -133,6 +140,9 @@ void	echo_command(char **av);
 
 void	free_double_array(char **doubles);
 t_arg	*get_arg_byindex(t_shell *shell, int index);
+
+/*				Pipes				*/
+int	find_pipe(t_shell *shell, int pipe_index);
 
 
 #endif

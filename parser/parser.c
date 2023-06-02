@@ -6,7 +6,7 @@
 /*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/01 21:13:59 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:18:40 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	handle_end_of_quote(t_arg *arg, int *i, char c, int *change)
 		*change = edit_parse_struct(arg, i, 0, 0);
 }
 
-void	handle_special_char(t_arg **args, t_arg *arg, int *i, char *str, int *change)
+void	handle_special_char(t_arg **args, t_arg *arg, int *i, char *str, int *change, char c)
 {
 	if (!arg->in_quotes && is_pipes_red(c))
 	{
@@ -91,7 +91,7 @@ void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i)
 			break ;
 		handle_quote(arg, i, c, &change);
 		handle_end_of_quote(arg, i, c, &change);
-		handle_special_char(args, arg, i, str, &change);
+		handle_special_char(args, arg, i, str, &change, c);
 		append_to_arg_name(arg, c, i, &change);
 	}
 }
