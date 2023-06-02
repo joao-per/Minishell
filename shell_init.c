@@ -6,12 +6,29 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:12:13 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/31 22:06:22 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/02 15:41:39 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Libft/libft.h"
 #include "minishell.h"
+
+t_arg	*get_arg_byname(t_shell *shell, char *name)
+{
+	t_arg	*temp;
+	int		i;
+
+	temp = (*shell->args);
+	i = 0;
+	while (temp != NULL)
+	{
+		if (ft_strcmp(temp->name, name) == 0)
+			return (temp);
+		temp = temp->next;
+		i++;
+	}
+	return (NULL);
+}
 
 t_arg	*get_arg_byindex(t_shell *shell, int index)
 {

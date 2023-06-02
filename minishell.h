@@ -84,6 +84,7 @@ void	arg_add_back(t_arg **arg, t_arg *new);
 int		edit_parse_struct(t_arg *arg, int *i, char c, int quotes);
 int		ft_argsize(t_arg *arg);
 t_arg	**parse_arguments(char *string);
+t_arg	*get_arg_byname(t_shell *shell, char *name);
 /*				Parser memory free		*/
 void	free_extra_string_mem(t_arg **arg);
 void	eliminate_extra_arg(t_arg **arg);
@@ -113,9 +114,9 @@ void	back_slash(int sig);
 void	setup_signals(void);
 /*				Execute				*/
 void	file_descriptor_handler(int in, int out);
-void	run_commands_aux(t_shell *shell, t_env **env, int in_fd, int out_fd);
-void	execute_command(t_shell *shell, t_env **env_vars);
-void	execute_external_command(t_shell *shell, t_env **env_vars);
+void	run_commands_aux(t_shell *shell, int in_fd, int out_fd);
+void	execute_command(t_shell *shell);
+void	execute_external_command(t_shell *shell);
 int		is_builtin_command(t_shell *shell);
 /*				Redirections			*/
 void	handle_redirection(t_shell *shell);
@@ -125,8 +126,8 @@ void	handle_heredoc_redirection(char **av, int *j);
 void	handle_input_redirection(char **av, int *j);
 /*				Built in Commands				*/
 void	cd_command(char **av, t_env **env_vars);
-int		check_commands(t_shell *shell, t_env **child_env_vars);
-int		check_commands2(t_shell *shell, t_env **child_env_vars);
+int		check_commands(t_shell *shell);
+int		check_commands2(t_shell *shell);
 void	export_variable(t_env **env_vars, char *new_var);
 void	unset_variable(t_env **env_vars, const char *var_name);
 void	echo_command(char **av);

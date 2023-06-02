@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/01 21:13:59 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/02 14:34:48 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	handle_end_of_quote(t_arg *arg, int *i, char c, int *change)
 	if (arg->in_quotes && arg->quote_type == c && !*change)
 		*change = edit_parse_struct(arg, i, 0, 0);
 }
-
+/*
 void	handle_special_char(t_arg **args, t_arg *arg, int *i, char *str, int *change)
 {
 	if (!arg->in_quotes && is_pipes_red(c))
@@ -67,7 +67,7 @@ void	handle_special_char(t_arg **args, t_arg *arg, int *i, char *str, int *chang
 			eliminate_extra_arg(args);
 		*change = parsing_tree(args, i, str);
 	}
-}
+} */
 
 void	append_to_arg_name(t_arg *arg, char c, int *i, int *change)
 {
@@ -91,8 +91,17 @@ void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i)
 			break ;
 		handle_quote(arg, i, c, &change);
 		handle_end_of_quote(arg, i, c, &change);
-		handle_special_char(args, arg, i, str, &change);
-		append_to_arg_name(arg, c, i, &change);
+		if (!arg->in_quotes && is_pipes_red(c))
+		{
+			if (ft_strcmp(arg->name, "") == 0)
+				eliminate_extra_arg(args);
+			change = parsing_tree(args, i, str);
+			return ;
+		}
+		if (change)
+			return;
+		arg->name[arg->arg_len++] = c;
+		(*i)++;
 	}
 }
 

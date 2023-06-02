@@ -33,21 +33,21 @@ void	file_descriptor_handler(int in, int out)
 	}
 }
 
-void	handle_child_process(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
+void	handle_child_process(t_shell *shell, int in_fd, int out_fd)
 {
 	int built_in_command_executed;
 
 	file_descriptor_handler(in_fd, out_fd);
 	handle_redirection(shell);
-	built_in_command_executed = check_commands(shell, env_vars);
+	built_in_command_executed = check_commands(shell);
 	if (!built_in_command_executed)
 		exit(0);
-	execute_external_command(shell, env_vars);
+	execute_external_command(shell);
 	perror("execve");
 	exit(1);
 }
 
-void	run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
+void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
 {
 	pid_t	pid;
 	int		status;
@@ -59,17 +59,17 @@ void	run_commands_aux(t_shell *shell, t_env **env_vars, int in_fd, int out_fd)
 		exit(1);
 	}
 	else if (pid == 0)
-		handle_child_process(shell, env_vars, in_fd, out_fd);
+		handle_child_process(shell, in_fd, out_fd);
 	else
 	{
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status)) 
 			exit_status = WEXITSTATUS(status);
-		check_commands2(shell, env_vars);
+		check_commands2(shell);
 	}
 }
 
-void	handle_pipe(t_shell *shell, t_env **env_vars, int *in_fd, int pipe_index)
+void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index)
 {
 	int fd[2];
 
@@ -80,7 +80,7 @@ void	handle_pipe(t_shell *shell, t_env **env_vars, int *in_fd, int pipe_index)
 	}
 	free(shell->args_str[pipe_index]);
 	shell->args_str[pipe_index] = NULL;
-	run_commands_aux(shell, env_vars, *in_fd, fd[1]);
+	run_commands_aux(shell, *in_fd, fd[1]);
 	close(fd[1]);
 	if (*in_fd != 0)
 		close(*in_fd);
@@ -88,7 +88,7 @@ void	handle_pipe(t_shell *shell, t_env **env_vars, int *in_fd, int pipe_index)
 	shell->args_str += pipe_index + 1;
 }
 
-void	execute_command(t_shell *shell, t_env **env_vars)
+void	execute_command(t_shell *shell)
 {
 	int		pipe_index;
 	int		in_fd;
@@ -100,10 +100,10 @@ void	execute_command(t_shell *shell, t_env **env_vars)
 	i = 0;
 	while ((pipe_index = find_pipe(shell, i)) != -1)
 	{
-		handle_pipe(shell, env_vars, &in_fd, pipe_index);
+		handle_pipe(shell, &in_fd, pipe_index);
 		i += pipe_index + 1;
 	}
-	run_commands_aux(shell, env_vars, in_fd, STDOUT_FILENO);
+	run_commands_aux(shell, in_fd, STDOUT_FILENO);
 	if (in_fd != 0)
 		close(in_fd);
 	shell->args_str = av;
@@ -150,12 +150,12 @@ void	try_execve_at_each_path(t_shell *shell, char **path_dirs)
 	}
 }
 
-void	execute_relative_path(t_shell *shell, t_env **env_vars)
+void	execute_relative_path(t_shell *shell)
 {
 	char	*path_var;
 	char	**path_dirs;
 
-	path_var = get_env_value("PATH", env_vars);
+	path_var = get_env_value("PATH", shell->envs);
 	path_dirs = ft_split(path_var, ':');
 	free(path_var);
 
@@ -167,12 +167,12 @@ void	execute_relative_path(t_shell *shell, t_env **env_vars)
 }
 
 
-void	execute_external_command(t_shell *shell, t_env **env_vars)
+void	execute_external_command(t_shell *shell)
 {
 	if (ft_strchr(shell->args_str[0], '/'))
 		execute_absolute_path(shell);
 	else
-		execute_relative_path(shell, env_vars);
+		execute_relative_path(shell);
 }
 
 

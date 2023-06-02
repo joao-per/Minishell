@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/01 20:22:04 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/02 14:33:55 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,23 @@ void cd_command(char **av, t_env **env_vars)
 	free(oldwd);
 }
 
-int	check_commands2(t_shell *shell, t_env **child_env_vars)
+int	check_commands2(t_shell *shell)
 {
 	int i;
 
 	if (ft_strcmp(shell->args_str[0], "cd") == 0)
 	{
-		cd_command(shell->args_str, child_env_vars);
+		cd_command(shell->args_str, shell->envs);
 		return 0;
 	}
 	if (ft_strcmp(shell->args_str[0], "export") == 0)
 	{
 		i = 1;
 		if (!shell->args_str[i])
-			export_variable(child_env_vars, shell->args_str[i]);
+			export_variable(shell->envs, shell->args_str[i]);
 		while (shell->args_str[i])
 		{
-			export_variable(child_env_vars, shell->args_str[i]);
+			export_variable(shell->envs, shell->args_str[i]);
 			i++;
 		}
 		return (0);
@@ -66,7 +66,7 @@ int	check_commands2(t_shell *shell, t_env **child_env_vars)
 		i = 1;
 		while (shell->args_str[i])
 		{
-			unset_variable(child_env_vars, shell->args_str[i]);
+			unset_variable(shell->envs, shell->args_str[i]);
 			i++;
 		}
 		return (0);
@@ -89,7 +89,7 @@ int is_builtin_command(t_shell *shell)
 	return (0);
 }
 
-int	check_commands(t_shell *shell, t_env **child_env_vars)
+int	check_commands(t_shell *shell)
 {
 	char	cwd[MAX_LINE];
 
@@ -109,7 +109,7 @@ int	check_commands(t_shell *shell, t_env **child_env_vars)
 		echo_command(shell->args_str);
 		return (0);
 	}
-	return (check_commands2(shell, child_env_vars));
+	return (check_commands2(shell));
 }
 
 void	check_new_var_format(char *new_var)

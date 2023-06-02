@@ -80,7 +80,7 @@ void handle_redirection(t_shell *shell)
 	t_arg *temp;
 
 	j = 0;
-	temp = (*shell->args);
+	temp = get_arg_byname(shell, shell->args_str[0]);
 	while (temp)
 	{
 		if (ft_strcmp(temp->name, "<") == 0 && temp->quotes_perm == 0)

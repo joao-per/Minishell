@@ -18,6 +18,7 @@ int exit_status;
 
 void init_program(char **env, t_env ***env_vars, char ***envs)
 {
+	setup_signals();
 	*env_vars = env_init(env);
 	*envs = create_env_arr(*env_vars);
 }
@@ -50,19 +51,19 @@ t_shell *init_shell(t_env ***env_vars, t_arg **args, char ***envs)
 	return (shell_init(*env_vars, args, *envs, av));
 }
 
-int	check_command(t_arg **args, t_shell *shell, t_env ***env_vars)
+int	check_command(t_shell *shell)
 {
-	if (args && args[0]->name)
+	if (shell->args && shell->args[0]->name)
 	{
-		if (ft_strcmp(args[0]->name, "exit") == 0)
-			return 0;
-		if (ft_strcmp(args[0]->name, "env") == 0)
+		if (ft_strcmp(shell->args[0]->name, "exit") == 0)
+			return (0);
+		if (ft_strcmp(shell->args[0]->name, "env") == 0)
 		{
-			print_env_vars(*env_vars);
-			return -1;
+			print_env_vars(shell->envs);
+			return (-1);
 		}
 	}
-	return 1;
+	return (1);
 }
 
 void	cleanup_after_command(t_shell *shell)
@@ -81,20 +82,23 @@ void	main_loop(t_env **env_vars, char **envs)
 	should_run = 1;
 	while (should_run)
 	{
-		setup_signals();
 		args = process_input(&line, &env_vars);
+		if (!args)
+			continue;
 		shell = init_shell(&env_vars, args, &envs);
-		should_run = check_command(args, shell, &env_vars);
+		if (!shell)
+			continue;
+		should_run = check_command(shell);
 		if (should_run == 1)
 		{
-			execute_command(shell, &env_vars);
+			execute_command(shell);
 			cleanup_after_command(shell);
 		}
 	}
 	free_env(shell);
 	free_args(shell, shell->len_args);
 	free(shell);
-	free(line);
+	//free(line);
 	rl_clear_history();
 }
 
