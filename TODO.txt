@@ -1,4 +1,4 @@
-Rever os pipes e redirections
+Rever os pipes e redirections (mais importante)
     casos com pipe e redirections
     exemplo: cat main.c >> a.txt | cat main.c > b.txt - nao da o output esperado
 
