@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/01 20:22:04 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/02 18:28:22 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,17 @@ int	check_commands2(t_shell *shell, t_env **child_env_vars)
 		cd_command(shell->args_str, child_env_vars);
 		return 0;
 	}
-	if (ft_strcmp(shell->args_str[0], "export") == 0)
+	if (ft_strcmp(shell->args_str[0], "unset") == 0)
+	{
+		i = 1;
+		while (shell->args_str[i])
+		{
+			unset_variable(child_env_vars, shell->args_str[i]);
+			i++;
+		}
+		return (0);
+	}
+	if (ft_strcmp(shell->args_str[0], "export") == 0 && shell->args_str[1])
 	{
 		i = 1;
 		if (!shell->args_str[i])
@@ -57,16 +67,6 @@ int	check_commands2(t_shell *shell, t_env **child_env_vars)
 		while (shell->args_str[i])
 		{
 			export_variable(child_env_vars, shell->args_str[i]);
-			i++;
-		}
-		return (0);
-	}
-	if (ft_strcmp(shell->args_str[0], "unset") == 0)
-	{
-		i = 1;
-		while (shell->args_str[i])
-		{
-			unset_variable(child_env_vars, shell->args_str[i]);
 			i++;
 		}
 		return (0);
@@ -86,13 +86,17 @@ int is_builtin_command(t_shell *shell)
 		return (1);
 	if (ft_strcmp(shell->args_str[0], "unset") == 0)
 		return (1);
+	if (ft_strcmp(shell->args_str[0], "env") == 0)
+		return (1);
 	return (0);
 }
 
 int	check_commands(t_shell *shell, t_env **child_env_vars)
 {
 	char	cwd[MAX_LINE];
+	int 	i;
 
+	i = 0;
 	if (ft_strcmp(shell->args_str[0], "pwd") == 0)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
@@ -107,6 +111,23 @@ int	check_commands(t_shell *shell, t_env **child_env_vars)
 	if (ft_strcmp(shell->args_str[0], "echo") == 0)
 	{
 		echo_command(shell->args_str);
+		return (0);
+	}
+	if (ft_strcmp(shell->args_str[0], "env") == 0)
+	{
+		print_env_vars(shell->envs);
+		return (0);
+	}
+	if (ft_strcmp(shell->args_str[0], "export") == 0)
+	{
+		i = 1;
+		if (!shell->args_str[i])
+			export_variable(child_env_vars, shell->args_str[i]);
+		while (shell->args_str[i])
+		{
+			export_variable(child_env_vars, shell->args_str[i]);
+			i++;
+		}
 		return (0);
 	}
 	return (check_commands2(shell, child_env_vars));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/02 11:18:40 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:58:12 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ t_arg	**parse_arguments(char *string)
 		parse_aux(args, temp, string, i);
 	}
 	free(i);
+	free(string);
 	return (args);
 }
 

@@ -59,8 +59,7 @@ char	*construct_full_path(char *path_dir, char *command)
 	temp = ft_strjoin(path_dir, "/");
 	full_path = ft_strjoin(temp, command);
 	free(temp);
-
-	return full_path;
+	return (full_path);
 }
 
 void	try_execve_at_each_path(t_shell *shell, char **path_dirs)

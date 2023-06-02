@@ -19,8 +19,9 @@ void	handle_child_process(t_shell *shell, t_env **env_vars, int in_fd, int out_f
 
 	file_descriptor_handler(in_fd, out_fd);
 	handle_redirection(shell);
-	built_in_command_executed = check_commands(shell, env_vars);
-	if (!built_in_command_executed)
+	built_in_command_executed = is_builtin_command(shell);
+	check_commands(shell, env_vars);
+	if (built_in_command_executed)
 		exit(0);
 	execute_external_command(shell, env_vars);
 	perror("execve");
