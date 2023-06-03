@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free_mem_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 14:18:43 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 12:09:35 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/03 16:19:27 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int count_strings(char **str_arr)
+int	count_strings(char **str_arr)
 {
 	int	i;
 

@@ -15,7 +15,7 @@
 
 void	handle_child_process(t_shell *shell, int in_fd, int out_fd, pid_t pid)
 {
-	int built_in_command_executed;
+	int	built_in_command_executed;
 
 	file_descriptor_handler(in_fd, out_fd);
 	handle_redirection(shell);
@@ -30,7 +30,7 @@ void	handle_child_process(t_shell *shell, int in_fd, int out_fd, pid_t pid)
 
 void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index)
 {
-	int fd[2];
+	int	fd[2];
 
 	if (pipe(fd) == -1)
 	{

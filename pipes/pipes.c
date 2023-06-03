@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/03 12:01:53 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/03 16:45:11 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ void	execute_command(t_shell *shell)
 	av = shell->args_str;
 	in_fd = 0;
 	i = 0;
-	while ((pipe_index = find_pipe(shell, i)) != -1)
+	pipe_index = find_pipe(shell, i);
+	while (pipe_index != -1)
 	{
 		handle_pipe(shell, &in_fd, pipe_index);
 		i += pipe_index + 1;
+		pipe_index = find_pipe(shell, i);
 	}
 	run_commands_aux(shell, in_fd, STDOUT_FILENO);
 	if (in_fd != 0)

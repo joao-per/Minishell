@@ -36,8 +36,8 @@ void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
 
 int	find_pipe(t_shell *shell, int pipe_index)
 {
-	int pos;
-	t_arg *temp;
+	int		pos;
+	t_arg	*temp;
 
 	pos = 0;
 	temp = get_arg_byindex(shell, pipe_index);
