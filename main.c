@@ -104,15 +104,17 @@ void	main_loop(t_env **env_vars, char **envs)
 			cleanup_after_command(&shell);
 		}
 		else if (should_run == -1)
+		{
+			free_env(shell);
+			cleanup_after_command(&shell);
 			break ;
+		}
 		else if (should_run == 2)
 		{
 			cleanup_after_command(&shell);
 			continue ;
 		}
 	}
-	if (shell)
-		free_env(shell);
 }
 
 
