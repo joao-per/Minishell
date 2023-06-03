@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_mem_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:43:03 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 12:09:25 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:23:53 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,14 @@ void	free_env(t_shell *shell)
 		free_env_array(shell->envs_str);
 	if (shell->envs)
 		free_env_struct(shell->envs);
+}
+
+void	cleanup_after_command(t_shell **shell)
+{
+	if (shell && *shell)
+	{
+		free_args(*shell, (*shell)->len_args);
+		free(*shell);
+		*shell = NULL;
+	}
 }

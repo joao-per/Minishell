@@ -29,7 +29,7 @@ void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
 	{
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
-			exit_status = WEXITSTATUS(status);
+			g_exit_status = WEXITSTATUS(status);
 		check_commands2(shell, pid);
 	}
 }

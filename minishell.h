@@ -25,7 +25,7 @@
 # define MAX_HISTORY 100
 // Maximum number of commands to be stored in history
 
-extern int	exit_status;
+extern int	g_exit_status;
 
 typedef struct s_env
 {
@@ -92,6 +92,7 @@ int		edit_parse_struct(t_arg *arg, int *i, char c, int quotes);
 int		ft_argsize(t_arg *arg);
 t_arg	**parse_arguments(char *string);
 /*				Parser memory free		*/
+void	cleanup_after_command(t_shell **shell);
 void	free_extra_string_mem(t_arg **arg);
 void	eliminate_extra_arg(t_arg **arg);
 void	ft_argdelone(t_arg *arg);
@@ -104,6 +105,7 @@ int		print_error_messages(char type_error, char *error);
 t_arg	**parse_arguments(char *string);
 /*				Shell Init				*/
 t_shell	*shell_init(t_env **env_vars, t_arg **args, char **envs, char **av);
+t_shell	*init_shell(t_env **env_vars, t_arg **args, char **envs);
 char	**create_args_arr(t_arg **args);
 char	**create_env_arr(t_env **envs);
 /*				Commands				*/

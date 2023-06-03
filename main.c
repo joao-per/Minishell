@@ -16,7 +16,7 @@
 #include "Libft/libft.h"
 #include "minishell.h"
 
-int exit_status;
+int	g_exit_status;
 
 void	init_program(char **env, t_env ***env_vars, char ***envs)
 {
@@ -24,21 +24,9 @@ void	init_program(char **env, t_env ***env_vars, char ***envs)
 	*envs = create_env_arr(*env_vars);
 }
 
-t_shell	*init_shell(t_env **env_vars, t_arg **args, char **envs)
-{
-	t_shell *shell;
-	char **args_str;
-
-	args_str = create_args_arr(args);
-	if (!args_str)
-		return (0);
-	shell = shell_init(env_vars, args, envs, args_str);
-	return (shell);
-}
-
 t_arg	**process_input(char **line, t_env **env_vars)
 {
-	char *line_exp;
+	char	*line_exp;
 
 	*line = readline("\033[0;93m Minishell>$ \033[0;39m");
 	if (*line == NULL)
@@ -66,17 +54,7 @@ int	check_command(t_shell *shell)
 	return (1);
 }
 
-void	cleanup_after_command(t_shell **shell)
-{
-	if (shell && *shell)
-	{
-		free_args(*shell, (*shell)->len_args);
-		free(*shell);
-		*shell = NULL;
-	}
-}
-
-int should_run_aux(t_shell *shell)
+int	should_run_aux(t_shell *shell)
 {
 	int	should_run;
 
@@ -103,10 +81,10 @@ int should_run_aux(t_shell *shell)
 
 void	main_loop(t_env **env_vars, char **envs)
 {
-	int should_run;
-	t_shell *shell;
-	t_arg **args;
-	char *line;
+	int		should_run;
+	t_shell	*shell;
+	t_arg	**args;
+	char	*line;
 
 	shell = NULL;
 	should_run = 1;
@@ -129,7 +107,6 @@ void	main_loop(t_env **env_vars, char **envs)
 			break ;
 	}
 }
-
 
 int	main(int ac, char **argv, char **env)
 {

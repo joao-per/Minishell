@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 17:50:26 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:25:37 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*expansion_interrogation_mark(char *str_exp)
 	char	*status;
 
 	temp = str_exp;
-	status = ft_itoa(exit_status);
+	status = ft_itoa(g_exit_status);
 	str_exp = ft_strjoin(str_exp, status);
 	free(temp);
 	free(status);
