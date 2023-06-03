@@ -13,14 +13,14 @@
 #include "../minishell.h"
 #include "../Libft/libft.h"
 
-void	handle_child_process(t_shell *shell, int in_fd, int out_fd)
+void	handle_child_process(t_shell *shell, int in_fd, int out_fd, int pid)
 {
 	int built_in_command_executed;
 
 	file_descriptor_handler(in_fd, out_fd);
 	handle_redirection(shell);
 	built_in_command_executed = is_builtin_command(shell);
-	check_commands(shell);
+	check_commands(shell, pid);
 	if (built_in_command_executed)
 		exit(0);
 	execute_external_command(shell);

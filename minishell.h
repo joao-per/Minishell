@@ -130,7 +130,7 @@ void	back_slash(int sig);
 void	setup_signals(void);
 /*				Execute				*/
 void	file_descriptor_handler(int in, int out);
-void	handle_child_process(t_shell *shell, int in_fd, int out_fd);
+void	handle_child_process(t_shell *shell, int in_fd, int out_fd, int pid);
 void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index);
 char	*construct_full_path(char *path_dir, char *command);
 void	run_commands(t_shell *shell);
@@ -148,8 +148,8 @@ void	handle_output_redirection(char **av, int *j);
 void	handle_heredoc_redirection(char **av, int *j);
 void	handle_input_redirection(char **av, int *j);
 /*				Built in Commands				*/
-int		check_commands(t_shell *shell);
-int		check_commands2(t_shell *shell);
+int		check_commands(t_shell *shell, int pid);
+int		check_commands2(t_shell *shell, int pid);
 void	export_variable(t_env **env_vars, char *new_var);
 void	unset_variable(t_env **env_vars, const char *var_name);
 void	echo_command(char **av);

@@ -56,6 +56,11 @@ int	handle_export(t_shell *shell)
 
 	if (ft_strcmp(shell->args_str[0], "export") == 0)
 	{
+		if (!shell->args_str[1])
+		{
+			print_export_vars(shell->envs);
+			return 0;
+		}
 		i = 1;
 		while (shell->args_str[i])
 		{

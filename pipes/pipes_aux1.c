@@ -24,13 +24,13 @@ void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
 		exit(1);
 	}
 	else if (pid == 0)
-		handle_child_process(shell, in_fd, out_fd);
+		handle_child_process(shell, in_fd, out_fd, pid);
 	else
 	{
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status)) 
 			exit_status = WEXITSTATUS(status);
-		check_commands2(shell);
+		check_commands2(shell, pid);
 	}
 }
 
