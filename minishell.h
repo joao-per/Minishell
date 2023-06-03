@@ -54,11 +54,12 @@ typedef struct s_shell
 	t_arg	**args;
 }	t_shell;
 
-typedef struct s_clean_vars {
-    t_shell *shell;
-    t_env **env_vars;
-    char **envs;
-}   t_clean_vars;
+typedef struct s_clean_vars
+{
+	t_shell *shell;
+	t_env **env_vars;
+	char **envs;
+}	t_clean_vars;
 
 
 /*				Environment				*/
@@ -156,7 +157,7 @@ void	echo_command(char **av);
 
 void	free_double_array(char **doubles);
 t_arg	*get_arg_byindex(t_shell *shell, int index);
-
+char	*get_next_line(int fd);
 /*				Pipes				*/
 int		find_pipe(t_shell *shell, int pipe_index);
 
