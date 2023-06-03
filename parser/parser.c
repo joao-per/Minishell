@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/02 16:58:12 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:51:01 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,19 @@ void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i)
 			break ;
 		handle_quote(arg, i, c, &change);
 		handle_end_of_quote(arg, i, c, &change);
-		handle_special_char(args, arg, i, str, &change, c);
-		append_to_arg_name(arg, c, i, &change);
+		//handle_special_char(args, arg, i, str, &change, c);
+		//append_to_arg_name(arg, c, i, &change);
+		if (!arg->in_quotes && is_pipes_red(c))
+		{
+			if (ft_strcmp(arg->name, "") == 0)
+				eliminate_extra_arg(args);
+			change = parsing_tree(args, i, str);
+			return ;
+		}
+		if (change)
+			continue ;
+		arg->name[arg->arg_len++] = c;
+		(*i)++;
 	}
 }
 
