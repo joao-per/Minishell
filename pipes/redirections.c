@@ -6,7 +6,7 @@
 /*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 11:11:12 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/03 19:50:12 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:11:57 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,22 @@ void handle_input_redirection(char **av, int *j)
 
 void handle_heredoc_redirection(char **av, int *j)
 {
-	char *delimiter;
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t read;
-	int input_fd;
+	char	*delimiter;
+	char	*line = NULL;
+	int		input_fd;
 
 	delimiter = av[*j + 1];
 	input_fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	while ((read = getline(&line, &len, stdin)) != -1) 
+	while ((line = get_next_line(STDIN_FILENO)) != NULL)
 	{
 		if (ft_strcmp(line, delimiter) == 0)
-			break;
-		write(input_fd, line, read);
+		{
+			free(line);
+			break ;
+		}
+		write(input_fd, line, strlen(line));
+		write(input_fd, "\n", 1);  // manually add the newline character
+		free(line);
 	}
 	close(input_fd);
 	input_fd = open("/tmp/minishell_heredoc", O_RDONLY);
@@ -52,6 +55,7 @@ void handle_heredoc_redirection(char **av, int *j)
 	av[*j] = NULL;
 }
 
+
 void handle_output_redirection(char **av, int *j)
 {
 	char *output_file;
@@ -59,11 +63,11 @@ void handle_output_redirection(char **av, int *j)
 
 	output_file = av[*j + 1];
 	output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (output_fd < 0)
+	/* if (output_fd < 0)
 	{
 		perror("open");
 		exit(1);
-	}
+	} */
 	dup2(output_fd, STDOUT_FILENO);
 	close(output_fd);
 	av[*j] = NULL;
