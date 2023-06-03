@@ -53,6 +53,14 @@ typedef struct s_shell
 	t_env	**envs;
 	t_arg	**args;
 }	t_shell;
+
+typedef struct s_clean_vars {
+    t_shell *shell;
+    t_env **env_vars;
+    char **envs;
+}   t_clean_vars;
+
+
 /*				Environment				*/
 int		ft_envsize(t_env *env);
 t_env	*env_last(t_env *env);
@@ -98,6 +106,10 @@ t_arg	**parse_arguments(char *string);
 t_shell	*shell_init(t_env **env_vars, t_arg **args, char **envs, char **av);
 char	**create_args_arr(t_arg **args);
 char	**create_env_arr(t_env **envs);
+/*				Commands				*/
+int	handle_cd(t_shell *shell);
+int	handle_unset(t_shell *shell);
+int	handle_export(t_shell *shell);
 /*				Free Memory Utils		*/
 int		count_strings(char **str_arr);
 void	free_env_array(char **str_arr);

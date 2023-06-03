@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_mem_utils.c                                   :+:      :+:    :+:   */
+/*   free_mem_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 14:18:43 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/26 19:46:12 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:09:35 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Libft/libft.h"
-#include "minishell.h"
+#include "../minishell.h"
 
 int count_strings(char **str_arr)
 {

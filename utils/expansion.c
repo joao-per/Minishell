@@ -6,12 +6,11 @@
 /*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/01 23:57:00 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:15:45 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Libft/libft.h"
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*expansion_interrogation_mark(char *str_exp)
 {

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 13:08:10 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/31 20:34:12 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:16:13 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Libft/libft.h"
-#include "minishell.h"
+#include "../minishell.h"
 
 int	print_error_messages(char type_error, char *error)
 {

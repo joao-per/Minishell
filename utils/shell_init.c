@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   shell_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:12:13 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/31 22:06:22 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:15:53 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Libft/libft.h"
-#include "minishell.h"
+#include "../minishell.h"
 
 t_arg	*get_arg_byindex(t_shell *shell, int index)
 {

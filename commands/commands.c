@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/02 18:36:25 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:23:25 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Libft/libft.h"
-#include "minishell.h"
+#include "../minishell.h"
 
 void cd_command(char **av, t_env **env_vars)
 {
@@ -42,36 +41,14 @@ void cd_command(char **av, t_env **env_vars)
 
 int	check_commands2(t_shell *shell)
 {
-	int i;
-
-	if (ft_strcmp(shell->args_str[0], "cd") == 0)
-	{
-		cd_command(shell->args_str, shell->envs);
+	if (!handle_cd(shell))
 		return 0;
-	}
-	if (ft_strcmp(shell->args_str[0], "unset") == 0)
-	{
-		i = 1;
-		while (shell->args_str[i])
-		{
-			unset_variable(shell->envs, shell->args_str[i]);
-			i++;
-		}
-		return (0);
-	}
-	if (ft_strcmp(shell->args_str[0], "export") == 0 && shell->args_str[1])
-	{
-		i = 1;
-		if (!shell->args_str[i])
-			export_variable(shell->envs, shell->args_str[i]);
-		while (shell->args_str[i])
-		{
-			export_variable(shell->envs, shell->args_str[i]);
-			i++;
-		}
-		return (0);
-	}
-	return (1);
+	if (!handle_unset(shell))
+		return 0;
+	if (!handle_export(shell))
+		return 0;
+
+	return 1;
 }
 
 int is_builtin_command(t_shell *shell)

@@ -36,19 +36,16 @@ t_shell	*init_shell(t_env **env_vars, t_arg **args, char **envs)
 	return (shell);
 }
 
-void	cleanup_after_command(t_shell *shell)
-{
-	free_args(shell, shell->len_args);
-	free(shell);
-}
-
 t_arg	**process_input(char **line, t_env **env_vars)
 {
 	char *line_exp;
 
 	*line = readline("\033[0;93m Minishell>$ \033[0;39m");
 	if (*line == NULL)
+	{
+		printf("exit\n");
 		return (NULL);
+	}
 	line_exp = treat_expansion(*line, env_vars);
 	add_history(*line);
 	free(*line);
@@ -71,6 +68,15 @@ int	check_command(t_shell *shell)
 	return (1);
 }
 
+void	cleanup_after_command(t_shell **shell)
+{
+	if (shell && *shell) {
+		free_args(*shell, (*shell)->len_args);
+		free(*shell);
+		*shell = NULL;
+	}
+}
+
 void	main_loop(t_env **env_vars, char **envs)
 {
 	int should_run;
@@ -87,6 +93,7 @@ void	main_loop(t_env **env_vars, char **envs)
 		{
 			if (!line)
 				break ;
+			//free(line);
 			continue ;
 		}
 		shell = init_shell(env_vars, args, envs);
@@ -96,7 +103,7 @@ void	main_loop(t_env **env_vars, char **envs)
 		if (should_run == 1)
 		{
 			execute_command(shell);
-			cleanup_after_command(shell);
+			cleanup_after_command(&shell);
 		}
 		else if (should_run == -1)
 			break ;
@@ -104,6 +111,7 @@ void	main_loop(t_env **env_vars, char **envs)
 	if (shell)
 		free_env(shell);
 }
+
 
 int	main(int ac, char **argv, char **env)
 {

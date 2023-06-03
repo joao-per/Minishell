@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free_mem_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:43:03 by pedperei          #+#    #+#             */
-/*   Updated: 2023/05/26 19:46:01 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:09:25 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Libft/libft.h"
-#include "minishell.h"
+#include "../minishell.h"
 
 void	free_args(t_shell *shell, int len)
 {
