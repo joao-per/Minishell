@@ -57,4 +57,3 @@ void	setup_signals(void)
 		exit(1);
 	}
 }
-

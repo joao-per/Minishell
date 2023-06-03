@@ -108,6 +108,7 @@ t_shell	*shell_init(t_env **env_vars, t_arg **args, char **envs, char **av);
 t_shell	*init_shell(t_env **env_vars, t_arg **args, char **envs);
 char	**create_args_arr(t_arg **args);
 char	**create_env_arr(t_env **envs);
+void	main_loop(t_env **env_vars, char **envs);
 /*				Commands				*/
 void	cd_command(char **av, t_env **env_vars);
 int		handle_cd(t_shell *shell);
