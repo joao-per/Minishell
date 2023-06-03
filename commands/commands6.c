@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands7.c                                        :+:      :+:    :+:   */
+/*   commands6.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:56:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 16:01:12 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:35:21 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,36 @@ int	is_builtin_command(t_shell *shell)
 	return (0);
 }
 
+
+int	check_commands2(t_shell *shell, pid_t pid)
+{
+	if (pid != 0)
+	{
+		if (!handle_env(shell))
+			return (0);
+	}
+	if (pid != 0)
+	{
+		if (!handle_export(shell))
+			return (0);
+	}
+	return (1);
+}
+
 int	check_commands(t_shell *shell, pid_t pid)
 {
 	if (pid != 0)
 	{
-		if (!handle_pwd(shell))
-			return (0);
-		if (!handle_echo(shell))
-			return (0);
-		if (!handle_env(shell))
-			return (0);
 		if (!handle_export(shell))
 			return (0);
-		if (!handle_cd(shell))
-			return (0);
-		if (!handle_unset(shell))
-			return (0);
 	}
-	return (1);
+	if (!handle_pwd(shell))
+		return (0);
+	if (!handle_echo(shell))
+		return (0);
+	if (!handle_cd(shell))
+		return (0);
+	if (!handle_unset(shell))
+		return (0);
+	return (check_commands2(shell, pid));
 }

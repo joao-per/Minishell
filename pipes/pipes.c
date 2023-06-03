@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/03 16:45:11 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 16:47:34 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,7 @@ void	execute_relative_path(t_shell *shell)
 	path_var = get_env_value("PATH", shell->envs);
 	path_dirs = ft_split(path_var, ':');
 	free(path_var);
-
 	try_execve_at_each_path(shell, path_dirs);
-
 	free_double_array(path_dirs);
 	perror("minishell");
 	exit(1);
