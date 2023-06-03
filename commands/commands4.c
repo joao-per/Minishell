@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   commands4.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2023/06/03 12:30:42 by joao-per          #+#    #+#             */
 /*   Updated: 2023/06/03 12:30:42 by joao-per         ###   ########.fr       */
 /*                                                                            */
@@ -19,10 +22,10 @@ void	delete_var(t_env **env_vars, const char *var_name)
 
 	curr = *env_vars;
 	prev = NULL;
-
 	while (curr)
 	{
-		if (ft_strncmp(curr->env_name, (char *)var_name, ft_strlen(var_name)) == 0)
+		if (ft_strncmp(curr->env_name, (char *)var_name,
+				ft_strlen(var_name)) == 0)
 		{
 			if (prev)
 				prev->next = curr->next;

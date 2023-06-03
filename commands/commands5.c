@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:41:21 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 15:58:14 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 16:16:19 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,3 @@ void	get_env_name_and_value(char **env_name, char **env_value, char *new_var)
 	(*env_name)[env_name_l] = '\0';
 	*env_value = eq_pos + 1;
 }
-
-
-
