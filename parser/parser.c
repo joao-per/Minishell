@@ -6,12 +6,21 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 16:29:43 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 18:40:36 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Libft/libft.h"
 #include "../minishell.h"
+
+t_arg	**free_parse_arguments_aux(char *string, int *i)
+{
+	if (i)
+		free(i);
+	if (string)
+		free(string);
+	return (0);
+}
 
 t_arg	**parse_arguments(char *string)
 {
@@ -20,8 +29,9 @@ t_arg	**parse_arguments(char *string)
 	t_arg	**args;
 	t_arg	*temp;
 
+	i = 0;
 	if (!is_even_quotes(string) || !string[0])
-		return (0);
+		return (free_parse_arguments_aux(string, i));
 	len = ft_strlen(string);
 	i = ft_calloc(1, sizeof(int));
 	args = ft_calloc(1, sizeof(t_arg *));
@@ -36,8 +46,7 @@ t_arg	**parse_arguments(char *string)
 			return (NULL);
 		parse_aux(args, temp, string, i);
 	}
-	free(i);
-	free(string);
+	free_parse_arguments_aux(string, i);
 	return (args);
 }
 

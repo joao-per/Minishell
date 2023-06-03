@@ -54,23 +54,22 @@ t_arg	**process_input(char **line, t_env **env_vars)
 
 int	check_command(t_shell *shell)
 {
-	t_arg   *temp;
+	t_arg	*temp;
 
 	temp = (*shell->args);
-	if (!temp || temp->name == NULL)
-	{
-		return (0);
-	}
+	if (!(shell->args))
+		return (2);
+	if (temp == NULL)
+		return (2);
 	else if (ft_strcmp(temp->name, "exit") == 0)
-	{
 		return (-1);
-	}
 	return (1);
 }
 
 void	cleanup_after_command(t_shell **shell)
 {
-	if (shell && *shell) {
+	if (shell && *shell)
+	{
 		free_args(*shell, (*shell)->len_args);
 		free(*shell);
 		*shell = NULL;
@@ -106,6 +105,11 @@ void	main_loop(t_env **env_vars, char **envs)
 		}
 		else if (should_run == -1)
 			break ;
+		else if (should_run == 2)
+		{
+			cleanup_after_command(&shell);
+			continue ;
+		}
 	}
 	if (shell)
 		free_env(shell);
@@ -114,14 +118,13 @@ void	main_loop(t_env **env_vars, char **envs)
 
 int	main(int ac, char **argv, char **env)
 {
-	t_env **env_vars;
-	char **envs;
+	t_env	**env_vars;
+	char	**envs;
 
 	(void)ac;
 	(void)argv;
 	(void)env;
-
-    setup_signals();
+	setup_signals();
 	init_program(env, &env_vars, &envs);
 	main_loop(env_vars, envs);
 
