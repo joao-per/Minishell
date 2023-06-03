@@ -57,14 +57,13 @@ void	setup_signals(void)
 	struct sigaction action;
 
 	action.sa_handler = restore_prompt;
-	action.sa_flags = SA_RESTART;  // Make certain system calls restartable across signals
+	action.sa_flags = SA_RESTART;
 	sigemptyset(&action.sa_mask);
 	if (sigaction(SIGINT, &action, NULL) < 0)
 	{
 		perror("sigaction");
 		exit(1);
 	}
-
 	action.sa_handler = back_slash;
 	action.sa_flags = SA_RESTART;
 	sigemptyset(&action.sa_mask);

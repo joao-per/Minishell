@@ -93,7 +93,6 @@ void	main_loop(t_env **env_vars, char **envs)
 		{
 			if (!line)
 				break ;
-			//free(line);
 			continue ;
 		}
 		shell = init_shell(env_vars, args, envs);

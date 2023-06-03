@@ -107,9 +107,15 @@ t_shell	*shell_init(t_env **env_vars, t_arg **args, char **envs, char **av);
 char	**create_args_arr(t_arg **args);
 char	**create_env_arr(t_env **envs);
 /*				Commands				*/
+void	cd_command(char **av, t_env **env_vars);
 int	handle_cd(t_shell *shell);
 int	handle_unset(t_shell *shell);
 int	handle_export(t_shell *shell);
+int	handle_pwd(t_shell *shell);
+int	handle_echo(t_shell *shell);
+int	handle_env(t_shell *shell);
+void	delete_var(t_env **env_vars, const char *var_name);
+void	validate_var_name(const char *var_name);
 /*				Free Memory Utils		*/
 int		count_strings(char **str_arr);
 void	free_env_array(char **str_arr);
@@ -142,7 +148,6 @@ void	handle_output_redirection(char **av, int *j);
 void	handle_heredoc_redirection(char **av, int *j);
 void	handle_input_redirection(char **av, int *j);
 /*				Built in Commands				*/
-void	cd_command(char **av, t_env **env_vars);
 int		check_commands(t_shell *shell);
 int		check_commands2(t_shell *shell);
 void	export_variable(t_env **env_vars, char *new_var);
