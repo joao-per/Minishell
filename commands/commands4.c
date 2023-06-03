@@ -19,7 +19,7 @@ void	delete_var(t_env **env_vars, const char *var_name)
 
 	curr = *env_vars;
 	prev = NULL;
-	
+
 	while (curr)
 	{
 		if (ft_strncmp(curr->env_name, (char *)var_name, ft_strlen(var_name)) == 0)

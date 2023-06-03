@@ -3,29 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   commands2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/03 12:22:54 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/03 12:22:54 by joao-per         ###   ########.fr       */
+/*   Created: 2023/06/03 15:48:19 by pedperei          #+#    #+#             */
+/*   Updated: 2023/06/03 15:48:19 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void cd_command(char **av, t_env **env_vars)
+void	cd_command(char **av, t_env **env_vars)
 {
 	char	cwd[MAX_LINE];
 	char	*oldwd;
-	t_env 	*temp;
+	t_env	*temp;
 
-    if (av[1] == NULL)
+	if (av[1] == NULL)
 		chdir(getenv("HOME"));
 	else
 	{
 		if (chdir(av[1]) != 0)
 		{
 			perror("minishell");
-			return;
+			return ;
 		}
 	}
 	getcwd(cwd, sizeof(cwd));
@@ -44,14 +44,14 @@ int	handle_cd(t_shell *shell)
 	if (ft_strcmp(shell->args_str[0], "cd") == 0)
 	{
 		cd_command(shell->args_str, shell->envs);
-		return 0;
+		return (0);
 	}
-	return 1;
+	return (1);
 }
 
 int	handle_unset(t_shell *shell)
 {
-	int i;
+	int		i;
 
 	if (ft_strcmp(shell->args_str[0], "unset") == 0)
 	{
@@ -61,7 +61,13 @@ int	handle_unset(t_shell *shell)
 			unset_variable(shell->envs, shell->args_str[i]);
 			i++;
 		}
-		return 0;
+		return (0);
 	}
-	return 1;
+	return (1);
+}
+
+void	unset_variable(t_env **env_vars, const char *var_name)
+{
+	validate_var_name(var_name);
+	delete_var(env_vars, var_name);
 }

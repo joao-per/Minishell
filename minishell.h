@@ -108,14 +108,16 @@ char	**create_args_arr(t_arg **args);
 char	**create_env_arr(t_env **envs);
 /*				Commands				*/
 void	cd_command(char **av, t_env **env_vars);
-int	handle_cd(t_shell *shell);
-int	handle_unset(t_shell *shell);
-int	handle_export(t_shell *shell);
-int	handle_pwd(t_shell *shell);
-int	handle_echo(t_shell *shell);
-int	handle_env(t_shell *shell);
+int		handle_cd(t_shell *shell);
+int		handle_unset(t_shell *shell);
+int		handle_export(t_shell *shell);
+int		handle_pwd(t_shell *shell);
+int		handle_echo(t_shell *shell);
+int		handle_env(t_shell *shell);
 void	delete_var(t_env **env_vars, const char *var_name);
 void	validate_var_name(const char *var_name);
+void	get_env_name_and_value(char **env_name, char **env_value, char *new_var);
+
 /*				Free Memory Utils		*/
 int		count_strings(char **str_arr);
 void	free_env_array(char **str_arr);
