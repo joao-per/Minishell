@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands6.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:56:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 18:23:27 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:50:51 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ int	check_commands2(t_shell *shell, pid_t pid)
 		if (!handle_cd(shell))
 			return (0);
 	}
+	if (pid != 0)
+	{
+		if (!handle_unset(shell))
+			return (0);
+	}
 	return (1);
 }
 
@@ -59,8 +64,6 @@ int	check_commands(t_shell *shell, pid_t pid)
 	if (!handle_pwd(shell))
 		return (0);
 	if (!handle_echo(shell))
-		return (0);
-	if (!handle_unset(shell))
 		return (0);
 	return (check_commands2(shell, pid));
 }
