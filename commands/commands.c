@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/03 14:04:53 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:34:16 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,23 @@ int	is_builtin_command(t_shell *shell)
 	return (0);
 }
 
-int	check_commands(t_shell *shell, int pid)
+int	check_commands(t_shell *shell, pid_t pid)
 {
-	if (!handle_pwd(shell))
-		return (0);
-	if (!handle_echo(shell))
-		return (0);
-	if (!handle_env(shell))
-		return (0);
-	if (!handle_export(shell))
-		return (0);
-	return (check_commands2(shell, pid));
-}
-
-int	check_commands2(t_shell *shell, int pid)
-{
-	if (!handle_cd(shell))
-		return (0);
-	if (!handle_unset(shell))
-		return (0);
-	if (pid != 0 && !handle_export(shell))
-		return (0);
+	if (pid != 0)
+	{
+		if (!handle_pwd(shell))
+			return (0);
+		if (!handle_echo(shell))
+			return (0);
+		if (!handle_env(shell))
+			return (0);
+		if (!handle_export(shell))
+			return (0);
+		if (!handle_cd(shell))
+			return (0);
+		if (!handle_unset(shell))
+			return (0);
+	}
 	return (1);
 }
 

@@ -13,7 +13,7 @@
 #include "../minishell.h"
 #include "../Libft/libft.h"
 
-void	handle_child_process(t_shell *shell, int in_fd, int out_fd, int pid)
+void	handle_child_process(t_shell *shell, int in_fd, int out_fd, pid_t pid)
 {
 	int built_in_command_executed;
 
