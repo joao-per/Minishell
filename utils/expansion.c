@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 12:34:32 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:50:26 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char	*expansion_interrogation_mark(char *str_exp)
 	free(status);
 	return (str_exp);
 }
-
 
 char	*expansion(char *input, char *str_exp, t_env **env, int *i)
 {
@@ -128,4 +127,3 @@ char	*treat_expansion(char *input, t_env **env)
 	
 }  
  */
-

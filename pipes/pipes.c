@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/03 16:47:34 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:48:58 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	execute_relative_path(t_shell *shell)
 	perror("minishell");
 	exit(1);
 }
-
 
 void	execute_external_command(t_shell *shell)
 {

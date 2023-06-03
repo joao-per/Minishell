@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:56:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 17:35:21 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:45:37 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	is_builtin_command(t_shell *shell)
 		return (1);
 	return (0);
 }
-
 
 int	check_commands2(t_shell *shell, pid_t pid)
 {

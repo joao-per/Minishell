@@ -12,14 +12,13 @@
 
 #include "../minishell.h"
 
-void free_double_array(char **doubles)
+void	free_double_array(char **doubles)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!doubles)
 		return ;
-
 	while (doubles[i] != NULL)
 	{
 		free(doubles[i]);
@@ -27,4 +26,3 @@ void free_double_array(char **doubles)
 	}
 	free(doubles);
 }
-
