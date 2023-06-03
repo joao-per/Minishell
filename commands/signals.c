@@ -43,17 +43,11 @@ void	restore_prompt(int sig)
 	rl_redisplay();
 }
 
-void	back_slash(int sig)
-{
-	(void)sig;
-	printf("Quit (core dumped)\n");
-	exit(0);
-}
-
 void	setup_signals(void)
 {
 	struct sigaction	action;
 
+	signal(SIGQUIT, SIG_IGN);
 	action.sa_handler = restore_prompt;
 	action.sa_flags = SA_RESTART;
 	sigemptyset(&action.sa_mask);
@@ -62,12 +56,5 @@ void	setup_signals(void)
 		perror("sigaction");
 		exit(1);
 	}
-	action.sa_handler = back_slash;
-	action.sa_flags = SA_RESTART;
-	sigemptyset(&action.sa_mask);
-	if (sigaction(SIGQUIT, &action, NULL) < 0)
-	{
-		perror("sigaction");
-		exit(1);
-	}
 }
+
