@@ -42,7 +42,10 @@ int	check_command(t_shell *shell)
 	if (temp == NULL)
 		return (2);
 	else if (ft_strcmp(temp->name, "exit") == 0)
+	{
+		printf("exit\n");
 		return (-1);
+	}
 	return (1);
 }
 

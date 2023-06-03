@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 11:11:12 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/03 20:11:57 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/03 22:07:36 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void handle_input_redirection(char **av, int *j)
 	}
 	dup2(input_fd, STDIN_FILENO);
 	close(input_fd);
+	free(av[*j]);
 	av[*j] = NULL;
 }
 
@@ -52,6 +53,7 @@ void handle_heredoc_redirection(char **av, int *j)
 	input_fd = open("/tmp/minishell_heredoc", O_RDONLY);
 	dup2(input_fd, STDIN_FILENO);
 	close(input_fd);
+	free(av[*j]);
 	av[*j] = NULL;
 }
 
@@ -70,6 +72,7 @@ void handle_output_redirection(char **av, int *j)
 	} */
 	dup2(output_fd, STDOUT_FILENO);
 	close(output_fd);
+	free(av[*j]);
 	av[*j] = NULL;
 }
 
@@ -87,6 +90,7 @@ void handle_append_redirection(char **av, int *j)
 	}
 	dup2(output_fd, STDOUT_FILENO);
 	close(output_fd);
+	free(av[*j]);
 	av[*j] = NULL;
 }
 
