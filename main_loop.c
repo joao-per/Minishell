@@ -101,7 +101,9 @@ void	main_loop(t_env **env_vars, char **envs)
 	while (should_run)
 	{
 		args = process_input(&line, env_vars);
-		free_ctrl_d(args, env_vars, envs, line);
+		if (!args)
+			continue ;
+		should_run = free_ctrl_d(args, env_vars, envs, line);
 		if (should_run == 2)
 			continue ;
 		if (should_run == -1)

@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:43:03 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 19:23:53 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/05 22:48:33 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ void	free_args(t_shell *shell, int len)
 		free_args_array(shell->args_str, len);
 	if (shell->args)
 		free_args_struct(shell->args);
+	if (shell->args_str_pipe)
+		free_args_array(shell->args_str_pipe, ft_argsize(*shell->args_pipe));
+	if (shell->args_pipe)
+		free_args_struct(shell->args_pipe);
 }
 
 void	free_env(t_shell *shell)

@@ -52,6 +52,8 @@ typedef struct s_shell
 	int		len_args;
 	t_env	**envs;
 	t_arg	**args;
+	t_arg	**args_pipe;
+	char	**args_str_pipe;
 }	t_shell;
 
 typedef struct s_clean_vars {
@@ -165,5 +167,6 @@ char	*get_next_line(int fd);
 
 /*				Pipes				*/
 int		find_pipe(t_shell *shell, int pipe_index);
+void	create_args_pipe(t_shell *shell);
 
 #endif
