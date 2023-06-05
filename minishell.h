@@ -56,13 +56,6 @@ typedef struct s_shell
 	char	**args_str_pipe;
 }	t_shell;
 
-typedef struct s_clean_vars {
-    t_shell *shell;
-    t_env **env_vars;
-    char **envs;
-}   t_clean_vars;
-
-
 /*				Environment				*/
 int		ft_envsize(t_env *env);
 t_env	*env_last(t_env *env);
