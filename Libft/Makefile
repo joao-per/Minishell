@@ -23,7 +23,7 @@ ft_atoi ft_bzero ft_calloc ft_split ft_itoa \
 BONUS = ft_lstadd_back ft_lstadd_front ft_lstclear ft_lstdelone ft_lstnew \
 ft_lstlast ft_lstiter ft_lstsize ft_lstmap \
 
-CC = gcc
+CC = cc
 RM = rm -f
 CFLAGS = -Wall -Werror -Wextra -g
 AR	= ar rcs
