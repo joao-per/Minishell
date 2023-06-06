@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:59:57 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/06 09:11:52 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/06 10:43:51 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ t_arg	*aux_pipe_loop(t_shell *shell, t_arg *temp, t_arg *temp_pipe, int *flag)
 			temp_str = temp_pipe->name;
 			temp_pipe->name = ft_strjoin(temp_pipe->name, str_quotes);
 			free(temp_str);
+			if (temp->next && ft_strcmp(temp->next->name, "|") != 0)
+			{
+				temp_str = temp_pipe->name;
+				temp_pipe->name = ft_strjoin(temp_pipe->name, " ");
+				free(temp_str);
+			}
 		}
 		if (temp->quotes_perm == 1)
 			free(str_quotes);
