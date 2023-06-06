@@ -141,7 +141,7 @@ char	**create_args_execve(t_shell *shell)
 	{
 		if (flag_red)
 			flag_red = 0;
-		else if (is_redirection(arg->name) && !arg->quotes_perm)
+		else if (is_reds(arg->name) && !arg->quotes_perm)
 			flag_red = 1;
 		else
 			args_execve[i++] = arg->name;
