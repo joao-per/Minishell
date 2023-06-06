@@ -25,7 +25,7 @@ void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
 	}
 	else if (pid == 0)
 	{
-		printf("Current command is: %s\n", (*shell->args)->name);
+		//printf("Current command is: %s\n", (*shell->args)->name);
 		handle_child_process(shell, in_fd, out_fd, pid);
 	}
 	else
@@ -73,10 +73,10 @@ void	try_execve_at_each_path(t_shell *shell, char **path_dirs)
 	i = 0;
 	while (path_dirs[i])
 	{
-		full_path = construct_full_path(path_dirs[i], shell->args_str[0]);
+		full_path = construct_full_path(path_dirs[i], shell->args_execve[0]);
 		if (access(full_path, X_OK) == 0)
 		{
-			execve(full_path, shell->args_str, shell->envs_str);
+			execve(full_path, shell->args_execve, shell->envs_str);
 			free(full_path);
 			break ;
 		}

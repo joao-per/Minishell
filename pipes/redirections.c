@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 11:11:12 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/06 12:22:18 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/06 22:53:27 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void handle_input_redirection(char **av, int *j)
 	}
 	dup2(input_fd, STDIN_FILENO);
 	close(input_fd);
-	av[*j] = NULL;
 }
 
 void handle_heredoc_redirection(char **av, int *j)
@@ -62,7 +61,7 @@ void handle_output_redirection(char **av, int *j)
 	int output_fd;
 
 	output_file = av[*j + 1];
-	printf("output_file: %s\n", output_file);
+	//printf("output_file: %s\n", output_file);
 	output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (output_fd < 0)
 	{
@@ -71,7 +70,6 @@ void handle_output_redirection(char **av, int *j)
 	}
 	dup2(output_fd, STDOUT_FILENO);
 	close(output_fd);
-	av[*j] = NULL;
 }
 
 void handle_append_redirection(char **av, int *j)
@@ -88,7 +86,6 @@ void handle_append_redirection(char **av, int *j)
 	}
 	dup2(output_fd, STDOUT_FILENO);
 	close(output_fd);
-	av[*j] = NULL;
 }
 
 //"cd" ".." "|" "pwd" ">" "a"
@@ -98,17 +95,17 @@ void handle_redirection(t_shell *shell)
 	t_arg *temp;
 
 	j = 0;
-	temp = (*shell->args);
+	temp = get_arg_byindex(shell, shell->index);
 	while (temp && strcmp(temp->name, "|") != 0)
 	{
-		printf("temp->name: %s\n", temp->name);
+		//printf("temp->name: %s\n", temp->name);
 		if (ft_strcmp(temp->name, "<") == 0 && temp->quotes_perm == 0)
 			handle_input_redirection(shell->args_str, &j);
 		else if (ft_strcmp(temp->name, "<<") == 0 && temp->quotes_perm == 0)
 			handle_heredoc_redirection(shell->args_str, &j);
 		else if (ft_strcmp(temp->name, ">") == 0 && temp->quotes_perm == 0)
 		{
-			printf("Current arg: %s\n", shell->args_str[j]);
+			//printf("Current arg: %s\n", shell->args_str[j]);
 			handle_output_redirection(shell->args_str, &j);
 		}
 		else if (ft_strcmp(temp->name, ">>") == 0 && temp->quotes_perm == 0)

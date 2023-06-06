@@ -108,7 +108,7 @@ int	count_arguments(t_shell *shell)
 
 	count_args = 0;
 	flag_red = 0;
-	arg = *shell->args;
+	arg = get_arg_byindex(shell, shell->index);
 	while (arg && !(ft_strcmp(arg->name, "|") == 0 && !arg->quotes_perm))
 	{
 		if (flag_red)
@@ -124,15 +124,15 @@ int	count_arguments(t_shell *shell)
 
 char	**create_args_execve(t_shell *shell)
 {
-	char **args_execve;
-	int count_args;
-	int flag_red;
-	int i;
-	t_arg *arg;
+	char	**args_execve;
+	int		count_args;
+	int		flag_red;
+	int		i;
+	t_arg	*arg;
 
 	count_args = count_arguments(shell);
 	args_execve = ft_calloc(count_args + 1, sizeof(char *));
-	arg = *shell->args;
+	arg = get_arg_byindex(shell, shell->index);
 	if (!args_execve)
 		return (0);
 	flag_red = 0;

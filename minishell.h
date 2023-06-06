@@ -50,10 +50,12 @@ typedef struct s_shell
 	char	**args_str;
 	char	**envs_str;
 	int		len_args;
+	int		index;
 	t_env	**envs;
 	t_arg	**args;
 	t_arg	**args_pipe;
 	char	**args_str_pipe;
+	char	**args_execve;
 }	t_shell;
 
 typedef struct s_clean_vars {
@@ -148,6 +150,7 @@ void	execute_absolute_path(t_shell *shell);
 void	execute_relative_path(t_shell *shell);
 void	execute_external_command(t_shell *shell);
 int		is_builtin_command(t_shell *shell);
+char	**create_args_execve(t_shell *shell);
 /*				Redirections			*/
 void	handle_redirection(t_shell *shell);
 void	handle_append_redirection(char **av, int *j);

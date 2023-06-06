@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:12:13 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 19:19:15 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/06 20:39:46 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ t_shell	*shell_init(t_env **env_vars, t_arg **args, char **envs, char **av)
 	shell->envs_str = envs;
 	shell->args_str = av;
 	shell->len_args = count_strings(av);
+	shell->index = 0;
 	return (shell);
 }
 

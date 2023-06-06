@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands6.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:56:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 19:50:51 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/06 22:27:28 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 int	is_builtin_command(t_shell *shell)
 {
-	if (ft_strcmp(shell->args_str[0], "pwd") == 0)
+	if (ft_strcmp(shell->args_execve[0], "pwd") == 0)
 		return (1);
-	if (ft_strcmp(shell->args_str[0], "echo") == 0)
+	if (ft_strcmp(shell->args_execve[0], "echo") == 0)
 		return (1);
-	if (ft_strcmp(shell->args_str[0], "cd") == 0)
+	if (ft_strcmp(shell->args_execve[0], "cd") == 0)
 		return (1);
-	if (ft_strcmp(shell->args_str[0], "export") == 0)
+	if (ft_strcmp(shell->args_execve[0], "export") == 0)
 		return (1);
-	if (ft_strcmp(shell->args_str[0], "unset") == 0)
+	if (ft_strcmp(shell->args_execve[0], "unset") == 0)
 		return (1);
-	if (ft_strcmp(shell->args_str[0], "env") == 0)
+	if (ft_strcmp(shell->args_execve[0], "env") == 0)
 		return (1);
 	return (0);
 }

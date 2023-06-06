@@ -19,7 +19,7 @@ int	handle_pwd(t_shell *shell)
 {
 	char	cwd[MAX_LINE];
 
-	if (ft_strcmp(shell->args_str[0], "pwd") == 0)
+	if (ft_strcmp(shell->args_execve[0], "pwd") == 0)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 			perror("minishell");
@@ -35,9 +35,9 @@ int	handle_pwd(t_shell *shell)
 
 int	handle_echo(t_shell *shell)
 {
-	if (ft_strcmp(shell->args_str[0], "echo") == 0)
+	if (ft_strcmp(shell->args_execve[0], "echo") == 0)
 	{
-		echo_command(shell->args_str);
+		echo_command(shell->args_execve);
 		return (0);
 	}
 	return (1);
@@ -45,7 +45,7 @@ int	handle_echo(t_shell *shell)
 
 int	handle_env(t_shell *shell)
 {
-	if (ft_strcmp(shell->args_str[0], "env") == 0)
+	if (ft_strcmp(shell->args_execve[0], "env") == 0)
 	{
 		print_env_vars(shell->envs);
 		return (0);
@@ -57,17 +57,17 @@ int	handle_export(t_shell *shell)
 {
 	int		i;
 
-	if (ft_strcmp(shell->args_str[0], "export") == 0)
+	if (ft_strcmp(shell->args_execve[0], "export") == 0)
 	{
-		if (!shell->args_str[1])
+		if (!shell->args_execve[1])
 		{
 			print_export_vars(shell->envs);
 			return (0);
 		}
 		i = 1;
-		while (shell->args_str[i])
+		while (shell->args_execve[i])
 		{
-			export_variable(shell->envs, shell->args_str[i]);
+			export_variable(shell->envs, shell->args_execve[i]);
 			i++;
 		}
 		return (0);

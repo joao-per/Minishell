@@ -41,9 +41,9 @@ void	cd_command(char **av, t_env **env_vars)
 
 int	handle_cd(t_shell *shell)
 {
-	if (ft_strcmp(shell->args_str[0], "cd") == 0)
+	if (ft_strcmp(shell->args_execve[0], "cd") == 0)
 	{
-		cd_command(shell->args_str, shell->envs);
+		cd_command(shell->args_execve, shell->envs);
 		return (0);
 	}
 	return (1);
@@ -53,12 +53,12 @@ int	handle_unset(t_shell *shell)
 {
 	int		i;
 
-	if (ft_strcmp(shell->args_str[0], "unset") == 0)
+	if (ft_strcmp(shell->args_execve[0], "unset") == 0)
 	{
 		i = 1;
-		while (shell->args_str[i])
+		while (shell->args_execve[i])
 		{
-			unset_variable(shell->envs, shell->args_str[i]);
+			unset_variable(shell->envs, shell->args_execve[i]);
 			i++;
 		}
 		return (0);
