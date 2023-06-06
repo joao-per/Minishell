@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/05 22:56:10 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/06 09:16:56 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	execute_command(t_shell *shell)
 	{
 		printf("%s\n", temp->name);
 		temp=temp->next;
-	}*/
-	/*char **temp1 = shell->args_str_pipe;
+	}
+	char **temp1 = shell->args_str_pipe;
 	int j = 0;
 	while (temp1[j])
 	{

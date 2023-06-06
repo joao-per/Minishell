@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:59:57 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/05 22:42:18 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/06 09:11:52 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*join_quotes(t_arg *temp)
 		return (temp->name);
 }
 
-t_arg	*aux_pipe_loop(t_arg *temp, t_arg *temp_pipe, int *flag)
+t_arg	*aux_pipe_loop(t_shell *shell, t_arg *temp, t_arg *temp_pipe, int *flag)
 {
 	char	*str_quotes;
 	char	*temp_str;
@@ -61,7 +61,7 @@ t_arg	*aux_pipe_loop(t_arg *temp, t_arg *temp_pipe, int *flag)
 		*flag = 1;
 	}
 	if (!temp_pipe->name)
-		temp_pipe->name = ft_strdup("|");
+		eliminate_extra_arg(shell->args_pipe);
 	return (temp);
 }
 
@@ -81,7 +81,7 @@ void	create_args_pipe(t_shell *shell)
 		*flag = 0;
 		if (temp)
 			temp_pipe = create_arg(shell->args_pipe);
-		temp = aux_pipe_loop(temp, temp_pipe, flag);
+		temp = aux_pipe_loop(shell, temp, temp_pipe, flag);
 		if (*flag == 0)
 			temp = temp->next;
 	}
