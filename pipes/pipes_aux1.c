@@ -54,6 +54,23 @@ int	find_pipe(t_shell *shell, int pipe_index)
 	return (-1);
 }
 
+int	find_pipe_arg(t_shell *shell, int pipe_index)
+{
+	int		pos;
+	t_arg	*temp;
+
+	pos = 0;
+	temp = get_arg_byindex(shell, pipe_index);
+	while (temp)
+	{
+		if (ft_strcmp(temp->name, "|") == 0 && temp->quotes_perm == 0)
+			return (pos);
+		pos++;
+		temp = temp->next;
+	}
+	return (-1);
+}
+
 char	*construct_full_path(char *path_dir, char *command)
 {
 	char	*temp;

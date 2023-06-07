@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:56:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/06 22:27:28 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/07 10:30:34 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	check_commands2(t_shell *shell, pid_t pid)
 		if (!handle_export(shell))
 			return (0);
 	}
-	if (pid != 0)
+	if (pid != 0 && find_pipe_arg(shell, 0) == -1)
 	{
 		if (!handle_cd(shell))
 			return (0);

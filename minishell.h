@@ -171,5 +171,6 @@ void	create_args_pipe(t_shell *shell);
 
 /*				Pipes				*/
 int		find_pipe(t_shell *shell, int pipe_index);
+int		find_pipe_arg(t_shell *shell, int pipe_index);
 
 #endif
