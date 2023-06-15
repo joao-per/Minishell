@@ -15,7 +15,6 @@
 void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
 {
 	pid_t	pid;
-	int		status;
 
 	pid = fork();
 	if (pid < 0)
@@ -24,17 +23,9 @@ void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
 		exit(1);
 	}
 	else if (pid == 0)
-	{
-		//printf("Current command is: %s\n", (*shell->args)->name);
 		handle_child_process(shell, in_fd, out_fd, pid);
-	}
 	else
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			g_exit_status = WEXITSTATUS(status);
 		check_commands2(shell, pid);
-	}
 }
 
 int	find_pipe(t_shell *shell, int pipe_index)

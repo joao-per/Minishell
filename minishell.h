@@ -54,6 +54,10 @@ typedef struct s_shell
 	t_env	**envs;
 	t_arg	**args;
 	t_arg	**args_pipe;
+	int 	in_fd;
+	int		out_fd;
+	int		cmds;
+	int		current_cmd;
 	char	**args_str_pipe;
 	char	**args_execve;
 }	t_shell;
@@ -172,5 +176,6 @@ void	create_args_pipe(t_shell *shell);
 /*				Pipes				*/
 int		find_pipe(t_shell *shell, int pipe_index);
 int		find_pipe_arg(t_shell *shell, int pipe_index);
+int		count_pipes(t_shell *shell);
 
 #endif
