@@ -13,11 +13,25 @@
 #include "../minishell.h"
 #include "../Libft/libft.h"
 
-void	handle_child_process(t_shell *shell, int in_fd, int out_fd, pid_t pid)
+void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd, pid_t pid)
 {
 	int	built_in_command_executed;
 
-	file_descriptor_handler(in_fd, out_fd);
+	if (shell->current_cmd != 0)
+    {
+        dup2(in_fd, STDIN_FILENO);
+        close(in_fd);
+    }
+
+    // Redirect output to the next command or file
+    if (shell->current_cmd < shell->cmds - 1)
+    {
+        dup2(pipe_fd[1], STDOUT_FILENO);
+        close(pipe_fd[0]);
+        close(pipe_fd[1]);
+    }
+	if (!pipe_fd)
+		file_descriptor_handler(in_fd, STDOUT_FILENO);
 	handle_redirection(shell);
 	built_in_command_executed = is_builtin_command(shell);
 	check_commands(shell, pid);
@@ -39,7 +53,7 @@ void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index)
 	}
 	free(shell->args_str[pipe_index]);
 	shell->args_str[pipe_index] = NULL;
-	run_commands_aux(shell, *in_fd, fd[1]);
+	run_commands_aux(shell, *in_fd, fd);
 	close(fd[1]);
 	if (*in_fd != 0)
 		close(*in_fd);

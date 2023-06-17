@@ -143,12 +143,12 @@ void	back_slash(int sig);
 void	setup_signals(void);
 /*				Execute				*/
 void	file_descriptor_handler(int in, int out);
-void	handle_child_process(t_shell *shell, int in_fd, int out_fd, pid_t pid);
+void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd, pid_t pid);
 void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index);
 char	*construct_full_path(char *path_dir, char *command);
 void	run_commands(t_shell *shell);
 void	try_execve_at_each_path(t_shell *shell, char **path_dirs);
-void	run_commands_aux(t_shell *shell, int in_fd, int out_fd);
+void	run_commands_aux(t_shell *shell, int in_fd, int *pipe_fd);
 void	execute_command(t_shell *shell);
 void	execute_absolute_path(t_shell *shell);
 void	execute_relative_path(t_shell *shell);

@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
+void	run_commands_aux(t_shell *shell, int in_fd, int *fd)
 {
 	pid_t	pid;
 
@@ -23,9 +23,20 @@ void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
 		exit(1);
 	}
 	else if (pid == 0)
-		handle_child_process(shell, in_fd, out_fd, pid);
+		handle_child_process(shell, in_fd, fd, pid);
 	else
+	{
+		if (shell->current_cmd > 0)
+        	close(in_fd);
+
+        // Close the current pipe's read end
+        if (shell->current_cmd < shell->cmds - 1)
+        {
+            close(fd[1]);
+            in_fd = fd[0];
+        }
 		check_commands2(shell, pid);
+	}
 }
 
 int	find_pipe(t_shell *shell, int pipe_index)

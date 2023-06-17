@@ -63,7 +63,7 @@ void	execute_command(t_shell *shell)
 	temp = get_arg_byindex(shell, shell->index);
 	while(temp != NULL)
 	{
-		run_commands_aux(shell, in_fd, STDOUT_FILENO);
+		run_commands_aux(shell, in_fd, NULL);
 		while(temp)
 		{
 			if(strcmp(temp->name, "|") == 0 && !temp->quotes_perm)
