@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:56:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/07 10:30:34 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/17 20:25:44 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	is_builtin_command(t_shell *shell)
 	if (ft_strcmp(shell->args_execve[0], "unset") == 0)
 		return (1);
 	if (ft_strcmp(shell->args_execve[0], "env") == 0)
+		return (1);
+	if (ft_strcmp(shell->args_execve[0], "exit") == 0)
 		return (1);
 	return (0);
 }
