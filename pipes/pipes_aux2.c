@@ -22,8 +22,6 @@ void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd, pid_t pid)
         dup2(in_fd, STDIN_FILENO);
         close(in_fd);
     }
-
-    // Redirect output to the next command or file
     if (shell->current_cmd < shell->cmds - 1)
     {
         dup2(pipe_fd[1], STDOUT_FILENO);

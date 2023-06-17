@@ -18,6 +18,8 @@ void	free_args(t_shell *shell, int len)
 		free_args_array(shell->args_str, len);
 	if (shell->args)
 		free_args_struct(shell->args);
+	if (shell->args_execve)
+		free_args_array(shell->args_execve, count_strings(shell->args_execve));
 }
 
 void	free_env(t_shell *shell)

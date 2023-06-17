@@ -46,14 +46,13 @@ void	execute_command(t_shell *shell)
 	pipe_index = find_pipe(shell, i);
 	shell->cmds = count_pipes(shell);
 	shell->current_cmd = 0;
-	if (pipe_index != -1)
-		create_args_pipe(shell);
 	shell->args_execve = create_args_execve(shell);
 	while (pipe_index != -1)
 	{
 		handle_pipe(shell, &in_fd, pipe_index);
 		i += pipe_index + 1;
 		shell->index = i;
+		free_args_array(shell->args_execve, count_strings(shell->args_execve));
 		shell->args_execve = create_args_execve(shell);
 		pipe_index = find_pipe(shell, i);
 		shell->current_cmd++;
@@ -74,6 +73,7 @@ void	execute_command(t_shell *shell)
 			temp = temp->next;
 		}
 	}
+	//free_args_array(shell->args_execve, count_strings(shell->args_execve));
 	while (shell->cmds > 0)
 	{
 		wait(&status);

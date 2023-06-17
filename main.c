@@ -40,7 +40,7 @@ t_arg	**process_input(char **line, t_env **env_vars)
 	return (parse_arguments(line_exp));
 }
 
-int	check_command(t_shell *shell)
+int	check_exit(t_shell *shell)
 {
 	t_arg	*temp;
 
@@ -58,7 +58,7 @@ int	should_run_aux(t_shell *shell)
 {
 	int	should_run;
 
-	should_run = check_command(shell);
+	should_run = check_exit(shell);
 	if (should_run == 1)
 	{
 		execute_command(shell);

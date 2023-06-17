@@ -56,6 +56,9 @@ int	is_pipe_reds_valid(t_arg **args)
 		if (temp->next && is_reds(temp->name) && temp->quotes_perm == 0
 			&& is_pipe(temp->next->name) && temp->quotes_perm == 0)
 			return (print_error_messages('P', temp->next->name));
+		if (temp->next && is_pipe(temp->name) && temp->quotes_perm == 0
+			&& is_pipe(temp->next->name) && temp->quotes_perm == 0)
+			return (print_error_messages('P', temp->next->name));
 		temp = temp->next;
 	}
 	return (1);
