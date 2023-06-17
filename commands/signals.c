@@ -15,6 +15,7 @@
 
 #include "../minishell.h"
 
+
 /* void	cleanup(t_clean_vars *cleaning)
 {
 	if(cleaning->shell)
@@ -40,7 +41,8 @@ void	restore_prompt(int sig)
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	rl_redisplay();
+	if (g_check_exit[1] == 0)
+		rl_redisplay();
 }
 
 void	setup_signals(void)

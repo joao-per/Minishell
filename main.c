@@ -16,7 +16,7 @@
 #include "Libft/libft.h"
 #include "minishell.h"
 
-int	g_exit_status;
+int	g_check_exit[2];
 
 void	init_program(char **env, t_env ***env_vars, char ***envs)
 {
@@ -28,6 +28,7 @@ t_arg	**process_input(char **line, t_env **env_vars, char **envs)
 {
 	char	*line_exp;
 
+	g_check_exit[1] = 0;
 	*line = readline("\033[0;93mMinishell>$ \033[0;39m");
 	if (*line == NULL)
 	{

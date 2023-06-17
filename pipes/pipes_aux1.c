@@ -19,6 +19,7 @@ void	run_commands_aux(t_shell *shell, int in_fd, int *fd)
 {
 	pid_t	pid;
 
+	g_check_exit[1] = 1;
 	pid = fork();
 	if (pid < 0)
 	{

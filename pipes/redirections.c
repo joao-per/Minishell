@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 11:11:12 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/17 18:57:42 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/17 22:19:47 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	handle_input_redirection(char **av, int *j)
 	close(input_fd);
 }
 
-void	handle_heredoc_redirection(char **av, int *j)
+/* void	handle_heredoc_redirection(char **av, int *j)
 {
 	char	*delimiter;
 	char	*line;
@@ -55,6 +55,37 @@ void	handle_heredoc_redirection(char **av, int *j)
 	input_fd = open("/tmp/minishell_heredoc", O_RDONLY);
 	dup2(input_fd, STDIN_FILENO);
 	close(input_fd);
+} */
+
+void handle_heredoc_redirection(char **av, int *j)
+{
+    char *delimiter;
+    char *line = NULL;
+    int input_fd;
+    int original_stdin_fd;
+
+    delimiter = av[*j + 1];
+    input_fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    while ((line = readline("heredoc> ")) != NULL)
+    {
+        if (ft_strcmp(line, delimiter) == 0)
+        {
+            free(line);
+            break;
+        }
+        write(input_fd, line, strlen(line));
+        write(input_fd, "\n", 1);
+        free(line);
+    }
+    close(input_fd);
+    original_stdin_fd = dup(STDIN_FILENO); 
+    input_fd = open("/tmp/minishell_heredoc", O_RDONLY);
+    dup2(input_fd, STDIN_FILENO);
+    close(input_fd);
+    unlink("/tmp/minishell_heredoc");
+	close(original_stdin_fd);
+    dup2(original_stdin_fd, STDIN_FILENO);
+    close(original_stdin_fd);
 }
 
 void	handle_output_redirection(char **av, int *j)

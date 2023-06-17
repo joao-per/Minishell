@@ -36,7 +36,7 @@
 # define MAX_HISTORY 100
 // Maximum number of commands to be stored in history
 
-extern int	g_exit_status;
+extern int	g_check_exit[2];
 
 typedef struct s_env
 {
