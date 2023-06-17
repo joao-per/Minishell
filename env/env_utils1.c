@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:35:26 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/01 20:15:49 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/17 19:57:19 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_env	*env_new(char *env_var)
 {
 	t_env	*new;
 
-	new = (t_env *)malloc(sizeof(t_env));
+	new = ft_calloc(1, sizeof(t_env));
 	sep_name_value_env(new, env_var);
 	return (new);
 }

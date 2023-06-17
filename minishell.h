@@ -42,6 +42,7 @@ typedef struct s_env
 {
 	char			*env_name;
 	char			*env_value;
+	int				rank;
 	struct s_env	*next;
 }	t_env;
 
