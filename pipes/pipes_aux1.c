@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipes_aux1.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2023/06/02 11:04:03 by joao-per          #+#    #+#             */
 /*   Updated: 2023/06/02 11:04:03 by joao-per         ###   ########.fr       */
 /*                                                                            */
@@ -27,14 +30,12 @@ void	run_commands_aux(t_shell *shell, int in_fd, int *fd)
 	else
 	{
 		if (shell->current_cmd > 0)
-        	close(in_fd);
-
-        // Close the current pipe's read end
-        if (shell->current_cmd < shell->cmds - 1)
-        {
-            close(fd[1]);
-            in_fd = fd[0];
-        }
+			close(in_fd);
+		if (shell->current_cmd < shell->cmds - 1)
+		{
+			close(fd[1]);
+			in_fd = fd[0];
+		}
 		check_commands2(shell, pid);
 	}
 }
@@ -48,7 +49,8 @@ int	find_pipe(t_shell *shell, int pipe_index)
 	temp = get_arg_byindex(shell, pipe_index);
 	while (temp)
 	{
-		if (ft_strcmp(shell->args_str[pos], "|") == 0 && temp->quotes_perm == 0)
+		if (ft_strcmp(shell->args_str[pos], "|") == 0
+			&& temp->quotes_perm == 0)
 			return (pos);
 		pos++;
 		temp = temp->next;
@@ -71,17 +73,6 @@ int	find_pipe_arg(t_shell *shell, int pipe_index)
 		temp = temp->next;
 	}
 	return (-1);
-}
-
-char	*construct_full_path(char *path_dir, char *command)
-{
-	char	*temp;
-	char	*full_path;
-
-	temp = ft_strjoin(path_dir, "/");
-	full_path = ft_strjoin(temp, command);
-	free(temp);
-	return (full_path);
 }
 
 void	try_execve_at_each_path(t_shell *shell, char **path_dirs)

@@ -6,31 +6,12 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/17 18:40:54 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/17 18:55:51 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Libft/libft.h"
 #include "../minishell.h"
-
-int	count_pipes(t_shell *shell)
-{
-	int		count;
-	int		pos;
-	t_arg	*temp;
-
-	count = 0;
-	pos = 0;
-	temp = *shell->args;
-	while (temp)
-	{
-		if (ft_strcmp(shell->args_str[pos], "|") == 0 && temp->quotes_perm == 0)
-			count++;
-		temp = temp->next;
-		pos++;
-	}
-	return (count + 1);
-}
 
 void	run_last_command(t_shell *shell, int *in_fd)
 {
@@ -97,33 +78,32 @@ void	execute_command(t_shell *shell)
 	shell->args_str = av;
 }
 
-void	execute_absolute_path(t_shell *shell)
+char	*construct_full_path(char *path_dir, char *command)
 {
-	execve(shell->args_str[0], shell->args_execve, shell->envs_str);
-	free_args(shell, shell->len_args);
-	free(shell);
-	perror("minishell");
-	exit(1);
+	char	*temp;
+	char	*full_path;
+
+	temp = ft_strjoin(path_dir, "/");
+	full_path = ft_strjoin(temp, command);
+	free(temp);
+	return (full_path);
 }
 
-void	execute_relative_path(t_shell *shell)
+void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index)
 {
-	char	*path_var;
-	char	**path_dirs;
+	int	fd[2];
 
-	path_var = get_env_value("PATH", shell->envs);
-	path_dirs = ft_split(path_var, ':');
-	free(path_var);
-	try_execve_at_each_path(shell, path_dirs);
-	free_double_array(path_dirs);
-	perror("minishell");
-	exit(1);
-}
-
-void	execute_external_command(t_shell *shell)
-{
-	if (ft_strchr(shell->args_str[0], '/'))
-		execute_absolute_path(shell);
-	else
-		execute_relative_path(shell);
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		exit(1);
+	}
+	free(shell->args_str[pipe_index]);
+	shell->args_str[pipe_index] = NULL;
+	run_commands_aux(shell, *in_fd, fd);
+	close(fd[1]);
+	if (*in_fd != 0)
+		close(*in_fd);
+	*in_fd = fd[0];
+	shell->args_str += pipe_index + 1;
 }

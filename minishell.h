@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/17 19:03:12 by pedperei          #+#    #+#             */
+/*   Updated: 2023/06/17 19:03:12 by pedperei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -19,7 +31,6 @@
 # include <signal.h>
 
 # define MAX_LINE 80               // Maximum length of user input
-# define MAX_ARGS MAX_LINE / 2 + 1 // Maximum number of arguments for a command
 # define READ_END 0                // File descriptor for read end of a pipe
 # define WRITE_END 1               // File descriptor for write end of a pipe
 # define MAX_HISTORY 100
@@ -29,19 +40,19 @@ extern int	g_exit_status;
 
 typedef struct s_env
 {
-	char	*env_name;
-	char	*env_value;
+	char			*env_name;
+	char			*env_value;
 	struct s_env	*next;
 }	t_env;
 
 typedef struct s_arg
 {
-	char	*name;
-	int		arg_len;
-	int		in_quotes;
-	int		quotes_perm;
-	char	quote_type;
-	char	arg_type;
+	char			*name;
+	int				arg_len;
+	int				in_quotes;
+	int				quotes_perm;
+	char			quote_type;
+	char			arg_type;
 	struct s_arg	*next;
 }	t_arg;
 
@@ -54,20 +65,13 @@ typedef struct s_shell
 	t_env	**envs;
 	t_arg	**args;
 	t_arg	**args_pipe;
-	int 	in_fd;
+	int		in_fd;
 	int		out_fd;
 	int		cmds;
 	int		current_cmd;
 	char	**args_str_pipe;
 	char	**args_execve;
 }	t_shell;
-
-typedef struct s_clean_vars {
-    t_shell *shell;
-    t_env **env_vars;
-    char **envs;
-}   t_clean_vars;
-
 
 /*				Environment				*/
 int		ft_envsize(t_env *env);
@@ -127,7 +131,8 @@ int		handle_echo(t_shell *shell);
 int		handle_env(t_shell *shell);
 void	delete_var(t_env **env_vars, const char *var_name);
 void	validate_var_name(const char *var_name);
-void	get_env_name_and_value(char **env_name, char **env_value, char *new_var);
+void	get_env_name_and_value(char **env_name, char **env_value, char *new_v);
+int		check_exit(t_shell *shell);
 
 /*				Free Memory Utils		*/
 int		count_strings(char **str_arr);
@@ -143,7 +148,7 @@ void	back_slash(int sig);
 void	setup_signals(void);
 /*				Execute				*/
 void	file_descriptor_handler(int in, int out);
-void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd, pid_t pid);
+void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd, pid_t id);
 void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index);
 char	*construct_full_path(char *path_dir, char *command);
 void	run_commands(t_shell *shell);

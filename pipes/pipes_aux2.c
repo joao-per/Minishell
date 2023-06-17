@@ -2,32 +2,36 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipes_aux2.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2023/06/02 11:04:26 by joao-per          #+#    #+#             */
 /*   Updated: 2023/06/02 11:04:26 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
 #include "../Libft/libft.h"
+#include "../minishell.h"
 
-void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd, pid_t pid)
+void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd,
+		pid_t pid)
 {
 	int	built_in_command_executed;
 
 	if (shell->current_cmd != 0)
-    {
-        dup2(in_fd, STDIN_FILENO);
-        close(in_fd);
-    }
-    if (shell->current_cmd < shell->cmds - 1)
-    {
-        dup2(pipe_fd[1], STDOUT_FILENO);
-        close(pipe_fd[0]);
-        close(pipe_fd[1]);
-    }
+	{
+		dup2(in_fd, STDIN_FILENO);
+		close(in_fd);
+	}
+	if (shell->current_cmd < shell->cmds - 1)
+	{
+		dup2(pipe_fd[1], STDOUT_FILENO);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+	}
 	if (!pipe_fd)
 		file_descriptor_handler(in_fd, STDOUT_FILENO);
 	handle_redirection(shell);
@@ -40,21 +44,33 @@ void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd, pid_t pid)
 	exit(1);
 }
 
-void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index)
+void	execute_absolute_path(t_shell *shell)
 {
-	int	fd[2];
+	execve(shell->args_str[0], shell->args_execve, shell->envs_str);
+	free_args(shell, shell->len_args);
+	free(shell);
+	perror("minishell");
+	exit(1);
+}
 
-	if (pipe(fd) == -1)
-	{
-		perror("pipe");
-		exit(1);
-	}
-	free(shell->args_str[pipe_index]);
-	shell->args_str[pipe_index] = NULL;
-	run_commands_aux(shell, *in_fd, fd);
-	close(fd[1]);
-	if (*in_fd != 0)
-		close(*in_fd);
-	*in_fd = fd[0];
-	shell->args_str += pipe_index + 1;
+void	execute_relative_path(t_shell *shell)
+{
+	char	*path_var;
+	char	**path_dirs;
+
+	path_var = get_env_value("PATH", shell->envs);
+	path_dirs = ft_split(path_var, ':');
+	free(path_var);
+	try_execve_at_each_path(shell, path_dirs);
+	free_double_array(path_dirs);
+	perror("minishell");
+	exit(1);
+}
+
+void	execute_external_command(t_shell *shell)
+{
+	if (ft_strchr(shell->args_str[0], '/'))
+		execute_absolute_path(shell);
+	else
+		execute_relative_path(shell);
 }

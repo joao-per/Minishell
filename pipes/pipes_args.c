@@ -1,10 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipes_args.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/17 18:44:52 by pedperei          #+#    #+#             */
+/*   Updated: 2023/06/17 18:44:52 by pedperei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Libft/libft.h"
 #include "../minishell.h"
 
+int	count_pipes(t_shell *shell)
+{
+	int		count;
+	int		pos;
+	t_arg	*temp;
+
+	count = 0;
+	pos = 0;
+	temp = *shell->args;
+	while (temp)
+	{
+		if (ft_strcmp(shell->args_str[pos], "|") == 0
+			&& temp->quotes_perm == 0)
+			count++;
+		temp = temp->next;
+		pos++;
+	}
+	return (count + 1);
+}
+
 int	count_commands(t_shell *shell)
 {
-	int count;
-	t_arg *arg;
+	int		count;
+	t_arg	*arg;
 
 	count = 1;
 	arg = *shell->args;
@@ -19,9 +51,9 @@ int	count_commands(t_shell *shell)
 
 int	count_arguments(t_shell *shell)
 {
-	int count_args;
-	int flag_red;
-	t_arg *arg;
+	int		count_args;
+	int		flag_red;
+	t_arg	*arg;
 
 	count_args = 0;
 	flag_red = 0;

@@ -40,20 +40,6 @@ t_arg	**process_input(char **line, t_env **env_vars)
 	return (parse_arguments(line_exp));
 }
 
-int	check_exit(t_shell *shell)
-{
-	t_arg	*temp;
-
-	temp = (*shell->args);
-	if (!(shell->args))
-		return (2);
-	if (temp == NULL)
-		return (2);
-	else if (ft_strcmp(temp->name, "exit") == 0)
-		return (-1);
-	return (1);
-}
-
 int	should_run_aux(t_shell *shell)
 {
 	int	should_run;
@@ -119,6 +105,5 @@ int	main(int ac, char **argv, char **env)
 	setup_signals();
 	init_program(env, &env_vars, &envs);
 	main_loop(env_vars, envs);
-
 	return (0);
 }

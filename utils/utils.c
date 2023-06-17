@@ -26,3 +26,17 @@ void	free_double_array(char **doubles)
 	}
 	free(doubles);
 }
+
+int	check_exit(t_shell *shell)
+{
+	t_arg	*temp;
+
+	temp = (*shell->args);
+	if (!(shell->args))
+		return (2);
+	if (temp == NULL)
+		return (2);
+	else if (ft_strcmp(temp->name, "exit") == 0)
+		return (-1);
+	return (1);
+}
