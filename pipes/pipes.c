@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/15 20:14:12 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/17 18:40:54 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,34 @@ int	count_pipes(t_shell *shell)
 	return (count + 1);
 }
 
-void	execute_command(t_shell *shell)
+void	run_last_command(t_shell *shell, int *in_fd)
 {
-	int		pipe_index;
-	int		in_fd;
-	char	**av;
+	t_arg	*temp;
+
+	temp = get_arg_byindex(shell, shell->index);
+	while (temp != NULL)
+	{
+		run_commands_aux(shell, *in_fd, NULL);
+		while (temp)
+		{
+			if (strcmp(temp->name, "|") == 0 && !temp->quotes_perm)
+			{
+				temp = temp->next;
+				break ;
+			}
+			temp = temp->next;
+		}
+	}
+}
+
+void	pipe_loop(t_shell *shell, int *in_fd, int pipe_index)
+{
 	int		i;
-	int status;
-	
-	av = shell->args_str;
-	in_fd = 0;
+
 	i = 0;
-	pipe_index = find_pipe(shell, i);
-	shell->cmds = count_pipes(shell);
-	shell->current_cmd = 0;
-	shell->args_execve = create_args_execve(shell);
 	while (pipe_index != -1)
 	{
-		handle_pipe(shell, &in_fd, pipe_index);
+		handle_pipe(shell, in_fd, pipe_index);
 		i += pipe_index + 1;
 		shell->index = i;
 		free_args_array(shell->args_execve, count_strings(shell->args_execve));
@@ -57,31 +67,33 @@ void	execute_command(t_shell *shell)
 		pipe_index = find_pipe(shell, i);
 		shell->current_cmd++;
 	}
-	i = -1;
-	t_arg *temp;
-	temp = get_arg_byindex(shell, shell->index);
-	while(temp != NULL)
-	{
-		run_commands_aux(shell, in_fd, NULL);
-		while(temp)
-		{
-			if(strcmp(temp->name, "|") == 0 && !temp->quotes_perm)
-			{
-				temp = temp->next;
-				break;
-			}
-			temp = temp->next;
-		}
-	}
-	//free_args_array(shell->args_execve, count_strings(shell->args_execve));
+}
+
+void	execute_command(t_shell *shell)
+{
+	int		pipe_index;
+	int		*in_fd;
+	char	**av;
+	int		i;
+	int		status;
+
+	av = shell->args_str;
+	in_fd = ft_calloc(1, sizeof(int));
+	i = 0;
+	pipe_index = find_pipe(shell, i);
+	shell->cmds = count_pipes(shell);
+	shell->current_cmd = 0;
+	shell->args_execve = create_args_execve(shell);
+	pipe_loop(shell, in_fd, pipe_index);
+	run_last_command(shell, in_fd);
 	while (shell->cmds > 0)
 	{
 		wait(&status);
 		g_exit_status = WEXITSTATUS(status);
 		shell->cmds--;
 	}
-	if (in_fd != 0)
-		close(in_fd);
+	if (*in_fd != 0)
+		close(*in_fd);
 	shell->args_str = av;
 }
 

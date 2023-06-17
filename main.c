@@ -28,7 +28,7 @@ t_arg	**process_input(char **line, t_env **env_vars)
 {
 	char	*line_exp;
 
-	*line = readline("\033[0;93m Minishell>$ \033[0;39m");
+	*line = readline("\033[0;93mMinishell>$ \033[0;39m");
 	if (*line == NULL)
 	{
 		printf("exit\n");
