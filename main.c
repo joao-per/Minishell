@@ -24,7 +24,7 @@ void	init_program(char **env, t_env ***env_vars, char ***envs)
 	*envs = create_env_arr(*env_vars);
 }
 
-t_arg	**process_input(char **line, t_env **env_vars)
+t_arg	**process_input(char **line, t_env **env_vars, char **envs)
 {
 	char	*line_exp;
 
@@ -32,6 +32,10 @@ t_arg	**process_input(char **line, t_env **env_vars)
 	if (*line == NULL)
 	{
 		printf("exit\n");
+		if (env_vars)
+			free_env_struct(env_vars);
+		if (envs)
+			free_env_array(envs);
 		return (NULL);
 	}
 	line_exp = treat_expansion(*line, env_vars);
@@ -76,7 +80,7 @@ void	main_loop(t_env **env_vars, char **envs)
 	should_run = 1;
 	while (should_run)
 	{
-		args = process_input(&line, env_vars);
+		args = process_input(&line, env_vars, envs);
 		if (!args)
 		{
 			if (!line)

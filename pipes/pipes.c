@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/17 18:55:51 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/17 19:19:27 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	execute_command(t_shell *shell)
 	if (*in_fd != 0)
 		close(*in_fd);
 	shell->args_str = av;
+	free(in_fd);
 }
 
 char	*construct_full_path(char *path_dir, char *command)

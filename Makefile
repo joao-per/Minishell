@@ -17,4 +17,10 @@ fclean:
 		rm -f $(NAME)
 		$(MAKE) -C Libft fclean
 
+valgrind: 	all
+			valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME)
+			
+valgrind_supp: all
+				valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=readline.supp ./$(NAME)
+
 re: fclean all
