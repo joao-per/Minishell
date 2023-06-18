@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 15:11:40 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/03 15:56:51 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/18 14:10:39 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	check_new_var_format(char *new_var)
 	if ((!ft_isalpha(new_var[0]) && !(new_var[0] == '_')))
 	{
 		printf("export: `%s': not a valid identifier \n", new_var);
+		g_check_exit[0] = 1;
 		return (0);
 	}
 	return (1);
@@ -56,13 +57,16 @@ void	update_or_create_variable(t_env **env_vars, char *new_var,
 		create_new_var(new_var, eq_pos, env_vars);
 }
 
-void	export_variable(t_env **env_vars, char *new_var)
+int	export_variable(t_env **env_vars, char *new_var)
 {
 	char	*env_name;
 	char	*env_value;
+	int		flag;
 
-	if (!check_new_var_format(new_var))
-		return ;
+	flag = check_new_var_format(new_var);
+	if (!flag)
+		return (1);
 	get_env_name_and_value(&env_name, &env_value, new_var);
 	update_or_create_variable(env_vars, new_var, env_name);
+	return (0);
 }

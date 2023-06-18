@@ -41,5 +41,7 @@ int	check_exit(t_shell *shell)
 		printf("exit\n");
 		return (-1);
 	}
+	else if (ft_strcmp(temp->name, "exit") == 0 && count_pipes(shell) > 1)
+		g_check_exit[0] = 0;
 	return (1);
 }

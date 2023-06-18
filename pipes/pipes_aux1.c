@@ -37,7 +37,7 @@ void	run_commands_aux(t_shell *shell, int in_fd, int *fd)
 			close(fd[1]);
 			in_fd = fd[0];
 		}
-		check_commands2(shell, pid);
+		check_commands(shell, pid);
 	}
 }
 

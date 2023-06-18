@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/17 23:04:01 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/18 14:41:59 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,11 @@ void	execute_command(t_shell *shell)
 	int		pipe_index;
 	int		*in_fd;
 	char	**av;
-	int		i;
 	int		status;
 
 	av = shell->args_str;
 	in_fd = ft_calloc(1, sizeof(int));
-	i = 0;
-	pipe_index = find_pipe(shell, i);
+	pipe_index = find_pipe(shell, 0);
 	shell->cmds = count_pipes(shell);
 	shell->current_cmd = 0;
 	shell->args_execve = create_args_execve(shell);
@@ -70,7 +68,8 @@ void	execute_command(t_shell *shell)
 	while (shell->cmds > 0)
 	{
 		wait(&status);
-		g_check_exit[0] = WEXITSTATUS(status);
+		if (!is_builtin_command(shell))
+			g_check_exit[0] = WEXITSTATUS(status);
 		shell->cmds--;
 	}
 	if (*in_fd != 0)

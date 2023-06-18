@@ -170,7 +170,7 @@ void	handle_input_redirection(char **av, int *j);
 /*				Built in Commands				*/
 int		check_commands(t_shell *shell, pid_t pid);
 int		check_commands2(t_shell *shell, pid_t pid);
-void	export_variable(t_env **env_vars, char *new_var);
+int		export_variable(t_env **env_vars, char *new_var);
 void	unset_variable(t_env **env_vars, const char *var_name);
 void	echo_command(char **av);
 

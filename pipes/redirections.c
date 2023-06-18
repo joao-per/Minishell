@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 11:11:12 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/17 22:19:47 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/18 14:45:29 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ void handle_heredoc_redirection(char **av, int *j)
     dup2(input_fd, STDIN_FILENO);
     close(input_fd);
     unlink("/tmp/minishell_heredoc");
-	close(original_stdin_fd);
     dup2(original_stdin_fd, STDIN_FILENO);
     close(original_stdin_fd);
 }
