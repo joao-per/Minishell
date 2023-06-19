@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/18 14:41:59 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/19 15:37:04 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	run_last_command(t_shell *shell, int *in_fd)
 		run_commands_aux(shell, *in_fd, NULL);
 		while (temp)
 		{
-			if (strcmp(temp->name, "|") == 0 && !temp->quotes_perm)
+			if (ft_strcmp(temp->name, "|") == 0 && !temp->quotes_perm)
 			{
 				temp = temp->next;
 				break ;

@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 13:08:10 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/18 13:22:11 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/19 15:14:59 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,7 @@ int	print_error_messages(char type_error, char *error)
 		printf("bash: syntax error near unexpected token \'%s\'\n", error);
 		g_check_exit[0] = 2;
 	}
+	if (type_error == 'F')
+		printf("%s: command not found\n", error);
 	return (0);
 }

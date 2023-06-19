@@ -49,8 +49,8 @@ void	execute_absolute_path(t_shell *shell)
 	execve(shell->args_str[0], shell->args_execve, shell->envs_str);
 	free_args(shell, shell->len_args);
 	free(shell);
-	perror("minishell");
-	exit(1);
+	print_error_messages('F', shell->args_execve[0]);
+	exit(127);
 }
 
 void	execute_relative_path(t_shell *shell)
@@ -63,8 +63,8 @@ void	execute_relative_path(t_shell *shell)
 	free(path_var);
 	try_execve_at_each_path(shell, path_dirs);
 	free_double_array(path_dirs);
-	perror("minishell");
-	exit(1);
+	print_error_messages('F', shell->args_execve[0]);
+	exit(127);
 }
 
 void	execute_external_command(t_shell *shell)

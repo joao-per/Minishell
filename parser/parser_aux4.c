@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 16:25:26 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/19 14:59:36 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int	is_special_char(char c)
 {
 	if (c == '`' || c == '(' || c == ')' || c == '{' || c == '}')
 		return (1);
-	if (c == '&' || c == ';' || c == '*')
+	if (c == '&' || c == ';' || c == '*' || c == '[' || c == ']')
 		return (1);
-	if (c == '#' || c == '\\')
+	if (c == '#' || c == '\\' || c == '^')
 		return (1);
 	return (0);
 }
@@ -45,6 +45,8 @@ int	is_pipe_reds_valid(t_arg **args)
 	t_arg	*temp;
 
 	temp = *args;
+	if (is_pipe(temp->name))
+		return (print_error_messages('P', temp->name));
 	while (temp)
 	{
 		if ((is_reds(temp->name) || is_pipe(temp->name))
