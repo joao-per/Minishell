@@ -6,7 +6,7 @@
 /*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 22:13:20 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/19 22:13:21 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/19 22:19:20 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void	restore_stdin(void)
 
 	terminal_fd = open("/dev/tty", O_RDWR);
 	if (terminal_fd < 0)
-	{
 		perror("open failed");
-	}
 	dup2(terminal_fd, STDIN_FILENO);
 	close(terminal_fd);
 }

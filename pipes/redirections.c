@@ -6,7 +6,7 @@
 /*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 11:11:12 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/19 22:12:34 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/19 22:19:30 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ void	handle_heredoc_redirection(char **av, int *j)
 		}
 	}
 }
-
-
 
 void	handle_output_redirection(char **av, int *j)
 {
