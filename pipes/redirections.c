@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 11:11:12 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/19 16:18:41 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/19 18:17:36 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	handle_input_redirection(char **av, int *j)
 	close(input_fd);
 } */
 
-void handle_heredoc_redirection(char **av, int *j)
+/* void handle_heredoc_redirection(char **av, int *j)
 {
     char *delimiter;
     char *line = NULL;
@@ -86,7 +86,102 @@ void handle_heredoc_redirection(char **av, int *j)
     dup2(original_stdin_fd, STDIN_FILENO);
     close(original_stdin_fd);
 }
+ */
 
+int	write_line(char *delimiter, int temp_fd)
+{
+	char	*line;
+
+	line = readline("heredoc> ");
+	if (line == NULL)
+	{
+		return (-1);
+	}
+	if (ft_strcmp(line, delimiter) == 0)
+	{
+		free(line);
+		return (1);
+	}
+	else
+	{
+		write(temp_fd, line, ft_strlen(line));
+		write(temp_fd, "\n", 1);
+	}
+	free(line);
+	return (0);
+}
+
+void	restore_stdin(void)
+{
+	int	terminal_fd;
+
+	terminal_fd = open("/dev/tty", O_RDWR);
+	if (terminal_fd < 0)
+	{
+		perror("open failed");
+	}
+	dup2(terminal_fd, STDIN_FILENO);
+	close(terminal_fd);
+}
+
+void	handle_heredoc_redirection(char **av, int *j)
+{
+	char	*temp_file;
+	int		temp_fd;
+	pid_t	pid;
+	char	*delimiter;
+
+    delimiter = av[*j + 1];
+	if (delimiter != NULL)
+	{
+		g_check_exit[0] = 1;
+		restore_stdin();
+		temp_file = "./minishell_heredoc";
+		pid = fork();
+		if (pid < 0)
+		{
+			perror("fork failed");
+			return ;
+		}
+		if (pid == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
+			temp_fd = open(temp_file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+			if (temp_fd < 0)
+			{
+				perror("open failed");
+				return ;
+			}
+			int status;
+			while (1)
+			{
+				status = write_line(delimiter, temp_fd);
+				if (status == -1 || status == 1)
+					break ;
+			}
+			close(temp_fd);
+			g_check_exit[1] = 0;
+			exit(0);
+		}
+		else
+		{
+			waitpid(pid, NULL, 0);
+		}
+		int		input_fd;
+
+		input_fd = open(temp_file, O_RDONLY);
+		if (input_fd < 0)
+		{
+			perror("open");
+			exit(1);
+		}
+		dup2(input_fd, STDIN_FILENO);
+		close(input_fd);
+		unlink(temp_file);
+		g_check_exit[1] = 0;
+	}
+}
 void	handle_output_redirection(char **av, int *j)
 {
 	char	*output_file;

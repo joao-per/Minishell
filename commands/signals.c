@@ -41,10 +41,8 @@ void	restore_prompt(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	if (g_check_exit[1] == 0)
-	{
 		rl_redisplay();
-		g_check_exit[0] = 130;
-	}
+	g_check_exit[0] = 130;
 }
 
 void	setup_signals(void)
