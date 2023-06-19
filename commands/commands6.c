@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:56:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/18 14:19:55 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/19 17:15:53 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	is_builtin_command(t_shell *shell)
 {
+	if (!shell->args_execve[0])
+		return (0);
 	if (ft_strcmp(shell->args_execve[0], "pwd") == 0)
 		return (1);
 	if (ft_strcmp(shell->args_execve[0], "echo") == 0)
@@ -53,6 +55,8 @@ int	check_commands2(t_shell *shell, pid_t pid)
 
 int	check_commands(t_shell *shell, pid_t pid)
 {
+	if (!shell->args_execve[0])
+		return (1);
 	if (pid != 0)
 	{
 		if (!handle_export(shell))

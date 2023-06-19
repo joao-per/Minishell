@@ -37,7 +37,7 @@ void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd,
 	handle_redirection(shell);
 	built_in_command_executed = is_builtin_command(shell);
 	check_commands(shell, pid);
-	if (built_in_command_executed)
+	if (built_in_command_executed || !shell->args_execve[0])
 		exit(0);
 	execute_external_command(shell);
 	perror("execve");

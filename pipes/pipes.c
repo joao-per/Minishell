@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/19 15:37:04 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/19 16:54:08 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	execute_command(t_shell *shell)
 	while (shell->cmds > 0)
 	{
 		wait(&status);
-		if (!is_builtin_command(shell))
+		if (!is_builtin_command(shell) && g_check_exit[1] != 1)
 			g_check_exit[0] = WEXITSTATUS(status);
 		shell->cmds--;
 	}
