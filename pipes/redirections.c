@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 11:11:12 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/19 22:19:30 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/20 10:52:35 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,7 @@ void	handle_heredoc_redirection(char **av, int *j)
 		temp_file = "./minishell_heredoc";
 		pid = create_new_process();
 		if (pid == 0)
-		{
 			setup_child(delimiter, temp_file);
-		}
 		else
 		{
 			wait_for_child(pid);

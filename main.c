@@ -16,7 +16,7 @@
 #include "Libft/libft.h"
 #include "minishell.h"
 
-int	g_check_exit[2];
+int	*g_check_exit;
 
 void	init_program(char **env, t_env ***env_vars, char ***envs)
 {
@@ -107,6 +107,9 @@ int	main(int ac, char **argv, char **env)
 	(void)ac;
 	(void)argv;
 	(void)env;
+	g_check_exit = ft_calloc(2, sizeof(int));
+	if (!g_check_exit)
+		return (0);
 	setup_signals();
 	init_program(env, &env_vars, &envs);
 	main_loop(env_vars, envs);

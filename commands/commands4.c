@@ -39,7 +39,7 @@ void	delete_var(t_env **env_vars, const char *var_name)
 		prev = curr;
 		curr = curr->next;
 	}
-	printf("minishell: unset: Variable not found: %s\n", var_name);
+	//printf("unset: Variable not found: %s\n", var_name);
 }
 
 void	validate_var_name(const char *var_name)

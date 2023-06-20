@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redirections2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 22:13:13 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/19 22:19:10 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/20 10:52:44 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "../minishell.h"
 
 void	process_in_child(char *delimiter, int temp_fd)
 {

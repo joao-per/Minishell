@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redirections3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 22:13:20 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/19 22:19:20 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/20 10:52:29 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "../minishell.h"
 
 void	restore_stdin(void)
 {
@@ -28,10 +28,8 @@ int	write_line(char *delimiter, int temp_fd)
 	char	*line;
 
 	line = readline("> ");
-	if (line == NULL)
-	{
+	if (!line)
 		return (-1);
-	}
 	if (ft_strcmp(line, delimiter) == 0)
 	{
 		free(line);

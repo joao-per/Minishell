@@ -36,7 +36,7 @@
 # define MAX_HISTORY 100
 // Maximum number of commands to be stored in history
 
-extern int	g_check_exit[2];
+extern int	*g_check_exit;
 
 typedef struct s_env
 {
@@ -183,5 +183,15 @@ void	create_args_pipe(t_shell *shell);
 int		find_pipe(t_shell *shell, int pipe_index);
 int		find_pipe_arg(t_shell *shell, int pipe_index);
 int		count_pipes(t_shell *shell);
+
+/*				Heredoc aux				*/
+void	restore_stdin(void);
+int		write_line(char *delimiter, int temp_fd);
+void	open_temp_file(char *temp_file, int *temp_fd);
+void	process_in_child(char *delimiter, int temp_fd);
+void	process_in_parent(char *temp_file);
+void	wait_for_child(pid_t pid);
+pid_t	create_new_process(void);
+void	setup_child(char *delimiter, char *temp_file);
 
 #endif
