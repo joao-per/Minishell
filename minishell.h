@@ -146,7 +146,6 @@ void	free_env(t_shell *shell);
 /*				Signals					*/
 void	restore_prompt(int sig);
 void	back_slash(int sig);
-void	setup_signals(void);
 /*				Execute				*/
 void	file_descriptor_handler(int in, int out);
 void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd, pid_t id);

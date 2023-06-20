@@ -29,7 +29,10 @@ t_arg	**process_input(char **line, t_env **env_vars, char **envs)
 	char	*line_exp;
 
 	g_check_exit[1] = 0;
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, restore_prompt);
 	*line = readline("\033[0;93mMinishell>$ \033[0;39m");
+	signal(SIGQUIT, restore_prompt);
 	if (*line == NULL)
 	{
 		printf("exit\n");
@@ -110,7 +113,6 @@ int	main(int ac, char **argv, char **env)
 	g_check_exit = ft_calloc(2, sizeof(int));
 	if (!g_check_exit)
 		return (0);
-	setup_signals();
 	init_program(env, &env_vars, &envs);
 	main_loop(env_vars, envs);
 	return (0);
