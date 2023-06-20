@@ -115,5 +115,6 @@ int	main(int ac, char **argv, char **env)
 		return (0);
 	init_program(env, &env_vars, &envs);
 	main_loop(env_vars, envs);
+	free(g_check_exit);
 	return (0);
 }

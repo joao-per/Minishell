@@ -82,7 +82,7 @@ void	try_execve_at_each_path(t_shell *shell, char **path_dirs)
 	char	*full_path;
 
 	i = 0;
-	while (path_dirs[i])
+	while (path_dirs && path_dirs[i])
 	{
 		full_path = construct_full_path(path_dirs[i], shell->args_execve[0]);
 		if (access(full_path, X_OK) == 0)

@@ -70,7 +70,10 @@ void	execute_relative_path(t_shell *shell)
 	char	**path_dirs;
 
 	path_var = get_env_value("PATH", shell->envs);
-	path_dirs = ft_split(path_var, ':');
+	if (!path_var)
+		path_dirs = 0;
+	else
+		path_dirs = ft_split(path_var, ':');
 	free(path_var);
 	try_execve_at_each_path(shell, path_dirs);
 	free_double_array(path_dirs);
@@ -80,7 +83,7 @@ void	execute_relative_path(t_shell *shell)
 
 void	execute_external_command(t_shell *shell)
 {
-	if (ft_strchr(shell->args_str[0], '/'))
+	if (ft_strncmp(shell->args_str[0], "/", 1) == 0)
 		execute_absolute_path(shell);
 	else
 		execute_relative_path(shell);
