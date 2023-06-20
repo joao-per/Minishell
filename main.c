@@ -31,7 +31,7 @@ t_arg	**process_input(char **line, t_env **env_vars, char **envs)
 	g_check_exit[1] = 0;
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, restore_prompt);
-	*line = readline("\033[0;93mMinishell>$ \033[0;39m");
+	*line = readline("Minishell>$ ");
 	signal(SIGQUIT, restore_prompt);
 	if (*line == NULL)
 	{

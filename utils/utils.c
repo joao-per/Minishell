@@ -29,7 +29,8 @@ void	free_double_array(char **doubles)
 
 int	check_exit(t_shell *shell)
 {
-	t_arg	*temp;
+	t_arg			*temp;
+	unsigned char	c;
 
 	temp = (*shell->args);
 	if (!(shell->args))
@@ -38,6 +39,12 @@ int	check_exit(t_shell *shell)
 		return (2);
 	else if (ft_strcmp(temp->name, "exit") == 0 && count_pipes(shell) == 1)
 	{
+		if (temp->next)
+		{
+			c = ft_atoi(temp->next->name);
+			g_check_exit[0] = (int)c;
+			exit((int)c);
+		}
 		printf("exit\n");
 		return (-1);
 	}
