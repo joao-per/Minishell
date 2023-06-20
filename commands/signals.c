@@ -15,7 +15,6 @@
 
 #include "../minishell.h"
 
-
 /* void	cleanup(t_clean_vars *cleaning)
 {
 	if(cleaning->shell)
@@ -46,7 +45,13 @@ void	restore_prompt(int sig)
 		if (g_check_exit[1] == 0)
 			rl_redisplay();
 		if (sig == SIGQUIT)
+		{
 			printf("Quit (core dumped)\n");
+			g_check_exit[0] = 131;
+		}
+		else
+			g_check_exit[0] = 130;
+		g_check_exit[1] = 0;
 	}
 	else
 		signal(SIGQUIT, SIG_IGN);

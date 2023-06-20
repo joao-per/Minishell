@@ -159,6 +159,7 @@ void	execute_absolute_path(t_shell *shell);
 void	execute_relative_path(t_shell *shell);
 void	execute_external_command(t_shell *shell);
 int		is_builtin_command(t_shell *shell);
+int		is_builtin_command2(t_shell *shell);
 char	**create_args_execve(t_shell *shell);
 /*				Redirections			*/
 void	handle_redirection(t_shell *shell);

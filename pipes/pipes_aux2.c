@@ -53,6 +53,17 @@ void	execute_absolute_path(t_shell *shell)
 	exit(127);
 }
 
+char	*construct_full_path(char *path_dir, char *command)
+{
+	char	*temp;
+	char	*full_path;
+
+	temp = ft_strjoin(path_dir, "/");
+	full_path = ft_strjoin(temp, command);
+	free(temp);
+	return (full_path);
+}
+
 void	execute_relative_path(t_shell *shell)
 {
 	char	*path_var;

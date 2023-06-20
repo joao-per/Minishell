@@ -6,7 +6,7 @@
 /*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 11:03:57 by joao-per          #+#    #+#             */
-/*   Updated: 2023/06/20 11:14:53 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/20 16:55:00 by pedperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,22 @@ void	pipe_loop(t_shell *shell, int *in_fd, int pipe_index)
 	}
 }
 
+void	treat_exit_status(t_shell *shell)
+{
+	int	status;
+
+	wait(&status);
+	if (!is_builtin_command(shell) && g_check_exit[1] == 1)
+		g_check_exit[0] = WEXITSTATUS(status);
+	else if (is_builtin_command2(shell))
+		g_check_exit[0] = 0;
+}
+
 void	execute_command(t_shell *shell)
 {
 	int		pipe_index;
 	int		*in_fd;
 	char	**av;
-	int		status;
 
 	av = shell->args_str;
 	in_fd = ft_calloc(1, sizeof(int));
@@ -67,26 +77,13 @@ void	execute_command(t_shell *shell)
 	run_last_command(shell, in_fd);
 	while (shell->cmds > 0)
 	{
-		wait(&status);
-		if (!is_builtin_command(shell) && g_check_exit[1] != 0)
-			g_check_exit[0] = WEXITSTATUS(status);
+		treat_exit_status(shell);
 		shell->cmds--;
 	}
 	if (*in_fd != 0)
 		close(*in_fd);
 	shell->args_str = av;
 	free(in_fd);
-}
-
-char	*construct_full_path(char *path_dir, char *command)
-{
-	char	*temp;
-	char	*full_path;
-
-	temp = ft_strjoin(path_dir, "/");
-	full_path = ft_strjoin(temp, command);
-	free(temp);
-	return (full_path);
 }
 
 void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index)
