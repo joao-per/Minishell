@@ -176,7 +176,6 @@ void	echo_command(char **av);
 
 void	free_double_array(char **doubles);
 t_arg	*get_arg_byindex(t_shell *shell, int index);
-char	*get_next_line(int fd);
 void	create_args_pipe(t_shell *shell);
 
 /*				Pipes				*/
