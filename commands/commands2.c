@@ -24,6 +24,7 @@ void	cd_command(char **av, t_env **env_vars)
 	{
 		if (chdir(av[1]) != 0)
 		{
+			g_check_exit[0] = 1;
 			perror("minishell");
 			return ;
 		}
@@ -37,13 +38,14 @@ void	cd_command(char **av, t_env **env_vars)
 	free(temp->env_value);
 	temp->env_value = ft_strdup(oldwd);
 	free(oldwd);
+	g_check_exit[0] = 0;
 }
 
 int	handle_cd(t_shell *shell)
 {
-	if (ft_strcmp(shell->args_str[0], "cd") == 0)
+	if (ft_strcmp(shell->args_execve[0], "cd") == 0)
 	{
-		cd_command(shell->args_str, shell->envs);
+		cd_command(shell->args_execve, shell->envs);
 		return (0);
 	}
 	return (1);
@@ -53,14 +55,15 @@ int	handle_unset(t_shell *shell)
 {
 	int		i;
 
-	if (ft_strcmp(shell->args_str[0], "unset") == 0)
+	if (ft_strcmp(shell->args_execve[0], "unset") == 0)
 	{
 		i = 1;
-		while (shell->args_str[i])
+		while (shell->args_execve[i])
 		{
-			unset_variable(shell->envs, shell->args_str[i]);
+			unset_variable(shell->envs, shell->args_execve[i]);
 			i++;
 		}
+		g_check_exit[0] = 0;
 		return (0);
 	}
 	return (1);

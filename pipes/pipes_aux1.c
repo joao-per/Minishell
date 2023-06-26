@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipes_aux1.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2023/06/02 11:04:03 by joao-per          #+#    #+#             */
 /*   Updated: 2023/06/02 11:04:03 by joao-per         ###   ########.fr       */
 /*                                                                            */
@@ -12,11 +15,11 @@
 
 #include "../minishell.h"
 
-void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
+void	run_commands_aux(t_shell *shell, int in_fd, int *fd)
 {
 	pid_t	pid;
-	int		status;
 
+	g_check_exit[1] = 1;
 	pid = fork();
 	if (pid < 0)
 	{
@@ -24,12 +27,16 @@ void	run_commands_aux(t_shell *shell, int in_fd, int out_fd)
 		exit(1);
 	}
 	else if (pid == 0)
-		handle_child_process(shell, in_fd, out_fd, pid);
+		handle_child_process(shell, in_fd, fd, pid);
 	else
 	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			g_exit_status = WEXITSTATUS(status);
+		if (shell->current_cmd > 0)
+			close(in_fd);
+		if (shell->current_cmd < shell->cmds - 1)
+		{
+			close(fd[1]);
+			in_fd = fd[0];
+		}
 		check_commands2(shell, pid);
 	}
 }
@@ -43,7 +50,8 @@ int	find_pipe(t_shell *shell, int pipe_index)
 	temp = get_arg_byindex(shell, pipe_index);
 	while (temp)
 	{
-		if (ft_strcmp(shell->args_str[pos], "|") == 0 && temp->quotes_perm == 0)
+		if (ft_strcmp(shell->args_str[pos], "|") == 0
+			&& temp->quotes_perm == 0)
 			return (pos);
 		pos++;
 		temp = temp->next;
@@ -51,15 +59,21 @@ int	find_pipe(t_shell *shell, int pipe_index)
 	return (-1);
 }
 
-char	*construct_full_path(char *path_dir, char *command)
+int	find_pipe_arg(t_shell *shell, int pipe_index)
 {
-	char	*temp;
-	char	*full_path;
+	int		pos;
+	t_arg	*temp;
 
-	temp = ft_strjoin(path_dir, "/");
-	full_path = ft_strjoin(temp, command);
-	free(temp);
-	return (full_path);
+	pos = 0;
+	temp = get_arg_byindex(shell, pipe_index);
+	while (temp)
+	{
+		if (ft_strcmp(temp->name, "|") == 0 && temp->quotes_perm == 0)
+			return (pos);
+		pos++;
+		temp = temp->next;
+	}
+	return (-1);
 }
 
 void	try_execve_at_each_path(t_shell *shell, char **path_dirs)
@@ -68,12 +82,12 @@ void	try_execve_at_each_path(t_shell *shell, char **path_dirs)
 	char	*full_path;
 
 	i = 0;
-	while (path_dirs[i])
+	while (path_dirs && path_dirs[i])
 	{
-		full_path = construct_full_path(path_dirs[i], shell->args_str[0]);
+		full_path = construct_full_path(path_dirs[i], shell->args_execve[0]);
 		if (access(full_path, X_OK) == 0)
 		{
-			execve(full_path, shell->args_str, shell->envs_str);
+			execve(full_path, shell->args_execve, shell->envs_str);
 			free(full_path);
 			break ;
 		}

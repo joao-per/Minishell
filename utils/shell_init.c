@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:12:13 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/05 20:22:10 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/26 10:31:05 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,8 @@ t_shell	*shell_init(t_env **env_vars, t_arg **args, char **envs, char **av)
 	shell->args = args;
 	shell->envs_str = envs;
 	shell->args_str = av;
-	shell->args_pipe = 0;
-	shell->args_str_pipe = 0;
 	shell->len_args = count_strings(av);
+	shell->index = 0;
 	return (shell);
 }
 

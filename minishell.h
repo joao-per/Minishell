@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/17 19:03:12 by pedperei          #+#    #+#             */
+/*   Updated: 2023/06/17 19:03:12 by pedperei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -19,29 +31,29 @@
 # include <signal.h>
 
 # define MAX_LINE 80               // Maximum length of user input
-# define MAX_ARGS MAX_LINE / 2 + 1 // Maximum number of arguments for a command
 # define READ_END 0                // File descriptor for read end of a pipe
 # define WRITE_END 1               // File descriptor for write end of a pipe
 # define MAX_HISTORY 100
 // Maximum number of commands to be stored in history
 
-extern int	g_exit_status;
+extern int	*g_check_exit;
 
 typedef struct s_env
 {
-	char	*env_name;
-	char	*env_value;
+	char			*env_name;
+	char			*env_value;
+	int				rank;
 	struct s_env	*next;
 }	t_env;
 
 typedef struct s_arg
 {
-	char	*name;
-	int		arg_len;
-	int		in_quotes;
-	int		quotes_perm;
-	char	quote_type;
-	char	arg_type;
+	char			*name;
+	int				arg_len;
+	int				in_quotes;
+	int				quotes_perm;
+	char			quote_type;
+	char			arg_type;
 	struct s_arg	*next;
 }	t_arg;
 
@@ -50,10 +62,16 @@ typedef struct s_shell
 	char	**args_str;
 	char	**envs_str;
 	int		len_args;
+	int		index;
 	t_env	**envs;
 	t_arg	**args;
 	t_arg	**args_pipe;
+	int		in_fd;
+	int		out_fd;
+	int		cmds;
+	int		current_cmd;
 	char	**args_str_pipe;
+	char	**args_execve;
 }	t_shell;
 
 /*				Environment				*/
@@ -98,12 +116,12 @@ int		parsing_tree(t_arg **args, int *i, char *str);
 void	parse_aux(t_arg **args, t_arg *arg, char *str, int *i);
 int		print_error_messages(char type_error, char *error);
 t_arg	**parse_arguments(char *string);
+int		is_reds(char *input);
 /*				Shell Init				*/
 t_shell	*shell_init(t_env **env_vars, t_arg **args, char **envs, char **av);
 t_shell	*init_shell(t_env **env_vars, t_arg **args, char **envs);
 char	**create_args_arr(t_arg **args);
 char	**create_env_arr(t_env **envs);
-void	main_loop(t_env **env_vars, char **envs);
 /*				Commands				*/
 void	cd_command(char **av, t_env **env_vars);
 int		handle_cd(t_shell *shell);
@@ -114,7 +132,8 @@ int		handle_echo(t_shell *shell);
 int		handle_env(t_shell *shell);
 void	delete_var(t_env **env_vars, const char *var_name);
 void	validate_var_name(const char *var_name);
-void	get_env_name_and_value(char **env_name, char **env_value, char *new_var);
+void	get_env_name_and_value(char **env_name, char **env_value, char *new_v);
+int		check_exit(t_shell *shell);
 
 /*				Free Memory Utils		*/
 int		count_strings(char **str_arr);
@@ -127,20 +146,21 @@ void	free_env(t_shell *shell);
 /*				Signals					*/
 void	restore_prompt(int sig);
 void	back_slash(int sig);
-void	setup_signals(void);
 /*				Execute				*/
 void	file_descriptor_handler(int in, int out);
-void	handle_child_process(t_shell *shell, int in_fd, int out_fd, pid_t pid);
+void	handle_child_process(t_shell *shell, int in_fd, int *pipe_fd, pid_t id);
 void	handle_pipe(t_shell *shell, int *in_fd, int pipe_index);
 char	*construct_full_path(char *path_dir, char *command);
 void	run_commands(t_shell *shell);
 void	try_execve_at_each_path(t_shell *shell, char **path_dirs);
-void	run_commands_aux(t_shell *shell, int in_fd, int out_fd);
+void	run_commands_aux(t_shell *shell, int in_fd, int *pipe_fd);
 void	execute_command(t_shell *shell);
 void	execute_absolute_path(t_shell *shell);
 void	execute_relative_path(t_shell *shell);
 void	execute_external_command(t_shell *shell);
 int		is_builtin_command(t_shell *shell);
+int		is_builtin_command2(t_shell *shell);
+char	**create_args_execve(t_shell *shell);
 /*				Redirections			*/
 void	handle_redirection(t_shell *shell);
 void	handle_append_redirection(char **av, int *j);
@@ -150,16 +170,28 @@ void	handle_input_redirection(char **av, int *j);
 /*				Built in Commands				*/
 int		check_commands(t_shell *shell, pid_t pid);
 int		check_commands2(t_shell *shell, pid_t pid);
-void	export_variable(t_env **env_vars, char *new_var);
+int		export_variable(t_env **env_vars, char *new_var);
 void	unset_variable(t_env **env_vars, const char *var_name);
 void	echo_command(char **av);
 
 void	free_double_array(char **doubles);
 t_arg	*get_arg_byindex(t_shell *shell, int index);
 char	*get_next_line(int fd);
+void	create_args_pipe(t_shell *shell);
 
 /*				Pipes				*/
 int		find_pipe(t_shell *shell, int pipe_index);
-void	create_args_pipe(t_shell *shell);
+int		find_pipe_arg(t_shell *shell, int pipe_index);
+int		count_pipes(t_shell *shell);
+
+/*				Heredoc aux				*/
+void	restore_stdin(void);
+int		write_line(char *delimiter, int temp_fd);
+void	open_temp_file(char *temp_file, int *temp_fd);
+void	process_in_child(char *delimiter, int temp_fd);
+void	process_in_parent(char *temp_file);
+void	wait_for_child(pid_t pid);
+pid_t	create_new_process(void);
+void	setup_child(char *delimiter, char *temp_file);
 
 #endif

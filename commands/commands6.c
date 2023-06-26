@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands6.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao-per <joao-per@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:56:23 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 19:50:51 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/26 10:28:31 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,42 @@
 
 int	is_builtin_command(t_shell *shell)
 {
-	if (ft_strcmp(shell->args_str[0], "pwd") == 0)
+	if (!shell->args_execve[0])
+		return (0);
+	if (ft_strcmp(shell->args_execve[0], "pwd") == 0)
 		return (1);
-	if (ft_strcmp(shell->args_str[0], "echo") == 0)
+	if (ft_strcmp(shell->args_execve[0], "echo") == 0)
 		return (1);
-	if (ft_strcmp(shell->args_str[0], "cd") == 0)
+	if (ft_strcmp(shell->args_execve[0], "cd") == 0)
 		return (1);
-	if (ft_strcmp(shell->args_str[0], "export") == 0)
+	if (ft_strcmp(shell->args_execve[0], "export") == 0)
 		return (1);
-	if (ft_strcmp(shell->args_str[0], "unset") == 0)
+	if (ft_strcmp(shell->args_execve[0], "unset") == 0)
 		return (1);
-	if (ft_strcmp(shell->args_str[0], "env") == 0)
+	if (ft_strcmp(shell->args_execve[0], "env") == 0)
+		return (1);
+	if (ft_strcmp(shell->args_execve[0], "exit") == 0)
+		return (1);
+	return (0);
+}
+
+int	is_builtin_command2(t_shell *shell)
+{
+	if (!shell->args_execve[0])
+		return (0);
+	if (ft_strcmp(shell->args_execve[0], "pwd") == 0)
+		return (1);
+	if (ft_strcmp(shell->args_execve[0], "echo") == 0)
+		return (1);
+	if (ft_strcmp(shell->args_execve[0], "exit") == 0)
 		return (1);
 	return (0);
 }
 
 int	check_commands2(t_shell *shell, pid_t pid)
 {
+	if (!shell->args_execve[0])
+		return (0);
 	if (pid != 0)
 	{
 		if (!handle_env(shell))
@@ -41,7 +60,7 @@ int	check_commands2(t_shell *shell, pid_t pid)
 		if (!handle_export(shell))
 			return (0);
 	}
-	if (pid != 0)
+	if (pid != 0 && find_pipe_arg(shell, 0) == -1)
 	{
 		if (!handle_cd(shell))
 			return (0);

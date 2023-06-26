@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_mem_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:43:03 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/05 22:48:33 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/26 10:29:03 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@ void	free_args(t_shell *shell, int len)
 		free_args_array(shell->args_str, len);
 	if (shell->args)
 		free_args_struct(shell->args);
-	if (shell->args_str_pipe)
-		free_args_array(shell->args_str_pipe, ft_argsize(*shell->args_pipe));
-	if (shell->args_pipe)
-		free_args_struct(shell->args_pipe);
+	if (shell->args_execve)
+		free_args_array(shell->args_execve, count_strings(shell->args_execve));
 }
 
 void	free_env(t_shell *shell)

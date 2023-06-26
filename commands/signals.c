@@ -36,24 +36,23 @@
 
 void	restore_prompt(int sig)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-void	setup_signals(void)
-{
-	struct sigaction	action;
-
-	signal(SIGQUIT, SIG_IGN);
-	action.sa_handler = restore_prompt;
-	action.sa_flags = SA_RESTART;
-	sigemptyset(&action.sa_mask);
-	if (sigaction(SIGINT, &action, NULL) < 0)
+	if (sig == SIGINT || (sig == SIGQUIT && g_check_exit[1] != 0))
 	{
-		perror("sigaction");
-		exit(1);
+		if (sig == SIGINT)
+			write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		if (g_check_exit[1] == 0)
+			rl_redisplay();
+		if (sig == SIGQUIT)
+		{
+			printf("Quit (core dumped)\n");
+			g_check_exit[0] = 131;
+		}
+		else
+			g_check_exit[0] = 130;
+		g_check_exit[1] = 0;
 	}
+	else
+		signal(SIGQUIT, SIG_IGN);
 }
