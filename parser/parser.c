@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedperei <pedperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/03 18:40:36 by pedperei         ###   ########.fr       */
+/*   Updated: 2023/06/26 10:54:54 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,25 +49,3 @@ t_arg	**parse_arguments(char *string)
 	free_parse_arguments_aux(string, i);
 	return (args);
 }
-
-/* int	main(int ac, char **av)
-{
-	char *line = readline(">");
-	(void)ac;
-	char **res3;
-	char **res31;
-	t_arg **args;
-	t_arg *temp;
-
-	args = parse_arguments(line);
-	temp = (*args);
-
-	//printf("%s", line);
-
-	while (args && temp)
-	{
-		printf("%s\n", temp->name);
-		temp = temp->next;
-	}
-	ft_argclear(args);
-}   */

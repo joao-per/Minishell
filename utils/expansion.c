@@ -6,7 +6,7 @@
 /*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:16:42 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/26 10:30:57 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/26 10:53:29 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,22 +108,3 @@ char	*treat_expansion(char *input, t_env **env)
 	free_expansion_aux(i, quotes_open, flag_type);
 	return (str_exp);
 }
-
-/* int	main(int ac, char **av, char **env)
-{
-	char *line = readline(">");
-	(void)ac;
-	char *res3;
-	char **res31;
-	t_arg **args;
-	t_env **env_vars;
-	t_arg *temp;
-
-	env_vars = env_init(env);
-	res3 = treat_expansion(line, env_vars);
-
-	printf("%s", res3);
-
-	
-}  
- */

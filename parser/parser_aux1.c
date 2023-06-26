@@ -6,7 +6,7 @@
 /*   By: joao-per <joao-per@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:06:38 by pedperei          #+#    #+#             */
-/*   Updated: 2023/06/01 20:18:20 by joao-per         ###   ########.fr       */
+/*   Updated: 2023/06/26 10:54:36 by joao-per         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,39 +64,3 @@ int	is_even_quotes(char *str)
 		return (print_error_messages('U', 0));
 	return (quotes_closed);
 }
-
-/* char	*del_quotes(char *str)
-{
-	int	i;
-	int	j;
-	int	quotes_open;
-	int	flag_type;
-
-	i = 0;
-	j = 0;
-	quotes_open = 0;
-	while (str[i])
-	{
-		if (quote_type(str[i]))
-		{
-			if (quotes_open == 0)
-			{
-				flag_type = quote_type(str[i]);
-				quotes_open = 1;
-			}
-			else if (quotes_open == 1)
-				if (flag_type == quote_type(str[i]))
-					quotes_open = 0;
-		}
-		if ((!quote_type(str[i]) && !quotes_open) || (quotes_open
-				&& quote_type(str[i]) != flag_type))
-		{
-			str[j] = str[i];
-			j++;
-		}
-		i++;
-	}
-	str[j] = '\0';
-	return (str);
-}
- */
