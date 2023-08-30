@@ -1,6 +1,11 @@
 <h1 align="center">
 💻 Minishell 🐚
 </h1>
+
+<div align="center">
+<img alt="Minishell" src="https://github.com/joao-per/joao-per/blob/main/Badges/Minishell.png" />
+</div>
+
 <p align="center">
 	<b><i>Who needs a GUI when you've got the charm of the command line? 💻</i></b>
 </p>
